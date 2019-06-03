@@ -1,0 +1,572 @@
+{
+   "swagger":"2.0",
+   "info":{
+      "description":"System APIs: These APIs allow you to access all Waziup gateway services provided at the system level.",
+      "version":"1.0.0",
+      "title":"Waziup Gateway"
+   },
+   "host":"",
+   "basePath":"/api/v1",
+
+
+   "tags":[
+      {
+         "name":"Configurations",
+         "description":"WaziGate Configurations"
+      },
+      {
+         "name":"Network",
+         "description":"Network Management"
+      },
+      {
+         "name":"Maintenance",
+         "description":"WaziGate Maintenance"
+      }
+   ],
+
+   "schemes":[
+      "http",
+      "https"
+   ],
+
+   "paths":{
+      "/system/conf":{
+	      "get":{
+            "tags":[
+               "Configurations"
+            ],
+            "summary":"Retrieves the entire configurations of the gateway",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "201":{
+                  "description":"successful operation",
+                  "schema":{
+                     "type":"array",
+                     "items":{
+                        "$ref":"#/definitions/conf"
+                     }
+                  }
+               }
+            }
+         },
+         "put":{
+            "tags":[
+               "Configurations"
+            ],
+            "summary":"Stores the configurations of the gateway",
+            "description":"",
+            "operationId":"saveConf",
+            "consumes":[
+               "application/json"
+            ],
+            "produces":[
+               "application/json"
+            ],
+            "parameters":[
+               {
+                  "in":"body",
+                  "name":"body",
+                  "description":"Saving the configurations.",
+                  "required":true,
+                  "schema":{
+                     "$ref":"#/definitions/conf-put"
+                  }
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"Invalid input"
+               },
+			   "201":{
+                  "description":"successful operation"
+               }
+            }
+         },
+         "post":{
+            "tags":[
+               "Configurations"
+            ],
+            "summary":"Stores the configurations of the gateway",
+            "description":"",
+            "operationId":"saveConf",
+            "consumes":[
+               "application/json"
+            ],
+            "produces":[
+               "application/json"
+            ],
+            "parameters":[
+               {
+                  "in":"body",
+                  "name":"body",
+                  "description":"Saving the configurations.",
+                  "required":true,
+                  "schema":{
+                     "$ref":"#/definitions/conf-put"
+                  }
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"Invalid input"
+               },
+			   "201":{
+                  "description":"successful operation"
+               }
+            }
+         }
+      },
+      
+      "/system/gwid":{
+	      "get":{
+            "tags":[
+               "Configurations"
+            ],
+            "summary":"Builds the Unique Gateway ID based on the MAC address and stores it to the configuration file.",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "201":{
+                  "description":"successful operation",
+                  "schema":{
+                     "type":"string"
+                  }
+               }
+            }
+         }
+      },  
+      
+	"/system/net":{
+	      "get":{
+            "tags":[
+               "Network"
+            ],
+            "summary":"Retrieves the IP, device name and the MAC address of the used network interface.",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "201":{
+                  "description":"successful operation",
+                  "schema":{"$ref":"#/definitions/net"}
+               }
+            }
+         }
+      },
+      
+    "/system/wifi/devices":{
+	      "get":{
+            "tags":[
+               "Network"
+            ],
+            "summary":"Lists the names of all WiFi network interfaces.",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "201":{
+                  "description":"successful operation",
+                  "schema":{
+                     "type":"array",
+                     "items":{"type":"string"}
+                  }
+               }
+            }
+         }
+      },
+      
+	"/system/wifi":{
+	      "get":{
+            "tags":[
+               "Network"
+            ],
+            "summary":"Information about the WiFi interface.",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "201":{
+                  "description":"successful operation",
+                  "schema":{"$ref":"#/definitions/wifi"}
+               }
+            }
+         },
+         "put":{
+            "tags":[
+               "Network"
+            ],
+            "summary":"Set the connection configs for WiFi.",
+            "operationId":"saveConf",
+            "consumes":[
+               "application/json"
+            ],
+            "produces":[
+               "application/json"
+            ],
+            "parameters":[
+               {
+                  "in":"body",
+                  "name":"body",
+                  "required":true,
+                  "schema":{
+                     "$ref":"#/definitions/wifi-put"
+                  }
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"Invalid input"
+               },
+			   "201":{
+                  "description":"successful operation"
+               }
+            }
+         },
+         "post":{
+            "tags":[
+               "Network"
+            ],
+            "summary":"Set the connection configs for WiFi.",
+            "operationId":"saveConf",
+            "consumes":[
+               "application/json"
+            ],
+            "produces":[
+               "application/json"
+            ],
+            "parameters":[
+               {
+                  "in":"body",
+                  "name":"body",
+                  "required":true,
+                  "schema":{
+                     "$ref":"#/definitions/wifi-put"
+                  }
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"Invalid input"
+               },
+			   "201":{
+                  "description":"successful operation"
+               }
+            }
+         }
+      },
+      
+      
+    "/system/wifi/scanning":{
+	      "get":{
+            "tags":[
+               "Network"
+            ],
+            "summary":"Lists all available wireless networks.",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "201":{
+                  "description":"successful operation",
+                  "schema":{
+                     "type":"array",
+                     "items":{"$ref":"#/definitions/wifi-scanning"}
+                  }
+               }
+            }
+         }
+      },
+
+	"/system/wifi/ap":{
+	      "get":{
+            "tags":[
+               "Network"
+            ],
+            "summary":"Information about the WiFi hotspot on the gateway.",
+            "description":"The WiFi hotspot on the gateway is setup for management purpose.",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "201":{
+                  "description":"successful operation",
+                  "schema":{"$ref":"#/definitions/wifi-ap"}
+               }
+            }
+         },
+         "put":{
+            "tags":[
+               "Network"
+            ],
+            "summary":"Chnages the WiFi hotspot SSID and password.",
+            "operationId":"saveConf",
+            "consumes":[
+               "application/json"
+            ],
+            "produces":[
+               "application/json"
+            ],
+            "parameters":[
+               {
+                  "in":"body",
+                  "name":"body",
+                  "required":true,
+                  "schema":{
+                     "$ref":"#/definitions/wifi-ap"
+                  }
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"Invalid input"
+               },
+			   "201":{
+                  "description":"successful operation"
+               }
+            }
+         },
+         "post":{
+            "tags":[
+               "Network"
+            ],
+            "summary":"Chnages the WiFi hotspot SSID and password.",
+            "operationId":"saveConf",
+            "consumes":[
+               "application/json"
+            ],
+            "produces":[
+               "application/json"
+            ],
+            "parameters":[
+               {
+                  "in":"body",
+                  "name":"body",
+                  "required":true,
+                  "schema":{
+                     "$ref":"#/definitions/wifi-ap"
+                  }
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"Invalid input"
+               },
+			   "201":{
+                  "description":"successful operation"
+               }
+            }
+         }
+      },
+      
+      
+    	"/system/reboot":{
+	      "put":{
+            "tags":[
+               "Maintenance"
+            ],
+            "summary":"Restarts the gateway.",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "201":{
+                  "description":"successful operation"
+               }
+            }
+         }
+      },
+
+
+    "/system/shutdown":{
+	      "put":{
+            "tags":[
+               "Maintenance"
+            ],
+            "summary":"Shuts down the gateway.",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "201":{
+                  "description":"successful operation"
+               }
+            }
+         }
+      },
+      
+    "/system/logs50":{
+	      "get":{
+            "tags":[
+               "Maintenance"
+            ],
+            "summary":"Retrieves the last 50 lines of logs.",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "201":{
+                  "description":"successful operation"
+               }
+            }
+         }
+      },      
+ 
+     "/system/logs500":{
+	      "get":{
+            "tags":[
+               "Maintenance"
+            ],
+            "summary":"Retrieves the last 500 lines of logs.",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "201":{
+                  "description":"successful operation"
+               }
+            }
+         }
+      },
+      
+    "/system/logs":{
+	      "get":{
+            "tags":[
+               "Maintenance"
+            ],
+            "summary":"Retrieves all the logs.",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "201":{
+                  "description":"successful operation"
+               }
+            }
+         }
+      }
+
+   },
+   
+   "definitions":{
+      "conf":{
+         "type":"object",
+         "properties":{
+         
+            "radio_conf":{
+               "type":"object",
+               	 "properties":{
+				    "mode":{"type":"integer"},
+				    "freq":{"type":"integer"},
+				    "band":{"type":"string"}
+				}
+            },
+            "gateway_conf":{
+               "type":"object",
+               	 "properties":{
+				    "gateway_ID":{"type":"string"},
+				    "ref_latitude":{"type":"number", "format":"float"},
+				    "ref_longitude":{"type":"number", "format":"float"},
+				    "wappkey_enabled":{"type":"boolean"},
+				    "wappkey":{"type":"string"},
+				    "raw":{"type":"boolean"},
+				    "aes":{"type":"boolean"}
+				}
+            },
+            "alert_conf":{
+               "type":"object",
+               	 "properties":{
+				    "use_mail":{"type":"boolean"},
+				    "contact_mail":{"type":"string"},
+				    "mail_from":{"type":"string"},
+				    "mail_server":{"type":"string"},
+				    "mail_passwd":{"type":"string"},
+				    "use_sms":{"type":"boolean"},
+				    "pin":{"type":"string", "format":"integer"},
+				    "contact_sms":{
+				    	"type":"array", 
+				    	"items": { "type": "string"}
+				    }
+				}
+            },
+            "cloud_conf":{
+               "type":"object",
+               	 "properties":{
+				    "username":{"type":"string"},
+				    "password":{"type":"string"},
+				    "enabled":{"type":"boolean"},
+				    "public":{"type":"boolean"}
+				}
+            }
+         }
+      },
+      "conf-put":{
+         "type":"object",
+         "properties":{
+		  "json":{
+		     "type":"object",
+		     "properties":{
+         
+		        "radio_conf":{
+		           "type":"object",
+		           	 "properties":{
+						"mode":{"type":"integer"},
+						"freq":{"type":"integer"}
+					}
+		        }
+		     }
+		   }
+         }
+      },
+
+      "net":{
+         "type":"object",
+         "properties":{
+            "ip":{"type":"string"},
+            "dev":{"type":"string"},
+            "mac":{"type":"string"}
+         }
+      },
+
+      "wifi":{
+         "type":"object",
+         "properties":{
+            "ip":{"type":"string"},
+            "enabled":{"type":"boolean"},
+            "ssid":{"type":"string"}
+         }
+      },
+      
+      "wifi-put":{
+         "type":"object",
+         "properties":{
+            "enabled":{"type":"boolean"},
+            "ssid":{"type":"string"},
+            "password":{
+            	"type":"string",
+            	"description":"If your WiFi does not use a password, leave this parameter empty."
+            }
+         }
+      },
+      
+      "wifi-scanning":{
+         "type":"object",
+         "properties":{
+            "name":{"type":"string"},
+            "signal":{"type":"string"},
+            "security":{"type":"string"}
+         }
+      },
+      
+      "wifi-ap":{
+         "type":"object",
+         "properties":{
+            "SSID":{"type":"string"},
+            "password":{"type":"string"}
+         }
+      }
+      
+	}
+}
