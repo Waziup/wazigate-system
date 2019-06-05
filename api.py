@@ -18,9 +18,17 @@ CONF_FILE	=	PATH + '/conf.json';
 LOGS_PATH	=	PATH + '/logs/';
 
 WIFI_DEVICE = 'wlan0'; #'wlp2s0'; # The wifi device which connects to the internet. e.g. wlan0
+WIFI_DONGLE = 'wlan1';
 ETH_DEVICE  = 'eth0';
 
+if( 'WIFI_DEVICE' in os.environ):
+	WIFI_DEVICE = os.environ['WIFI_DEVICE'];
 
+if( 'WIFI_DONGLE' in os.environ):
+	WIFI_DONGLE = os.environ['WIFI_DONGLE'];
+	
+if( 'ETH_DEVICE' in os.environ):
+	ETH_DEVICE = os.environ['ETH_DEVICE'];
 
 
 #------------------------#
@@ -316,6 +324,11 @@ def wifi_set_ap( req):
 		#Setting wpa_passphrase in /etc/hostapd/hostapd.conf
 		os.popen( 'sed -i \'s/^wpa_passphrase.*/wpa_passphrase='+ req['password'] +'/g\' /etc/hostapd/hostapd.conf').read();
 		res.append( "Password saved.");
+	
+	if( 'interface' in req):
+		#Setting wpa_passphrase in /etc/hostapd/hostapd.conf
+		os.popen( 'sed -i \'s/^interface.*/interface='+ req['interface'] +'/g\' /etc/hostapd/hostapd.conf').read();
+		res.append( "Interface saved.");
 
 	#print( res);
 
@@ -370,8 +383,19 @@ def get_logs( n = 0):
 #------------------------#
 
 if __name__ == "__main__":
-	debugMode	= os.popen( 'echo $FLASK_DEBUG').read().strip() == '1';
-	apiPort		= int( os.popen( 'echo $FLASK_PORT').read().strip());
+	debugMode	= os.environ['DEBUG_MODE'] == '1';
+	apiAddr		= os.environ['WAZIGATE_SYSTEM_ADDR'];
+	
+	addr = apiAddr.split(':');
+	
+	apiHost = "0.0.0.0";
+	apiPort = 5000;
 
-	app.run( host = "0.0.0.0", debug = debugMode, port = apiPort);
+	if( 0 in addr and len( addr[0]) > 0):
+		apiHost = addr[0];
+
+	if( 1 in addr and len( addr[1]) > 0):
+		apiPort = int( addr[1]);
+
+	app.run( host = apiHost, debug = debugMode, port = apiPort);
 

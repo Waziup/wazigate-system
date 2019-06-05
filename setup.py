@@ -18,12 +18,15 @@ except KeyError as e:
 
 #---------- Setting up the Gateway ID and Access point -------------#
 
+#TODO: Config the gateway hotspot as well.
+
 jres = api.gwid();
 gwid = json.loads( jres[0]);
 
 ap_conf = {
-	'SSID'		: 'WAZIGATE_'+ gwid,
-	'password'	: 'loragateway'
+	'SSID'		:	'WAZIGATE_'+ gwid,
+	'password'	:	'loragateway',
+	'interface'	:	api.WIFI_DONGLE
 };
 
 print( api.wifi_set_ap( ap_conf));

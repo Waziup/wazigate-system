@@ -7,7 +7,7 @@ RUN apt-get update -y && \
    
 RUN pip install flask wifi requests pyserial
 
-#COPY ./app /app
+#COPY . /app
 
 #ENTRYPOINT [ "/" ]
 #CMD [ "python main.py" ]

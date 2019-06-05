@@ -15880,3 +15880,424 @@
 2019-05-31T13:38:10.467953> post status: show current GPS position
 2019-05-31T13:38:10.468231> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
 2019-05-31T13:38:10.468507> post status: exiting
+2019-06-03T13:14:23.829209> no timezone support, time will be expressed only in local time
+2019-06-03T13:14:23.832322> post_processing_gw.py found an alert_conf section
+2019-06-03T13:14:23.832887> Starting thread to perform periodic gw status/tasks
+2019-06-03T13:14:23.833319> 2019-06-03 13:14:23.830364
+2019-06-03T13:14:23.833634> post status: gw ON
+2019-06-03T13:14:23.833932> post status: executing periodic tasks
+2019-06-03T13:14:24.850094> 
+2019-06-03T13:14:24.850546> Current working directory: /
+2019-06-03T13:14:24.913871> no timezone support, time will be expressed only in local time
+2019-06-03T13:14:24.914282> post status: start running
+2019-06-03T13:14:26.021730> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-03T13:14:26.022246> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-03T13:14:26.022638> get_gps.py: invalid serial port
+2019-06-03T13:14:26.164377> post status: dynamic GPS is requested
+2019-06-03T13:14:26.164791> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-03T13:14:26.165141> post status get GPS: no GPS coordinates
+2019-06-03T13:14:26.165447> post status: show current GPS position
+2019-06-03T13:14:26.165739> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-03T13:14:26.166023> post status: exiting
+2019-06-03T13:52:42.586370> no timezone support, time will be expressed only in local time
+2019-06-03T13:52:42.586996> post_processing_gw.py found an alert_conf section
+2019-06-03T13:52:42.587461> Starting thread to perform periodic gw status/tasks
+2019-06-03T13:52:42.587912> 2019-06-03 13:52:42.586667
+2019-06-03T13:52:42.588256> post status: gw ON
+2019-06-03T13:52:42.588599> post status: executing periodic tasks
+2019-06-03T13:52:43.588702> 
+2019-06-03T13:52:43.589109> Current working directory: /
+2019-06-03T13:52:43.664573> no timezone support, time will be expressed only in local time
+2019-06-03T13:52:43.664985> post status: start running
+2019-06-03T13:52:44.704691> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-03T13:52:44.705238> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-03T13:52:44.705647> get_gps.py: invalid serial port
+2019-06-03T13:52:44.841926> post status: dynamic GPS is requested
+2019-06-03T13:52:44.842336> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-03T13:52:44.842701> post status get GPS: no GPS coordinates
+2019-06-03T13:52:44.843016> post status: show current GPS position
+2019-06-03T13:52:44.843315> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-03T13:52:44.843608> post status: exiting
+2019-06-03T13:54:33.774265> no timezone support, time will be expressed only in local time
+2019-06-03T13:54:33.774916> post_processing_gw.py found an alert_conf section
+2019-06-03T13:54:33.775305> Starting thread to perform periodic gw status/tasks
+2019-06-03T13:54:33.775677> 2019-06-03 13:54:33.774381
+2019-06-03T13:54:33.776003> post status: gw ON
+2019-06-03T13:54:33.776301> post status: executing periodic tasks
+2019-06-03T13:54:34.776680> 
+2019-06-03T13:54:34.777130> Current working directory: /
+2019-06-03T13:54:34.789910> no timezone support, time will be expressed only in local time
+2019-06-03T13:54:34.790362> post status: start running
+2019-06-03T13:54:35.911598> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-03T13:54:35.913005> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-03T13:54:35.914203> get_gps.py: invalid serial port
+2019-06-03T13:54:36.051147> post status: dynamic GPS is requested
+2019-06-03T13:54:36.051700> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-03T13:54:36.052180> post status get GPS: no GPS coordinates
+2019-06-03T13:54:36.052527> post status: show current GPS position
+2019-06-03T13:54:36.052917> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-03T13:54:36.053230> post status: exiting
+2019-06-03T14:02:46.189431> no timezone support, time will be expressed only in local time
+2019-06-03T14:02:46.190140> post_processing_gw.py found an alert_conf section
+2019-06-03T14:02:46.190590> Starting thread to perform periodic gw status/tasks
+2019-06-03T14:02:46.191003> 2019-06-03 14:02:46.190147
+2019-06-03T14:02:46.191299> post status: gw ON
+2019-06-03T14:02:46.191579> post status: executing periodic tasks
+2019-06-03T14:02:47.192150> 
+2019-06-03T14:02:47.192538> Current working directory: /
+2019-06-03T14:02:47.255301> no timezone support, time will be expressed only in local time
+2019-06-03T14:02:47.255725> post status: start running
+2019-06-03T14:02:48.328290> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-03T14:02:48.328836> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-03T14:02:48.329305> get_gps.py: invalid serial port
+2019-06-03T14:02:48.467011> post status: dynamic GPS is requested
+2019-06-03T14:02:48.467431> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-03T14:02:48.467817> post status get GPS: no GPS coordinates
+2019-06-03T14:02:48.468143> post status: show current GPS position
+2019-06-03T14:02:48.468438> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-03T14:02:48.468725> post status: exiting
+2019-06-04T09:49:00.837391> no timezone support, time will be expressed only in local time
+2019-06-04T09:49:00.839239> post_processing_gw.py found an alert_conf section
+2019-06-04T09:49:00.839654> Starting thread to perform periodic gw status/tasks
+2019-06-04T09:49:00.840093> 2019-06-04 09:49:00.836118
+2019-06-04T09:49:00.840446> post status: gw ON
+2019-06-04T09:49:00.840800> post status: executing periodic tasks
+2019-06-04T09:49:01.838118> 
+2019-06-04T09:49:01.838486> Current working directory: /
+2019-06-04T09:49:01.925032> no timezone support, time will be expressed only in local time
+2019-06-04T09:49:01.925557> post status: start running
+2019-06-04T09:49:03.011995> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-04T09:49:03.012636> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-04T09:49:03.013159> get_gps.py: invalid serial port
+2019-06-04T09:49:03.154368> post status: dynamic GPS is requested
+2019-06-04T09:49:03.154783> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-04T09:49:03.155432> post status get GPS: no GPS coordinates
+2019-06-04T09:49:03.155800> post status: show current GPS position
+2019-06-04T09:49:03.156108> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-04T09:49:03.156416> post status: exiting
+2019-06-04T10:01:46.012223> no timezone support, time will be expressed only in local time
+2019-06-04T10:01:46.012748> post_processing_gw.py found an alert_conf section
+2019-06-04T10:01:46.013109> Starting thread to perform periodic gw status/tasks
+2019-06-04T10:01:46.013545> 2019-06-04 10:01:46.012462
+2019-06-04T10:01:46.013830> post status: gw ON
+2019-06-04T10:01:46.014108> post status: executing periodic tasks
+2019-06-04T10:01:47.014465> 
+2019-06-04T10:01:47.014997> Current working directory: /
+2019-06-04T10:01:47.133989> no timezone support, time will be expressed only in local time
+2019-06-04T10:01:47.134418> post status: start running
+2019-06-04T10:01:48.218394> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-04T10:01:48.219028> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-04T10:01:48.219462> get_gps.py: invalid serial port
+2019-06-04T10:01:48.363755> post status: dynamic GPS is requested
+2019-06-04T10:01:48.364161> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-04T10:01:48.364522> post status get GPS: no GPS coordinates
+2019-06-04T10:01:48.364955> post status: show current GPS position
+2019-06-04T10:01:48.365311> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-04T10:01:48.365614> post status: exiting
+2019-06-04T10:11:48.605609> 2019-06-04 10:11:48.604897
+2019-06-04T10:11:48.606075> post status: gw ON
+2019-06-04T10:11:48.606381> post status: executing periodic tasks
+2019-06-04T10:11:49.656315> no timezone support, time will be expressed only in local time
+2019-06-04T10:11:49.656752> post status: start running
+2019-06-04T10:11:50.739320> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-04T10:11:50.739957> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-04T10:11:50.740480> get_gps.py: invalid serial port
+2019-06-04T10:11:50.882130> post status: dynamic GPS is requested
+2019-06-04T10:11:50.882549> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-04T10:11:50.882915> post status get GPS: no GPS coordinates
+2019-06-04T10:11:50.883226> post status: show current GPS position
+2019-06-04T10:11:50.883521> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-04T10:11:50.883810> post status: exiting
+2019-06-04T14:46:41.169807> no timezone support, time will be expressed only in local time
+2019-06-04T14:46:41.171321> post_processing_gw.py found an alert_conf section
+2019-06-04T14:46:41.171720> Starting thread to perform periodic gw status/tasks
+2019-06-04T14:46:41.172098> 2019-06-04 14:46:41.167582
+2019-06-04T14:46:41.172418> post status: gw ON
+2019-06-04T14:46:41.172751> post status: executing periodic tasks
+2019-06-04T14:46:42.169638> 
+2019-06-04T14:46:42.170033> Current working directory: /
+2019-06-04T14:46:42.257878> no timezone support, time will be expressed only in local time
+2019-06-04T14:46:42.258250> post status: start running
+2019-06-04T14:46:43.347711> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-04T14:46:43.348207> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-04T14:46:43.348638> get_gps.py: invalid serial port
+2019-06-04T14:46:43.500078> post status: dynamic GPS is requested
+2019-06-04T14:46:43.500494> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-04T14:46:43.500832> post status get GPS: no GPS coordinates
+2019-06-04T14:46:43.501120> post status: show current GPS position
+2019-06-04T14:46:43.501426> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-04T14:46:43.501725> post status: exiting
+2019-06-04T14:56:43.730263> 2019-06-04 14:56:43.729512
+2019-06-04T14:56:43.730687> post status: gw ON
+2019-06-04T14:56:43.730991> post status: executing periodic tasks
+2019-06-04T14:56:44.966025> no timezone support, time will be expressed only in local time
+2019-06-04T14:56:44.966472> post status: start running
+2019-06-04T14:56:46.186422> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-04T14:56:46.187123> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-04T14:56:46.187723> get_gps.py: invalid serial port
+2019-06-04T14:56:46.329363> post status: dynamic GPS is requested
+2019-06-04T14:56:46.330014> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-04T14:56:46.330544> post status get GPS: no GPS coordinates
+2019-06-04T14:56:46.330874> post status: show current GPS position
+2019-06-04T14:56:46.331171> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-04T14:56:46.331472> post status: exiting
+2019-06-05T09:43:52.220035> no timezone support, time will be expressed only in local time
+2019-06-05T09:43:52.220552> post_processing_gw.py found an alert_conf section
+2019-06-05T09:43:52.220872> Starting thread to perform periodic gw status/tasks
+2019-06-05T09:43:52.222386> 2019-06-05 09:43:52.221775
+2019-06-05T09:43:52.222751> post status: gw ON
+2019-06-05T09:43:52.223033> post status: executing periodic tasks
+2019-06-05T09:43:53.238033> 
+2019-06-05T09:43:53.238486> Current working directory: /
+2019-06-05T09:43:53.374243> no timezone support, time will be expressed only in local time
+2019-06-05T09:43:53.374653> post status: start running
+2019-06-05T09:43:54.488188> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T09:43:54.489162> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T09:43:54.489972> get_gps.py: invalid serial port
+2019-06-05T09:43:54.638300> post status: dynamic GPS is requested
+2019-06-05T09:43:54.638705> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T09:43:54.639042> post status get GPS: no GPS coordinates
+2019-06-05T09:43:54.639348> post status: show current GPS position
+2019-06-05T09:43:54.639643> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T09:43:54.639956> post status: exiting
+2019-06-05T09:53:54.921234> 2019-06-05 09:53:54.917676
+2019-06-05T09:53:54.921771> post status: gw ON
+2019-06-05T09:53:54.922165> post status: executing periodic tasks
+2019-06-05T09:53:56.176573> no timezone support, time will be expressed only in local time
+2019-06-05T09:53:56.176991> post status: start running
+2019-06-05T09:53:57.354089> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T09:53:57.354541> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T09:53:57.354931> get_gps.py: invalid serial port
+2019-06-05T09:53:57.506091> post status: dynamic GPS is requested
+2019-06-05T09:53:57.506492> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T09:53:57.506827> post status get GPS: no GPS coordinates
+2019-06-05T09:53:57.507123> post status: show current GPS position
+2019-06-05T09:53:57.507417> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T09:53:57.507817> post status: exiting
+2019-06-05T10:03:57.773726> 2019-06-05 10:03:57.769411
+2019-06-05T10:03:57.774291> post status: gw ON
+2019-06-05T10:03:57.774619> post status: executing periodic tasks
+2019-06-05T10:03:58.801315> no timezone support, time will be expressed only in local time
+2019-06-05T10:03:58.801728> post status: start running
+2019-06-05T10:03:59.869522> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T10:03:59.870304> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T10:03:59.870990> get_gps.py: invalid serial port
+2019-06-05T10:04:00.014362> post status: dynamic GPS is requested
+2019-06-05T10:04:00.014798> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T10:04:00.015161> post status get GPS: no GPS coordinates
+2019-06-05T10:04:00.015462> post status: show current GPS position
+2019-06-05T10:04:00.015746> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T10:04:00.016025> post status: exiting
+2019-06-05T10:14:00.318275> 2019-06-05 10:14:00.317550
+2019-06-05T10:14:00.318824> post status: gw ON
+2019-06-05T10:14:00.319189> post status: executing periodic tasks
+2019-06-05T10:14:01.388017> no timezone support, time will be expressed only in local time
+2019-06-05T10:14:01.388390> post status: start running
+2019-06-05T10:14:02.478725> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T10:14:02.479239> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T10:14:02.479639> get_gps.py: invalid serial port
+2019-06-05T10:14:02.628188> post status: dynamic GPS is requested
+2019-06-05T10:14:02.628574> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T10:14:02.628849> post status get GPS: no GPS coordinates
+2019-06-05T10:14:02.629114> post status: show current GPS position
+2019-06-05T10:14:02.629383> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T10:14:02.629714> post status: exiting
+2019-06-05T10:24:02.861123> 2019-06-05 10:24:02.860125
+2019-06-05T10:24:02.861599> post status: gw ON
+2019-06-05T10:24:02.861934> post status: executing periodic tasks
+2019-06-05T10:24:03.948417> no timezone support, time will be expressed only in local time
+2019-06-05T10:24:03.948835> post status: start running
+2019-06-05T10:24:05.081883> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T10:24:05.082649> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T10:24:05.083280> get_gps.py: invalid serial port
+2019-06-05T10:24:05.224034> post status: dynamic GPS is requested
+2019-06-05T10:24:05.224564> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T10:24:05.225017> post status get GPS: no GPS coordinates
+2019-06-05T10:24:05.225352> post status: show current GPS position
+2019-06-05T10:24:05.225655> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T10:24:05.225949> post status: exiting
+2019-06-05T10:34:05.508282> 2019-06-05 10:34:05.507580
+2019-06-05T10:34:05.508714> post status: gw ON
+2019-06-05T10:34:05.509011> post status: executing periodic tasks
+2019-06-05T10:34:06.699938> no timezone support, time will be expressed only in local time
+2019-06-05T10:34:06.700363> post status: start running
+2019-06-05T10:34:07.742040> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T10:34:07.742587> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T10:34:07.742997> get_gps.py: invalid serial port
+2019-06-05T10:34:07.886121> post status: dynamic GPS is requested
+2019-06-05T10:34:07.886545> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T10:34:07.886918> post status get GPS: no GPS coordinates
+2019-06-05T10:34:07.887228> post status: show current GPS position
+2019-06-05T10:34:07.888127> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T10:34:07.889907> post status: exiting
+2019-06-05T10:44:08.155803> 2019-06-05 10:44:08.155093
+2019-06-05T10:44:08.156262> post status: gw ON
+2019-06-05T10:44:08.156572> post status: executing periodic tasks
+2019-06-05T10:44:09.221727> no timezone support, time will be expressed only in local time
+2019-06-05T10:44:09.222089> post status: start running
+2019-06-05T10:44:10.425547> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T10:44:10.425921> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T10:44:10.426196> get_gps.py: invalid serial port
+2019-06-05T10:44:10.578113> post status: dynamic GPS is requested
+2019-06-05T10:44:10.578491> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T10:44:10.578768> post status get GPS: no GPS coordinates
+2019-06-05T10:44:10.579035> post status: show current GPS position
+2019-06-05T10:44:10.579305> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T10:44:10.579578> post status: exiting
+2019-06-05T10:54:10.848539> 2019-06-05 10:54:10.847728
+2019-06-05T10:54:10.849052> post status: gw ON
+2019-06-05T10:54:10.849453> post status: executing periodic tasks
+2019-06-05T10:54:12.039815> no timezone support, time will be expressed only in local time
+2019-06-05T10:54:12.040340> post status: start running
+2019-06-05T10:54:13.124269> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T10:54:13.124925> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T10:54:13.125474> get_gps.py: invalid serial port
+2019-06-05T10:54:13.266588> post status: dynamic GPS is requested
+2019-06-05T10:54:13.267012> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T10:54:13.267381> post status get GPS: no GPS coordinates
+2019-06-05T10:54:13.268432> post status: show current GPS position
+2019-06-05T10:54:13.269260> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T10:54:13.269812> post status: exiting
+2019-06-05T11:04:13.858282> 2019-06-05 11:04:13.857583
+2019-06-05T11:04:13.858731> post status: gw ON
+2019-06-05T11:04:13.859145> post status: executing periodic tasks
+2019-06-05T11:04:14.903671> no timezone support, time will be expressed only in local time
+2019-06-05T11:04:14.904047> post status: start running
+2019-06-05T11:04:16.184940> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T11:04:16.268430> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T11:04:16.268825> get_gps.py: invalid serial port
+2019-06-05T11:04:16.339754> post status: dynamic GPS is requested
+2019-06-05T11:04:16.340427> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T11:04:16.343684> post status get GPS: no GPS coordinates
+2019-06-05T11:04:16.344297> post status: show current GPS position
+2019-06-05T11:04:16.344847> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T11:04:16.345777> post status: exiting
+2019-06-05T11:14:16.618378> 2019-06-05 11:14:16.617617
+2019-06-05T11:14:16.618879> post status: gw ON
+2019-06-05T11:14:16.619241> post status: executing periodic tasks
+2019-06-05T11:14:17.752550> no timezone support, time will be expressed only in local time
+2019-06-05T11:14:17.752987> post status: start running
+2019-06-05T11:14:18.796553> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T11:14:18.797308> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T11:14:18.797987> get_gps.py: invalid serial port
+2019-06-05T11:14:18.935066> post status: dynamic GPS is requested
+2019-06-05T11:14:18.935477> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T11:14:18.935852> post status get GPS: no GPS coordinates
+2019-06-05T11:14:18.936172> post status: show current GPS position
+2019-06-05T11:14:18.936470> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T11:14:18.936771> post status: exiting
+2019-06-05T11:24:19.195739> 2019-06-05 11:24:19.195010
+2019-06-05T11:24:19.196274> post status: gw ON
+2019-06-05T11:24:19.196635> post status: executing periodic tasks
+2019-06-05T11:24:20.333393> no timezone support, time will be expressed only in local time
+2019-06-05T11:24:20.334093> post status: start running
+2019-06-05T11:24:21.440801> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T11:24:21.441470> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T11:24:21.441988> get_gps.py: invalid serial port
+2019-06-05T11:24:21.582010> post status: dynamic GPS is requested
+2019-06-05T11:24:21.582425> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T11:24:21.582795> post status get GPS: no GPS coordinates
+2019-06-05T11:24:21.583104> post status: show current GPS position
+2019-06-05T11:24:21.583406> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T11:24:21.583707> post status: exiting
+2019-06-05T11:34:22.069073> 2019-06-05 11:34:22.068262
+2019-06-05T11:34:22.069660> post status: gw ON
+2019-06-05T11:34:22.070144> post status: executing periodic tasks
+2019-06-05T11:34:23.166990> no timezone support, time will be expressed only in local time
+2019-06-05T11:34:23.245756> post status: start running
+2019-06-05T11:34:24.325724> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T11:34:24.326271> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T11:34:24.326681> get_gps.py: invalid serial port
+2019-06-05T11:34:24.468498> post status: dynamic GPS is requested
+2019-06-05T11:34:24.469020> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T11:34:24.469514> post status get GPS: no GPS coordinates
+2019-06-05T11:34:24.469922> post status: show current GPS position
+2019-06-05T11:34:24.470271> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T11:34:24.470754> post status: exiting
+2019-06-05T11:44:24.618371> 2019-06-05 11:44:24.617624
+2019-06-05T11:44:24.618827> post status: gw ON
+2019-06-05T11:44:24.619130> post status: executing periodic tasks
+2019-06-05T11:44:25.891364> no timezone support, time will be expressed only in local time
+2019-06-05T11:44:25.891791> post status: start running
+2019-06-05T11:44:26.977401> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T11:44:26.978145> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T11:44:26.978589> get_gps.py: invalid serial port
+2019-06-05T11:44:27.128539> post status: dynamic GPS is requested
+2019-06-05T11:44:27.128922> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T11:44:27.129197> post status get GPS: no GPS coordinates
+2019-06-05T11:44:27.129464> post status: show current GPS position
+2019-06-05T11:44:27.129733> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T11:44:27.130001> post status: exiting
+2019-06-05T12:50:34.991984> no timezone support, time will be expressed only in local time
+2019-06-05T12:50:34.992553> post_processing_gw.py found an alert_conf section
+2019-06-05T12:50:34.992941> Starting thread to perform periodic gw status/tasks
+2019-06-05T12:50:34.993306> 2019-06-05 12:50:34.992101
+2019-06-05T12:50:34.993590> post status: gw ON
+2019-06-05T12:50:34.993871> post status: executing periodic tasks
+2019-06-05T12:50:35.994108> 
+2019-06-05T12:50:35.994646> Current working directory: /
+2019-06-05T12:50:36.081967> no timezone support, time will be expressed only in local time
+2019-06-05T12:50:36.082413> post status: start running
+2019-06-05T12:50:37.164964> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T12:50:37.165422> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T12:50:37.165797> get_gps.py: invalid serial port
+2019-06-05T12:50:37.313932> post status: dynamic GPS is requested
+2019-06-05T12:50:37.314357> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T12:50:37.314757> post status get GPS: no GPS coordinates
+2019-06-05T12:50:37.315097> post status: show current GPS position
+2019-06-05T12:50:37.315399> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T12:50:37.315703> post status: exiting
+2019-06-05T13:01:34.171556> no timezone support, time will be expressed only in local time
+2019-06-05T13:01:34.172174> post_processing_gw.py found an alert_conf section
+2019-06-05T13:01:34.172613> Starting thread to perform periodic gw status/tasks
+2019-06-05T13:01:34.172996> 2019-06-05 13:01:34.171718
+2019-06-05T13:01:34.173279> post status: gw ON
+2019-06-05T13:01:34.173555> post status: executing periodic tasks
+2019-06-05T13:01:35.173713> 
+2019-06-05T13:01:35.174103> Current working directory: /
+2019-06-05T13:01:35.223543> no timezone support, time will be expressed only in local time
+2019-06-05T13:01:35.223971> post status: start running
+2019-06-05T13:01:36.338572> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T13:01:36.339090> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T13:01:36.339489> get_gps.py: invalid serial port
+2019-06-05T13:01:36.491174> post status: dynamic GPS is requested
+2019-06-05T13:01:36.491577> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T13:01:36.491939> post status get GPS: no GPS coordinates
+2019-06-05T13:01:36.492246> post status: show current GPS position
+2019-06-05T13:01:36.492543> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T13:01:36.492835> post status: exiting
+2019-06-05T13:02:48.394679> no timezone support, time will be expressed only in local time
+2019-06-05T13:02:48.395087> post_processing_gw.py found an alert_conf section
+2019-06-05T13:02:48.395362> Starting thread to perform periodic gw status/tasks
+2019-06-05T13:02:48.396804> 2019-06-05 13:02:48.396270
+2019-06-05T13:02:48.397141> post status: gw ON
+2019-06-05T13:02:48.397409> post status: executing periodic tasks
+2019-06-05T13:02:49.401772> 
+2019-06-05T13:02:49.402163> Current working directory: /
+2019-06-05T13:02:49.402481> SX1276 detected, starting.
+2019-06-05T13:02:49.402768> SX1276 LF/HF calibration
+2019-06-05T13:02:49.403051> ...
+2019-06-05T13:02:49.403341> **********Power ON: state 0
+2019-06-05T13:02:49.403621> Default sync word: 0x12
+2019-06-05T13:02:49.403895> LoRa mode 2
+2019-06-05T13:02:49.404164> Setting mode: state 0
+2019-06-05T13:02:49.404447> Frequency 865.200000: state 0
+2019-06-05T13:02:49.404736> Use PA_BOOST amplifier line
+2019-06-05T13:02:49.405027> Set LoRa power dBm to 14
+2019-06-05T13:02:49.405704> Power: state 0
+2019-06-05T13:02:49.406091> Get Preamble Length: state 0
+2019-06-05T13:02:49.406376> Preamble Length: 8
+2019-06-05T13:02:49.406653> LoRa addr 1: state 0
+2019-06-05T13:02:49.406931> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-05T13:02:49.407206> Low-level gw status ON
+2019-06-05T13:02:49.421116> no timezone support, time will be expressed only in local time
+2019-06-05T13:02:49.421545> post status: start running
+2019-06-05T13:02:50.517987> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-05T13:02:50.518660> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-05T13:02:50.519162> get_gps.py: invalid serial port
+2019-06-05T13:02:50.657429> post status: dynamic GPS is requested
+2019-06-05T13:02:50.658068> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-05T13:02:50.658613> post status get GPS: no GPS coordinates
+2019-06-05T13:02:50.659018> post status: show current GPS position
+2019-06-05T13:02:50.659373> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-05T13:02:50.659707> post status: exiting
