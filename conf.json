@@ -55,29 +55,5 @@
     "loragna_boot": true,
     "loragna_g": "2G",
     "autoReload": null
-  },
-  "cloud_conf": {
-    "name": "waziup.io",
-    "type": "iotcloud",
-    "server": "",
-    "username": "goozxzzz",
-    "password": "passwort",
-    "domain": "my_domainx",
-    "folder": "",
-    "write_key": "",
-    "public": false,
-    "enabled": true
-  },
-  "edge_conf": {
-    "name": "Local Edge",
-    "type": "iotEdge",
-    "server": "http://api.waziup.io/api/v1",
-    "username": "",
-    "password": "",
-    "domain": "my_domain",
-    "folder": "",
-    "write_key": "",
-    "sensor": "Sensor",
-    "enabled": true
   }
 }
