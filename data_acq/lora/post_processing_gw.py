@@ -1095,6 +1095,7 @@ while True:
 					cloud_script = "python "+ api.PATH +"/data_acq/edgeCall.py";
 					print( "uploading with "+ cloud_script);
 					sys.stdout.flush();
+					#cmd_arg = cloud_script +" \""+ ldata.replace('\n','').replace('\0','') +"\""+" \""+ pdata.replace('\n','') +"\""+" \""+ rdata.replace('\n','') +"\""+" \""+ tdata.replace('\n','') +"\""+" \""+ _gwid.replace('\n','') +"\"";
 					cmd_arg = cloud_script +" \""+ ldata.replace('\n','').replace('\0','') +"\""+" \""+ pdata.replace('\n','') +"\""+" \""+ rdata.replace('\n','') +"\""+" \""+ tdata.replace('\n','') +"\""+" \""+ _gwid.replace('\n','') +"\"";
 				except UnicodeDecodeError as ude:
 					print( ude);

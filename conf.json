@@ -4,7 +4,7 @@
     "wizard": false
   },
   "radio_conf": {
-    "mode": 2,
+    "mode": 1,
     "bw": 500,
     "cr": 5,
     "sf": 12,

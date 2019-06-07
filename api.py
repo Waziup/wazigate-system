@@ -391,10 +391,10 @@ if __name__ == "__main__":
 	apiHost = "0.0.0.0";
 	apiPort = 5000;
 
-	if( 0 in addr and len( addr[0]) > 0):
+	if( len( addr) > 0 in addr and len( addr[0]) > 0):
 		apiHost = addr[0];
 
-	if( 1 in addr and len( addr[1]) > 0):
+	if( len( addr) > 1 in addr and len( addr[1]) > 0):
 		apiPort = int( addr[1]);
 
 	app.run( host = apiHost, debug = debugMode, port = apiPort);
