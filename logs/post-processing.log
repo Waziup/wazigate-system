@@ -26949,3 +26949,526 @@
 2019-06-07T11:18:35.827433> Edge: upload success HU 26.00
 2019-06-07T11:18:36.021821> --> cloud end
 2019-06-07T11:18:36.022841> 
+2019-06-07T11:19:48.335958> --- rxlora. dst=1 type=0x10 src=118 seq=180 len=19 SNR=7 RSSIpkt=-56 BW=125 CR=4/5 SF=12
+2019-06-07T11:19:48.336530> 2019-06-07T11:19:48.333081
+2019-06-07T11:19:48.336925> rcv ctrl pkt info (^p): 1,16,118,180,19,7,-56
+2019-06-07T11:19:48.337509> splitted in: [1, 16, 118, 180, 19, 7, -56]
+2019-06-07T11:19:48.338157> (dst=1 type=0x10(DATA) src=118 seq=180 len=19 SNR=7 RSSI=-56)
+2019-06-07T11:19:48.338557> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:19:48.339394> splitted in: [125, 5, 12]
+2019-06-07T11:19:48.340455> (BW=125 CR=5 SF=12)
+2019-06-07T11:19:48.341181> rcv timestamp (^t): 2019-06-07T11:19:48.328
+2019-06-07T11:19:48.343094> 
+2019-06-07T11:19:48.346045> Got first framing byte
+2019-06-07T11:19:48.346932> --> got LoRa data prefix
+2019-06-07T11:19:48.347619> valid app key: accept data
+2019-06-07T11:19:48.348386> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:19:48.349212> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,180,19,7,-56" "125,5,12" "2019-06-07T11:19:48.328" "B827EB4E30A8"
+2019-06-07T11:19:51.760675> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:19:51.761250> Edge: upload success TC 26.00
+2019-06-07T11:19:51.761877> Edge: upload success HU 26.00
+2019-06-07T11:19:51.948718> --> cloud end
+2019-06-07T11:19:51.949203> 
+2019-06-07T11:21:03.588078> --- rxlora. dst=1 type=0x10 src=118 seq=181 len=19 SNR=6 RSSIpkt=-59 BW=125 CR=4/5 SF=12
+2019-06-07T11:21:03.589117> 2019-06-07T11:21:03.587172
+2019-06-07T11:21:03.589904> rcv ctrl pkt info (^p): 1,16,118,181,19,6,-59
+2019-06-07T11:21:03.590567> splitted in: [1, 16, 118, 181, 19, 6, -59]
+2019-06-07T11:21:03.591159> (dst=1 type=0x10(DATA) src=118 seq=181 len=19 SNR=6 RSSI=-59)
+2019-06-07T11:21:03.591870> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:21:03.592407> splitted in: [125, 5, 12]
+2019-06-07T11:21:03.592883> (BW=125 CR=5 SF=12)
+2019-06-07T11:21:03.593288> rcv timestamp (^t): 2019-06-07T11:21:03.583
+2019-06-07T11:21:03.593654> 
+2019-06-07T11:21:03.594015> Got first framing byte
+2019-06-07T11:21:03.594881> --> got LoRa data prefix
+2019-06-07T11:21:03.595348> valid app key: accept data
+2019-06-07T11:21:03.595865> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:21:03.596538> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,181,19,6,-59" "125,5,12" "2019-06-07T11:21:03.583" "B827EB4E30A8"
+2019-06-07T11:21:06.996797> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:21:06.997520> Edge: upload success TC 26.00
+2019-06-07T11:21:06.998290> Edge: upload success HU 26.00
+2019-06-07T11:21:07.182121> --> cloud end
+2019-06-07T11:21:07.182604> 
+2019-06-07T11:21:54.892847> Low-level gw status ON
+2019-06-07T11:22:18.961783> --- rxlora. dst=1 type=0x10 src=118 seq=182 len=19 SNR=9 RSSIpkt=-55 BW=125 CR=4/5 SF=12
+2019-06-07T11:22:18.965765> 2019-06-07T11:22:18.957596
+2019-06-07T11:22:18.966903> rcv ctrl pkt info (^p): 1,16,118,182,19,9,-55
+2019-06-07T11:22:18.968061> splitted in: [1, 16, 118, 182, 19, 9, -55]
+2019-06-07T11:22:18.969280> (dst=1 type=0x10(DATA) src=118 seq=182 len=19 SNR=9 RSSI=-55)
+2019-06-07T11:22:18.970106> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:22:18.970750> splitted in: [125, 5, 12]
+2019-06-07T11:22:18.971394> (BW=125 CR=5 SF=12)
+2019-06-07T11:22:18.972050> rcv timestamp (^t): 2019-06-07T11:22:18.952
+2019-06-07T11:22:18.973995> 
+2019-06-07T11:22:18.974766> Got first framing byte
+2019-06-07T11:22:18.975506> --> got LoRa data prefix
+2019-06-07T11:22:18.976071> valid app key: accept data
+2019-06-07T11:22:18.976569> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:22:18.977011> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,182,19,9,-55" "125,5,12" "2019-06-07T11:22:18.952" "B827EB4E30A8"
+2019-06-07T11:22:22.040937> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:22:22.041398> Edge: upload success TC 26.00
+2019-06-07T11:22:22.042065> Edge: upload success HU 26.00
+2019-06-07T11:22:22.230526> --> cloud end
+2019-06-07T11:22:22.231063> 
+2019-06-07T11:22:24.162575> 2019-06-07 11:22:24.161639
+2019-06-07T11:22:24.163094> post status: gw ON
+2019-06-07T11:22:24.163441> post status: executing periodic tasks
+2019-06-07T11:22:25.347158> no timezone support, time will be expressed only in local time
+2019-06-07T11:22:25.347956> post status: start running
+2019-06-07T11:22:26.526851> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-07T11:22:26.527676> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-07T11:22:26.528310> get_gps.py: invalid serial port
+2019-06-07T11:22:26.683873> post status: dynamic GPS is requested
+2019-06-07T11:22:26.684313> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-07T11:22:26.684723> post status get GPS: no GPS coordinates
+2019-06-07T11:22:26.685069> post status: show current GPS position
+2019-06-07T11:22:26.685396> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-07T11:22:26.685698> post status: exiting
+2019-06-07T11:23:34.329706> --- rxlora. dst=1 type=0x10 src=118 seq=183 len=19 SNR=8 RSSIpkt=-56 BW=125 CR=4/5 SF=12
+2019-06-07T11:23:34.330185> 2019-06-07T11:23:34.329289
+2019-06-07T11:23:34.330525> rcv ctrl pkt info (^p): 1,16,118,183,19,8,-56
+2019-06-07T11:23:34.330826> splitted in: [1, 16, 118, 183, 19, 8, -56]
+2019-06-07T11:23:34.331108> (dst=1 type=0x10(DATA) src=118 seq=183 len=19 SNR=8 RSSI=-56)
+2019-06-07T11:23:34.331397> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:23:34.331923> splitted in: [125, 5, 12]
+2019-06-07T11:23:34.332328> (BW=125 CR=5 SF=12)
+2019-06-07T11:23:34.332657> rcv timestamp (^t): 2019-06-07T11:23:34.325
+2019-06-07T11:23:34.332989> 
+2019-06-07T11:23:34.333450> Got first framing byte
+2019-06-07T11:23:34.333765> --> got LoRa data prefix
+2019-06-07T11:23:34.334074> valid app key: accept data
+2019-06-07T11:23:34.334422> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:23:34.334768> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,183,19,8,-56" "125,5,12" "2019-06-07T11:23:34.325" "B827EB4E30A8"
+2019-06-07T11:23:37.425518> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:23:37.426108> Edge: upload success TC 26.00
+2019-06-07T11:23:37.426535> Edge: upload success HU 26.00
+2019-06-07T11:23:37.594891> --> cloud end
+2019-06-07T11:23:37.595277> 
+2019-06-07T11:24:49.828227> --- rxlora. dst=1 type=0x10 src=118 seq=184 len=19 SNR=7 RSSIpkt=-50 BW=125 CR=4/5 SF=12
+2019-06-07T11:24:49.829312> 2019-06-07T11:24:49.828580
+2019-06-07T11:24:49.829689> rcv ctrl pkt info (^p): 1,16,118,184,19,7,-50
+2019-06-07T11:24:49.829992> splitted in: [1, 16, 118, 184, 19, 7, -50]
+2019-06-07T11:24:49.830290> (dst=1 type=0x10(DATA) src=118 seq=184 len=19 SNR=7 RSSI=-50)
+2019-06-07T11:24:49.832936> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:24:49.833695> splitted in: [125, 5, 12]
+2019-06-07T11:24:49.834213> (BW=125 CR=5 SF=12)
+2019-06-07T11:24:49.834627> rcv timestamp (^t): 2019-06-07T11:24:49.824
+2019-06-07T11:24:49.835022> 
+2019-06-07T11:24:49.835396> Got first framing byte
+2019-06-07T11:24:49.836153> --> got LoRa data prefix
+2019-06-07T11:24:49.836648> valid app key: accept data
+2019-06-07T11:24:49.837161> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:24:49.837785> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,184,19,7,-50" "125,5,12" "2019-06-07T11:24:49.824" "B827EB4E30A8"
+2019-06-07T11:24:53.027970> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:24:53.028382> Edge: upload success TC 26.00
+2019-06-07T11:24:53.028696> Edge: upload success HU 26.00
+2019-06-07T11:24:53.210612> --> cloud end
+2019-06-07T11:24:53.210997> 
+2019-06-07T11:26:05.329574> --- rxlora. dst=1 type=0x10 src=118 seq=185 len=19 SNR=7 RSSIpkt=-49 BW=125 CR=4/5 SF=12
+2019-06-07T11:26:05.330090> 2019-06-07T11:26:05.326676
+2019-06-07T11:26:05.330468> rcv ctrl pkt info (^p): 1,16,118,185,19,7,-49
+2019-06-07T11:26:05.330790> splitted in: [1, 16, 118, 185, 19, 7, -49]
+2019-06-07T11:26:05.331089> (dst=1 type=0x10(DATA) src=118 seq=185 len=19 SNR=7 RSSI=-49)
+2019-06-07T11:26:05.331436> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:26:05.332044> splitted in: [125, 5, 12]
+2019-06-07T11:26:05.332459> (BW=125 CR=5 SF=12)
+2019-06-07T11:26:05.332843> rcv timestamp (^t): 2019-06-07T11:26:05.323
+2019-06-07T11:26:05.333227> 
+2019-06-07T11:26:05.333609> Got first framing byte
+2019-06-07T11:26:05.333968> --> got LoRa data prefix
+2019-06-07T11:26:05.334326> valid app key: accept data
+2019-06-07T11:26:05.334669> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:26:05.335076> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,185,19,7,-49" "125,5,12" "2019-06-07T11:26:05.323" "B827EB4E30A8"
+2019-06-07T11:26:08.440571> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:26:08.441584> Edge: upload success TC 26.00
+2019-06-07T11:26:08.442438> Edge: upload success HU 26.00
+2019-06-07T11:26:08.643022> --> cloud end
+2019-06-07T11:26:08.643880> 
+2019-06-07T11:27:20.827351> --- rxlora. dst=1 type=0x10 src=118 seq=186 len=19 SNR=7 RSSIpkt=-48 BW=125 CR=4/5 SF=12
+2019-06-07T11:27:20.827881> 2019-06-07T11:27:20.826913
+2019-06-07T11:27:20.828397> rcv ctrl pkt info (^p): 1,16,118,186,19,7,-48
+2019-06-07T11:27:20.828843> splitted in: [1, 16, 118, 186, 19, 7, -48]
+2019-06-07T11:27:20.829182> (dst=1 type=0x10(DATA) src=118 seq=186 len=19 SNR=7 RSSI=-48)
+2019-06-07T11:27:20.829627> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:27:20.830060> splitted in: [125, 5, 12]
+2019-06-07T11:27:20.830483> (BW=125 CR=5 SF=12)
+2019-06-07T11:27:20.830873> rcv timestamp (^t): 2019-06-07T11:27:20.823
+2019-06-07T11:27:20.831301> 
+2019-06-07T11:27:20.832005> Got first framing byte
+2019-06-07T11:27:20.832520> --> got LoRa data prefix
+2019-06-07T11:27:20.832977> valid app key: accept data
+2019-06-07T11:27:20.833422> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:27:20.833861> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,186,19,7,-48" "125,5,12" "2019-06-07T11:27:20.823" "B827EB4E30A8"
+2019-06-07T11:27:24.103154> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:27:24.103785> Edge: upload success TC 26.00
+2019-06-07T11:27:24.104185> Edge: upload success HU 26.00
+2019-06-07T11:27:24.270471> --> cloud end
+2019-06-07T11:27:24.270879> 
+2019-06-07T11:28:36.263871> --- rxlora. dst=1 type=0x10 src=118 seq=187 len=19 SNR=8 RSSIpkt=-49 BW=125 CR=4/5 SF=12
+2019-06-07T11:28:36.264393> 2019-06-07T11:28:36.263387
+2019-06-07T11:28:36.264752> rcv ctrl pkt info (^p): 1,16,118,187,19,8,-49
+2019-06-07T11:28:36.265117> splitted in: [1, 16, 118, 187, 19, 8, -49]
+2019-06-07T11:28:36.265406> (dst=1 type=0x10(DATA) src=118 seq=187 len=19 SNR=8 RSSI=-49)
+2019-06-07T11:28:36.265688> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:28:36.265987> splitted in: [125, 5, 12]
+2019-06-07T11:28:36.266340> (BW=125 CR=5 SF=12)
+2019-06-07T11:28:36.266669> rcv timestamp (^t): 2019-06-07T11:28:36.259
+2019-06-07T11:28:36.266970> 
+2019-06-07T11:28:36.267347> Got first framing byte
+2019-06-07T11:28:36.267666> --> got LoRa data prefix
+2019-06-07T11:28:36.267954> valid app key: accept data
+2019-06-07T11:28:36.268238> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:28:36.268590> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,187,19,8,-49" "125,5,12" "2019-06-07T11:28:36.259" "B827EB4E30A8"
+2019-06-07T11:28:39.277127> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:28:39.277737> Edge: upload success TC 26.00
+2019-06-07T11:28:39.278237> Edge: upload success HU 26.00
+2019-06-07T11:28:39.450726> --> cloud end
+2019-06-07T11:28:39.451142> 
+2019-06-07T11:29:51.515669> --- rxlora. dst=1 type=0x10 src=118 seq=188 len=19 SNR=9 RSSIpkt=-51 BW=125 CR=4/5 SF=12
+2019-06-07T11:29:51.516160> 2019-06-07T11:29:51.515264
+2019-06-07T11:29:51.516503> rcv ctrl pkt info (^p): 1,16,118,188,19,9,-51
+2019-06-07T11:29:51.516801> splitted in: [1, 16, 118, 188, 19, 9, -51]
+2019-06-07T11:29:51.517078> (dst=1 type=0x10(DATA) src=118 seq=188 len=19 SNR=9 RSSI=-51)
+2019-06-07T11:29:51.517359> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:29:51.517647> splitted in: [125, 5, 12]
+2019-06-07T11:29:51.518017> (BW=125 CR=5 SF=12)
+2019-06-07T11:29:51.518355> rcv timestamp (^t): 2019-06-07T11:29:51.511
+2019-06-07T11:29:51.518664> 
+2019-06-07T11:29:51.519046> Got first framing byte
+2019-06-07T11:29:51.519380> --> got LoRa data prefix
+2019-06-07T11:29:51.519679> valid app key: accept data
+2019-06-07T11:29:51.519972> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:29:51.520327> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,188,19,9,-51" "125,5,12" "2019-06-07T11:29:51.511" "B827EB4E30A8"
+2019-06-07T11:29:54.543224> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:29:54.543666> Edge: upload success TC 26.00
+2019-06-07T11:29:54.543968> Edge: upload success HU 26.00
+2019-06-07T11:29:54.706571> --> cloud end
+2019-06-07T11:29:54.706979> 
+2019-06-07T11:31:06.705588> --- rxlora. dst=1 type=0x10 src=118 seq=189 len=19 SNR=6 RSSIpkt=-53 BW=125 CR=4/5 SF=12
+2019-06-07T11:31:06.706065> 2019-06-07T11:31:06.705186
+2019-06-07T11:31:06.706413> rcv ctrl pkt info (^p): 1,16,118,189,19,6,-53
+2019-06-07T11:31:06.706932> splitted in: [1, 16, 118, 189, 19, 6, -53]
+2019-06-07T11:31:06.710262> (dst=1 type=0x10(DATA) src=118 seq=189 len=19 SNR=6 RSSI=-53)
+2019-06-07T11:31:06.711324> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:31:06.712389> splitted in: [125, 5, 12]
+2019-06-07T11:31:06.719606> (BW=125 CR=5 SF=12)
+2019-06-07T11:31:06.724739> rcv timestamp (^t): 2019-06-07T11:31:06.701
+2019-06-07T11:31:06.730171> 
+2019-06-07T11:31:06.732219> Got first framing byte
+2019-06-07T11:31:06.733203> --> got LoRa data prefix
+2019-06-07T11:31:06.734179> valid app key: accept data
+2019-06-07T11:31:06.735635> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:31:06.737042> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,189,19,6,-53" "125,5,12" "2019-06-07T11:31:06.701" "B827EB4E30A8"
+2019-06-07T11:31:09.856708> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:31:09.857390> Edge: upload success TC 26.00
+2019-06-07T11:31:09.857946> Edge: upload success HU 26.00
+2019-06-07T11:31:10.026560> --> cloud end
+2019-06-07T11:31:10.026980> 
+2019-06-07T11:31:16.972447> Low-level gw status ON
+2019-06-07T11:32:21.894239> --- rxlora. dst=1 type=0x10 src=118 seq=190 len=19 SNR=7 RSSIpkt=-52 BW=125 CR=4/5 SF=12
+2019-06-07T11:32:21.894759> 2019-06-07T11:32:21.893762
+2019-06-07T11:32:21.895170> rcv ctrl pkt info (^p): 1,16,118,190,19,7,-52
+2019-06-07T11:32:21.895533> splitted in: [1, 16, 118, 190, 19, 7, -52]
+2019-06-07T11:32:21.895824> (dst=1 type=0x10(DATA) src=118 seq=190 len=19 SNR=7 RSSI=-52)
+2019-06-07T11:32:21.896122> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:32:21.896509> splitted in: [125, 5, 12]
+2019-06-07T11:32:21.896837> (BW=125 CR=5 SF=12)
+2019-06-07T11:32:21.897148> rcv timestamp (^t): 2019-06-07T11:32:21.890
+2019-06-07T11:32:21.897462> 
+2019-06-07T11:32:21.897787> Got first framing byte
+2019-06-07T11:32:21.898080> --> got LoRa data prefix
+2019-06-07T11:32:21.898479> valid app key: accept data
+2019-06-07T11:32:21.898998> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:32:21.899438> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,190,19,7,-52" "125,5,12" "2019-06-07T11:32:21.890" "B827EB4E30A8"
+2019-06-07T11:32:25.087548> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:32:25.088097> Edge: upload success TC 26.00
+2019-06-07T11:32:25.088540> Edge: upload success HU 26.00
+2019-06-07T11:32:25.264355> --> cloud end
+2019-06-07T11:32:25.264765> 
+2019-06-07T11:32:26.849592> 2019-06-07 11:32:26.846138
+2019-06-07T11:32:26.850385> post status: gw ON
+2019-06-07T11:32:26.851015> post status: executing periodic tasks
+2019-06-07T11:32:27.942660> no timezone support, time will be expressed only in local time
+2019-06-07T11:32:27.943079> post status: start running
+2019-06-07T11:32:29.039610> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-07T11:32:29.040169> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-07T11:32:29.040571> get_gps.py: invalid serial port
+2019-06-07T11:32:29.181784> post status: dynamic GPS is requested
+2019-06-07T11:32:29.182351> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-07T11:32:29.182783> post status get GPS: no GPS coordinates
+2019-06-07T11:32:29.183108> post status: show current GPS position
+2019-06-07T11:32:29.183402> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-07T11:32:29.183689> post status: exiting
+2019-06-07T11:33:37.334513> --- rxlora. dst=1 type=0x10 src=118 seq=191 len=19 SNR=7 RSSIpkt=-53 BW=125 CR=4/5 SF=12
+2019-06-07T11:33:37.335027> 2019-06-07T11:33:37.333838
+2019-06-07T11:33:37.335389> rcv ctrl pkt info (^p): 1,16,118,191,19,7,-53
+2019-06-07T11:33:37.335702> splitted in: [1, 16, 118, 191, 19, 7, -53]
+2019-06-07T11:33:37.335991> (dst=1 type=0x10(DATA) src=118 seq=191 len=19 SNR=7 RSSI=-53)
+2019-06-07T11:33:37.336290> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:33:37.336603> splitted in: [125, 5, 12]
+2019-06-07T11:33:37.336994> (BW=125 CR=5 SF=12)
+2019-06-07T11:33:37.337331> rcv timestamp (^t): 2019-06-07T11:33:37.329
+2019-06-07T11:33:37.337642> 
+2019-06-07T11:33:37.337970> Got first framing byte
+2019-06-07T11:33:37.338302> --> got LoRa data prefix
+2019-06-07T11:33:37.338673> valid app key: accept data
+2019-06-07T11:33:37.339027> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:33:37.339403> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,191,19,7,-53" "125,5,12" "2019-06-07T11:33:37.329" "B827EB4E30A8"
+2019-06-07T11:33:40.337786> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:33:40.338686> Edge: upload success TC 26.00
+2019-06-07T11:33:40.339294> Edge: upload success HU 26.00
+2019-06-07T11:33:40.503655> --> cloud end
+2019-06-07T11:33:40.504075> 
+2019-06-07T11:34:52.899309> --- rxlora. dst=1 type=0x10 src=118 seq=192 len=19 SNR=7 RSSIpkt=-55 BW=125 CR=4/5 SF=12
+2019-06-07T11:34:52.899863> 2019-06-07T11:34:52.897329
+2019-06-07T11:34:52.900258> rcv ctrl pkt info (^p): 1,16,118,192,19,7,-55
+2019-06-07T11:34:52.900786> splitted in: [1, 16, 118, 192, 19, 7, -55]
+2019-06-07T11:34:52.901145> (dst=1 type=0x10(DATA) src=118 seq=192 len=19 SNR=7 RSSI=-55)
+2019-06-07T11:34:52.901472> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:34:52.902061> splitted in: [125, 5, 12]
+2019-06-07T11:34:52.902466> (BW=125 CR=5 SF=12)
+2019-06-07T11:34:52.902859> rcv timestamp (^t): 2019-06-07T11:34:52.893
+2019-06-07T11:34:52.903241> 
+2019-06-07T11:34:52.903714> Got first framing byte
+2019-06-07T11:34:52.904119> --> got LoRa data prefix
+2019-06-07T11:34:52.904489> valid app key: accept data
+2019-06-07T11:34:52.904841> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:34:52.905205> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,192,19,7,-55" "125,5,12" "2019-06-07T11:34:52.893" "B827EB4E30A8"
+2019-06-07T11:34:55.938884> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:34:55.939450> Edge: upload success TC 26.00
+2019-06-07T11:34:55.939874> Edge: upload success HU 26.00
+2019-06-07T11:34:56.116808> --> cloud end
+2019-06-07T11:34:56.117181> 
+2019-06-07T11:36:08.149142> --- rxlora. dst=1 type=0x10 src=118 seq=193 len=19 SNR=7 RSSIpkt=-61 BW=125 CR=4/5 SF=12
+2019-06-07T11:36:08.149687> 2019-06-07T11:36:08.148132
+2019-06-07T11:36:08.150050> rcv ctrl pkt info (^p): 1,16,118,193,19,7,-61
+2019-06-07T11:36:08.150346> splitted in: [1, 16, 118, 193, 19, 7, -61]
+2019-06-07T11:36:08.150672> (dst=1 type=0x10(DATA) src=118 seq=193 len=19 SNR=7 RSSI=-61)
+2019-06-07T11:36:08.151013> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:36:08.151321> splitted in: [125, 5, 12]
+2019-06-07T11:36:08.151768> (BW=125 CR=5 SF=12)
+2019-06-07T11:36:08.152210> rcv timestamp (^t): 2019-06-07T11:36:08.144
+2019-06-07T11:36:08.152547> 
+2019-06-07T11:36:08.152860> Got first framing byte
+2019-06-07T11:36:08.153206> --> got LoRa data prefix
+2019-06-07T11:36:08.153555> valid app key: accept data
+2019-06-07T11:36:08.153918> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:36:08.154262> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,193,19,7,-61" "125,5,12" "2019-06-07T11:36:08.144" "B827EB4E30A8"
+2019-06-07T11:36:11.280179> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:36:11.280556> Edge: upload success TC 26.00
+2019-06-07T11:36:11.280830> Edge: upload success HU 26.00
+2019-06-07T11:36:11.456443> --> cloud end
+2019-06-07T11:36:11.456855> 
+2019-06-07T11:37:23.466057> --- rxlora. dst=1 type=0x10 src=118 seq=194 len=19 SNR=9 RSSIpkt=-56 BW=125 CR=4/5 SF=12
+2019-06-07T11:37:23.467117> 2019-06-07T11:37:23.465265
+2019-06-07T11:37:23.467772> rcv ctrl pkt info (^p): 1,16,118,194,19,9,-56
+2019-06-07T11:37:23.468461> splitted in: [1, 16, 118, 194, 19, 9, -56]
+2019-06-07T11:37:23.469572> (dst=1 type=0x10(DATA) src=118 seq=194 len=19 SNR=9 RSSI=-56)
+2019-06-07T11:37:23.470437> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:37:23.471303> splitted in: [125, 5, 12]
+2019-06-07T11:37:23.472205> (BW=125 CR=5 SF=12)
+2019-06-07T11:37:23.472802> rcv timestamp (^t): 2019-06-07T11:37:23.461
+2019-06-07T11:37:23.473395> 
+2019-06-07T11:37:23.474066> Got first framing byte
+2019-06-07T11:37:23.474728> --> got LoRa data prefix
+2019-06-07T11:37:23.475390> valid app key: accept data
+2019-06-07T11:37:23.476126> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:37:23.476793> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,194,19,9,-56" "125,5,12" "2019-06-07T11:37:23.461" "B827EB4E30A8"
+2019-06-07T11:37:26.480628> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:37:26.481328> Edge: upload success TC 26.00
+2019-06-07T11:37:26.482176> Edge: upload success HU 26.00
+2019-06-07T11:37:26.651464> --> cloud end
+2019-06-07T11:37:26.651973> 
+2019-06-07T11:38:38.782577> --- rxlora. dst=1 type=0x10 src=118 seq=195 len=19 SNR=8 RSSIpkt=-57 BW=125 CR=4/5 SF=12
+2019-06-07T11:38:38.783061> 2019-06-07T11:38:38.782101
+2019-06-07T11:38:38.783454> rcv ctrl pkt info (^p): 1,16,118,195,19,8,-57
+2019-06-07T11:38:38.783879> splitted in: [1, 16, 118, 195, 19, 8, -57]
+2019-06-07T11:38:38.784192> (dst=1 type=0x10(DATA) src=118 seq=195 len=19 SNR=8 RSSI=-57)
+2019-06-07T11:38:38.784492> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:38:38.784857> splitted in: [125, 5, 12]
+2019-06-07T11:38:38.785196> (BW=125 CR=5 SF=12)
+2019-06-07T11:38:38.785498> rcv timestamp (^t): 2019-06-07T11:38:38.778
+2019-06-07T11:38:38.785808> 
+2019-06-07T11:38:38.786142> Got first framing byte
+2019-06-07T11:38:38.786440> --> got LoRa data prefix
+2019-06-07T11:38:38.786897> valid app key: accept data
+2019-06-07T11:38:38.787279> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:38:38.787635> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,195,19,8,-57" "125,5,12" "2019-06-07T11:38:38.778" "B827EB4E30A8"
+2019-06-07T11:38:41.749134> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:38:41.749774> Edge: upload success TC 26.00
+2019-06-07T11:38:41.750198> Edge: upload success HU 26.00
+2019-06-07T11:38:41.924376> --> cloud end
+2019-06-07T11:38:41.924797> 
+2019-06-07T11:39:54.350417> --- rxlora. dst=1 type=0x10 src=118 seq=196 len=19 SNR=8 RSSIpkt=-54 BW=125 CR=4/5 SF=12
+2019-06-07T11:39:54.350946> 2019-06-07T11:39:54.349966
+2019-06-07T11:39:54.351448> rcv ctrl pkt info (^p): 1,16,118,196,19,8,-54
+2019-06-07T11:39:54.352189> splitted in: [1, 16, 118, 196, 19, 8, -54]
+2019-06-07T11:39:54.352716> (dst=1 type=0x10(DATA) src=118 seq=196 len=19 SNR=8 RSSI=-54)
+2019-06-07T11:39:54.353386> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:39:54.354079> splitted in: [125, 5, 12]
+2019-06-07T11:39:54.354812> (BW=125 CR=5 SF=12)
+2019-06-07T11:39:54.355328> rcv timestamp (^t): 2019-06-07T11:39:54.345
+2019-06-07T11:39:54.355817> 
+2019-06-07T11:39:54.356443> Got first framing byte
+2019-06-07T11:39:54.356900> --> got LoRa data prefix
+2019-06-07T11:39:54.357506> valid app key: accept data
+2019-06-07T11:39:54.358102> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:39:54.358834> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,196,19,8,-54" "125,5,12" "2019-06-07T11:39:54.345" "B827EB4E30A8"
+2019-06-07T11:39:57.466801> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:39:57.467256> Edge: upload success TC 26.00
+2019-06-07T11:39:57.467579> Edge: upload success HU 26.00
+2019-06-07T11:39:57.638782> --> cloud end
+2019-06-07T11:39:57.639206> 
+2019-06-07T11:40:45.655334> Low-level gw status ON
+2019-06-07T11:41:09.852404> --- rxlora. dst=1 type=0x10 src=118 seq=197 len=19 SNR=8 RSSIpkt=-55 BW=125 CR=4/5 SF=12
+2019-06-07T11:41:09.852952> 2019-06-07T11:41:09.851954
+2019-06-07T11:41:09.853363> rcv ctrl pkt info (^p): 1,16,118,197,19,8,-55
+2019-06-07T11:41:09.853731> splitted in: [1, 16, 118, 197, 19, 8, -55]
+2019-06-07T11:41:09.854076> (dst=1 type=0x10(DATA) src=118 seq=197 len=19 SNR=8 RSSI=-55)
+2019-06-07T11:41:09.854390> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:41:09.855062> splitted in: [125, 5, 12]
+2019-06-07T11:41:09.855594> (BW=125 CR=5 SF=12)
+2019-06-07T11:41:09.856027> rcv timestamp (^t): 2019-06-07T11:41:09.848
+2019-06-07T11:41:09.856484> 
+2019-06-07T11:41:09.856871> Got first framing byte
+2019-06-07T11:41:09.857360> --> got LoRa data prefix
+2019-06-07T11:41:09.857883> valid app key: accept data
+2019-06-07T11:41:09.858349> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:41:09.858752> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,197,19,8,-55" "125,5,12" "2019-06-07T11:41:09.848" "B827EB4E30A8"
+2019-06-07T11:41:12.903019> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:41:12.904471> Edge: upload success TC 26.00
+2019-06-07T11:41:12.906083> Edge: upload success HU 26.00
+2019-06-07T11:41:13.085522> --> cloud end
+2019-06-07T11:41:13.085958> 
+2019-06-07T11:42:25.420738> --- rxlora. dst=1 type=0x10 src=118 seq=198 len=19 SNR=8 RSSIpkt=-56 BW=125 CR=4/5 SF=12
+2019-06-07T11:42:25.422158> 2019-06-07T11:42:25.420223
+2019-06-07T11:42:25.423096> rcv ctrl pkt info (^p): 1,16,118,198,19,8,-56
+2019-06-07T11:42:25.424528> splitted in: [1, 16, 118, 198, 19, 8, -56]
+2019-06-07T11:42:25.425503> (dst=1 type=0x10(DATA) src=118 seq=198 len=19 SNR=8 RSSI=-56)
+2019-06-07T11:42:25.426525> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:42:25.427897> splitted in: [125, 5, 12]
+2019-06-07T11:42:25.428843> (BW=125 CR=5 SF=12)
+2019-06-07T11:42:25.429996> rcv timestamp (^t): 2019-06-07T11:42:25.416
+2019-06-07T11:42:25.430972> 
+2019-06-07T11:42:25.432105> Got first framing byte
+2019-06-07T11:42:25.433045> --> got LoRa data prefix
+2019-06-07T11:42:25.433870> valid app key: accept data
+2019-06-07T11:42:25.434552> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:42:25.435337> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,198,19,8,-56" "125,5,12" "2019-06-07T11:42:25.416" "B827EB4E30A8"
+2019-06-07T11:42:28.550519> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:42:28.551037> Edge: upload success TC 26.00
+2019-06-07T11:42:28.551867> Edge: upload success HU 26.00
+2019-06-07T11:42:28.726587> --> cloud end
+2019-06-07T11:42:28.727004> 
+2019-06-07T11:42:29.328701> 2019-06-07 11:42:29.326302
+2019-06-07T11:42:29.329477> post status: gw ON
+2019-06-07T11:42:29.330169> post status: executing periodic tasks
+2019-06-07T11:42:30.419534> no timezone support, time will be expressed only in local time
+2019-06-07T11:42:30.419922> post status: start running
+2019-06-07T11:42:31.498733> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-07T11:42:31.499415> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-07T11:42:31.499903> get_gps.py: invalid serial port
+2019-06-07T11:42:31.636882> post status: dynamic GPS is requested
+2019-06-07T11:42:31.637323> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-07T11:42:31.637686> post status get GPS: no GPS coordinates
+2019-06-07T11:42:31.637993> post status: show current GPS position
+2019-06-07T11:42:31.638283> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-07T11:42:31.638561> post status: exiting
+2019-06-07T11:43:40.622801> --- rxlora. dst=1 type=0x10 src=118 seq=199 len=19 SNR=7 RSSIpkt=-58 BW=125 CR=4/5 SF=12
+2019-06-07T11:43:40.623458> 2019-06-07T11:43:40.622317
+2019-06-07T11:43:40.624047> rcv ctrl pkt info (^p): 1,16,118,199,19,7,-58
+2019-06-07T11:43:40.624444> splitted in: [1, 16, 118, 199, 19, 7, -58]
+2019-06-07T11:43:40.624732> (dst=1 type=0x10(DATA) src=118 seq=199 len=19 SNR=7 RSSI=-58)
+2019-06-07T11:43:40.625031> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:43:40.625318> splitted in: [125, 5, 12]
+2019-06-07T11:43:40.625593> (BW=125 CR=5 SF=12)
+2019-06-07T11:43:40.625868> rcv timestamp (^t): 2019-06-07T11:43:40.618
+2019-06-07T11:43:40.626150> 
+2019-06-07T11:43:40.626484> Got first framing byte
+2019-06-07T11:43:40.626762> --> got LoRa data prefix
+2019-06-07T11:43:40.627036> valid app key: accept data
+2019-06-07T11:43:40.627313> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:43:40.627596> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,199,19,7,-58" "125,5,12" "2019-06-07T11:43:40.618" "B827EB4E30A8"
+2019-06-07T11:43:43.653879> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:43:43.654432> Edge: upload success TC 26.00
+2019-06-07T11:43:43.654858> Edge: upload success HU 26.00
+2019-06-07T11:43:43.819952> --> cloud end
+2019-06-07T11:43:43.820373> 
+2019-06-07T11:44:56.123467> --- rxlora. dst=1 type=0x10 src=118 seq=200 len=19 SNR=7 RSSIpkt=-58 BW=125 CR=4/5 SF=12
+2019-06-07T11:44:56.124000> 2019-06-07T11:44:56.123066
+2019-06-07T11:44:56.124426> rcv ctrl pkt info (^p): 1,16,118,200,19,7,-58
+2019-06-07T11:44:56.124748> splitted in: [1, 16, 118, 200, 19, 7, -58]
+2019-06-07T11:44:56.125041> (dst=1 type=0x10(DATA) src=118 seq=200 len=19 SNR=7 RSSI=-58)
+2019-06-07T11:44:56.125332> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:44:56.125626> splitted in: [125, 5, 12]
+2019-06-07T11:44:56.125912> (BW=125 CR=5 SF=12)
+2019-06-07T11:44:56.126183> rcv timestamp (^t): 2019-06-07T11:44:56.119
+2019-06-07T11:44:56.126454> 
+2019-06-07T11:44:56.126782> Got first framing byte
+2019-06-07T11:44:56.127051> --> got LoRa data prefix
+2019-06-07T11:44:56.127319> valid app key: accept data
+2019-06-07T11:44:56.127590> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:44:56.127859> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,200,19,7,-58" "125,5,12" "2019-06-07T11:44:56.119" "B827EB4E30A8"
+2019-06-07T11:44:59.272536> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:44:59.273106> Edge: upload success TC 26.00
+2019-06-07T11:44:59.273550> Edge: upload success HU 26.00
+2019-06-07T11:44:59.450181> --> cloud end
+2019-06-07T11:44:59.450555> 
+2019-06-07T11:46:11.632365> --- rxlora. dst=1 type=0x10 src=118 seq=201 len=19 SNR=7 RSSIpkt=-52 BW=125 CR=4/5 SF=12
+2019-06-07T11:46:11.632955> 2019-06-07T11:46:11.629980
+2019-06-07T11:46:11.633331> rcv ctrl pkt info (^p): 1,16,118,201,19,7,-52
+2019-06-07T11:46:11.633716> splitted in: [1, 16, 118, 201, 19, 7, -52]
+2019-06-07T11:46:11.634095> (dst=1 type=0x10(DATA) src=118 seq=201 len=19 SNR=7 RSSI=-52)
+2019-06-07T11:46:11.634408> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:46:11.634717> splitted in: [125, 5, 12]
+2019-06-07T11:46:11.635092> (BW=125 CR=5 SF=12)
+2019-06-07T11:46:11.635436> rcv timestamp (^t): 2019-06-07T11:46:11.626
+2019-06-07T11:46:11.635801> 
+2019-06-07T11:46:11.636175> Got first framing byte
+2019-06-07T11:46:11.636552> --> got LoRa data prefix
+2019-06-07T11:46:11.636918> valid app key: accept data
+2019-06-07T11:46:11.637251> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:46:11.637606> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,201,19,7,-52" "125,5,12" "2019-06-07T11:46:11.626" "B827EB4E30A8"
+2019-06-07T11:46:14.770154> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:46:14.770581> Edge: upload success TC 26.00
+2019-06-07T11:46:14.770935> Edge: upload success HU 26.00
+2019-06-07T11:46:14.937574> --> cloud end
+2019-06-07T11:46:14.937980> 
+2019-06-07T11:47:26.953138> --- rxlora. dst=1 type=0x10 src=118 seq=202 len=19 SNR=7 RSSIpkt=-51 BW=125 CR=4/5 SF=12
+2019-06-07T11:47:26.954145> 2019-06-07T11:47:26.953428
+2019-06-07T11:47:26.954510> rcv ctrl pkt info (^p): 1,16,118,202,19,7,-51
+2019-06-07T11:47:26.954819> splitted in: [1, 16, 118, 202, 19, 7, -51]
+2019-06-07T11:47:26.955115> (dst=1 type=0x10(DATA) src=118 seq=202 len=19 SNR=7 RSSI=-51)
+2019-06-07T11:47:26.958069> rcv ctrl radio info (^r): 125,5,12
+2019-06-07T11:47:26.958528> splitted in: [125, 5, 12]
+2019-06-07T11:47:26.958911> (BW=125 CR=5 SF=12)
+2019-06-07T11:47:26.959285> rcv timestamp (^t): 2019-06-07T11:47:26.948
+2019-06-07T11:47:26.959598> 
+2019-06-07T11:47:26.959879> Got first framing byte
+2019-06-07T11:47:26.960200> --> got LoRa data prefix
+2019-06-07T11:47:26.960490> valid app key: accept data
+2019-06-07T11:47:26.960794> uploading with python /app/data_acq/edgeCall.py
+2019-06-07T11:47:26.961084> python /app/data_acq/edgeCall.py "TC/26.00/HU/26.00" "1,16,118,202,19,7,-51" "125,5,12" "2019-06-07T11:47:26.948" "B827EB4E30A8"
+2019-06-07T11:47:30.015018> Received data (from 118):  {'TC': '26.00', 'HU': '26.00'}
+2019-06-07T11:47:30.015674> Edge: upload success TC 26.00
+2019-06-07T11:47:30.016207> Edge: upload success HU 26.00
+2019-06-07T11:47:30.186701> --> cloud end
+2019-06-07T11:47:30.187087> 
+2019-06-07T11:47:51.556986> no timezone support, time will be expressed only in local time
+2019-06-07T11:47:51.557764> post_processing_gw.py found an alert_conf section
+2019-06-07T11:52:11.494256> no timezone support, time will be expressed only in local time
+2019-06-07T11:52:11.494757> post_processing_gw.py found an alert_conf section
+2019-06-07T14:50:56.663136> no timezone support, time will be expressed only in local time
+2019-06-07T14:50:56.665797> post_processing_gw.py found an alert_conf section
+2019-06-07T14:51:08.108496> no timezone support, time will be expressed only in local time
+2019-06-07T14:51:08.109284> post_processing_gw.py found an alert_conf section
+2019-06-07T14:54:40.383495> no timezone support, time will be expressed only in local time
+2019-06-07T14:54:40.386585> post_processing_gw.py found an alert_conf section
+2019-06-07T14:57:28.075923> no timezone support, time will be expressed only in local time
+2019-06-07T14:57:28.079566> post_processing_gw.py found an alert_conf section
+2019-06-10T08:47:11.673926> no timezone support, time will be expressed only in local time
+2019-06-10T08:47:11.674502> post_processing_gw.py found an alert_conf section
+2019-06-10T08:52:39.996979> no timezone support, time will be expressed only in local time
+2019-06-10T08:52:39.997401> post_processing_gw.py found an alert_conf section
+2019-06-10T09:05:21.781713> no timezone support, time will be expressed only in local time
+2019-06-10T09:05:21.782462> post_processing_gw.py found an alert_conf section

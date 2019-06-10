@@ -4,7 +4,7 @@ from flask import request
 import subprocess
 import json
 import ast
-
+import time
 import os
 
 #------------------------#
@@ -379,6 +379,29 @@ def get_logs( n = 0):
 		cmd = 'cat '+ LOGS_PATH +'/post-processing.log';
 
 	return os.popen( cmd).read();
+
+#------------------------#
+
+@app.route( '/api/'+ API_VER +'/remote.it', methods=['GET'])
+def remoteIT():
+
+	doneF = PATH + '/remote.it/done.txt';
+	if( os.path.isfile( doneF) == False):
+		return json.dumps( False), 201;
+
+	try:
+		with open( doneF) as f:
+			regId = f.read();
+		res = {
+			'time'	: time.ctime( os.path.getmtime( doneF)),
+			'id'	: regId
+		};
+
+	except OSError:
+		res = 0
+
+	
+	return json.dumps( res), 201;
 
 #------------------------#
 
