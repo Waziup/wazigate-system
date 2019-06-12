@@ -736,33 +736,6 @@ _imagelog_filename = api.LOGS_PATH +"image_"+ str(_gwid) +".log"
 
 
 #------------------------------------------------------------
-#open clouds.json file to get enabled clouds
-#------------------------------------------------------------
-"""
-from clouds_parser import retrieve_enabled_clouds
-
-#get a copy of the list of enabled clouds
-_enabled_clouds=retrieve_enabled_clouds()
-
-print( "post_processing_gw.py got cloud list: ");
-print( _enabled_clouds);
-
-#------------------------------------------------------------
-#open clouds.json file to get clouds for encrypted data
-#------------------------------------------------------------
-
-_cloud_for_encrypted_data=retrieve_enabled_clouds("encrypted_clouds")
-print( "post_processing_gw.py got encrypted cloud list: ");
-print( _cloud_for_encrypted_data);
-
-_cloud_for_lorawan_encrypted_data=retrieve_enabled_clouds("lorawan_encrypted_clouds")
-print( "post_processing_gw.py got LoRaWAN encrypted cloud list: ");
-print( _cloud_for_lorawan_encrypted_data);
-"""
-
-_enabled_clouds = json_array["cloud_conf"]; # Later we will develop it in a better way
-
-#------------------------------------------------------------
 #start various threads
 #------------------------------------------------------------
 

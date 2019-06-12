@@ -385,6 +385,13 @@ def get_logs( n = 0):
 @app.route( '/api/'+ API_VER +'/remote.it', methods=['GET'])
 def remoteIT():
 
+	ongoingF = PATH + '/remote.it/ongoing.txt';
+	if( os.path.isfile( ongoingF)):
+		res = {
+			'msg'	: 'Registring started...'
+		};
+		return json.dumps( res), 201;
+	
 	doneF = PATH + '/remote.it/done.txt';
 	if( os.path.isfile( doneF) == False):
 		return json.dumps( False), 201;
@@ -403,6 +410,30 @@ def remoteIT():
 	
 	return json.dumps( res), 201;
 
+#------------------------#
+
+@app.route( '/api/'+ API_VER +'/location', methods=['GET'])
+def whereAmI():
+
+	import requests
+	try:
+		
+		url = 'https://api.ipify.org?format=json';
+		rs	= requests.get( url, timeout = 30, verify=False);
+		ip  = json.loads( rs.content)['ip'];
+
+		conf = conf_read();
+
+		url = 'https://api.checkgeoip.com/'+ ip +'?api_key='+ conf['ext_services']['geoip_API_key'];
+		rs	= requests.get( url, timeout = 30, verify=False);
+		res	= rs.content;
+
+	except requests.exceptions.RequestException as e:
+		print(e);
+		res = e;
+	
+	return res, 201;
+	
 #------------------------#
 
 if __name__ == "__main__":

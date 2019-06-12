@@ -27472,3 +27472,386 @@
 2019-06-10T08:52:39.997401> post_processing_gw.py found an alert_conf section
 2019-06-10T09:05:21.781713> no timezone support, time will be expressed only in local time
 2019-06-10T09:05:21.782462> post_processing_gw.py found an alert_conf section
+2019-06-10T09:42:59.358273> no timezone support, time will be expressed only in local time
+2019-06-10T09:42:59.362372> post_processing_gw.py found an alert_conf section
+2019-06-10T09:57:15.726659> no timezone support, time will be expressed only in local time
+2019-06-10T09:57:15.729970> post_processing_gw.py found an alert_conf section
+2019-06-10T11:41:39.535430> no timezone support, time will be expressed only in local time
+2019-06-10T11:41:39.538587> post_processing_gw.py found an alert_conf section
+2019-06-10T11:52:23.104579> no timezone support, time will be expressed only in local time
+2019-06-10T11:52:23.108435> post_processing_gw.py found an alert_conf section
+2019-06-10T12:09:21.312327> no timezone support, time will be expressed only in local time
+2019-06-10T12:09:21.315449> post_processing_gw.py found an alert_conf section
+2019-06-10T12:28:21.630726> no timezone support, time will be expressed only in local time
+2019-06-10T12:28:21.633895> post_processing_gw.py found an alert_conf section
+2019-06-10T12:58:51.839081> no timezone support, time will be expressed only in local time
+2019-06-10T12:58:51.842058> post_processing_gw.py found an alert_conf section
+2019-06-10T12:58:51.842664> Starting thread to perform periodic gw status/tasks
+2019-06-10T12:58:51.843111> 2019-06-10 12:58:51.836672
+2019-06-10T12:58:51.843407> post status: gw ON
+2019-06-10T12:58:51.843690> post status: executing periodic tasks
+2019-06-10T12:58:52.838846> 
+2019-06-10T12:58:52.839289> Current working directory: /app
+2019-06-10T12:58:52.839846> SX1276 detected, starting.
+2019-06-10T12:58:52.841005> SX1276 LF/HF calibration
+2019-06-10T12:58:52.841520> ...
+2019-06-10T12:58:52.841936> **********Power ON: state 0
+2019-06-10T12:58:52.842289> Default sync word: 0x12
+2019-06-10T12:58:52.842607> LoRa mode 1
+2019-06-10T12:58:52.842920> Setting mode: state 0
+2019-06-10T12:58:52.843294> Frequency 865.200000: state 0
+2019-06-10T12:58:52.843603> Use PA_BOOST amplifier line
+2019-06-10T12:58:52.843931> Set LoRa power dBm to 14
+2019-06-10T12:58:52.844264> Power: state 0
+2019-06-10T12:58:52.844576> Get Preamble Length: state 0
+2019-06-10T12:58:52.844960> Preamble Length: 8
+2019-06-10T12:58:52.845318> LoRa addr 1: state 0
+2019-06-10T12:58:52.845611> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-10T12:58:52.845905> Low-level gw status ON
+2019-06-10T12:58:52.927643> no timezone support, time will be expressed only in local time
+2019-06-10T12:58:52.928110> post status: start running
+2019-06-10T12:58:54.014940> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-10T12:58:54.015504> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-10T12:58:54.015918> get_gps.py: invalid serial port
+2019-06-10T12:58:54.161859> post status: dynamic GPS is requested
+2019-06-10T12:58:54.162367> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-10T12:58:54.162687> post status get GPS: no GPS coordinates
+2019-06-10T12:58:54.162984> post status: show current GPS position
+2019-06-10T12:58:54.164117> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-10T12:58:54.165080> post status: exiting
+2019-06-10T12:59:47.176351> --- rxlora. dst=1 type=0x10 src=118 seq=26 len=19 SNR=8 RSSIpkt=-40 BW=125 CR=4/5 SF=12
+2019-06-10T12:59:47.177192> 2019-06-10T12:59:47.176497
+2019-06-10T12:59:47.177628> rcv ctrl pkt info (^p): 1,16,118,26,19,8,-40
+2019-06-10T12:59:47.178004> splitted in: [1, 16, 118, 26, 19, 8, -40]
+2019-06-10T12:59:47.178635> (dst=1 type=0x10(DATA) src=118 seq=26 len=19 SNR=8 RSSI=-40)
+2019-06-10T12:59:47.179072> rcv ctrl radio info (^r): 125,5,12
+2019-06-10T12:59:47.179402> splitted in: [125, 5, 12]
+2019-06-10T12:59:47.179703> (BW=125 CR=5 SF=12)
+2019-06-10T12:59:47.179995> rcv timestamp (^t): 2019-06-10T12:59:47.171
+2019-06-10T12:59:47.180300> 
+2019-06-10T12:59:47.180582> Got first framing byte
+2019-06-10T12:59:47.181044> --> got LoRa data prefix
+2019-06-10T12:59:47.181549> valid app key: accept data
+2019-06-10T14:31:03.451427> no timezone support, time will be expressed only in local time
+2019-06-10T14:31:03.451961> post_processing_gw.py found an alert_conf section
+2019-06-10T14:31:03.452329> Starting thread to perform periodic gw status/tasks
+2019-06-10T14:31:03.452696> 2019-06-10 14:31:03.451737
+2019-06-10T14:31:03.453230> post status: gw ON
+2019-06-10T14:31:03.453581> post status: executing periodic tasks
+2019-06-10T14:31:04.453762> 
+2019-06-10T14:31:04.454217> Current working directory: /app
+2019-06-10T14:31:04.454828> SX1276 detected, starting.
+2019-06-10T14:31:04.456032> SX1276 LF/HF calibration
+2019-06-10T14:31:04.456508> ...
+2019-06-10T14:31:04.456873> **********Power ON: state 0
+2019-06-10T14:31:04.457196> Default sync word: 0x12
+2019-06-10T14:31:04.457700> LoRa mode 1
+2019-06-10T14:31:04.458018> Setting mode: state 0
+2019-06-10T14:31:04.458641> Frequency 865.200000: state 0
+2019-06-10T14:31:04.459263> Use PA_BOOST amplifier line
+2019-06-10T14:31:04.459759> Set LoRa power dBm to 14
+2019-06-10T14:31:04.460226> Power: state 0
+2019-06-10T14:31:04.460699> Get Preamble Length: state 0
+2019-06-10T14:31:04.461149> Preamble Length: 8
+2019-06-10T14:31:04.461782> LoRa addr 1: state 0
+2019-06-10T14:31:04.462355> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-10T14:31:04.462833> Low-level gw status ON
+2019-06-10T14:31:04.578837> no timezone support, time will be expressed only in local time
+2019-06-10T14:31:04.579191> post status: start running
+2019-06-10T14:31:05.657834> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-10T14:31:05.659236> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-10T14:31:05.660032> get_gps.py: invalid serial port
+2019-06-10T14:31:05.800959> post status: dynamic GPS is requested
+2019-06-10T14:31:05.801486> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-10T14:31:05.801948> post status get GPS: no GPS coordinates
+2019-06-10T14:31:05.802376> post status: show current GPS position
+2019-06-10T14:31:05.802732> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-10T14:31:05.803552> post status: exiting
+2019-06-10T14:31:29.018683> --- rxlora. dst=1 type=0x10 src=118 seq=99 len=19 SNR=7 RSSIpkt=-37 BW=125 CR=4/5 SF=12
+2019-06-10T14:31:29.019084> 2019-06-10T14:31:29.015398
+2019-06-10T14:31:29.019374> rcv ctrl pkt info (^p): 1,16,118,99,19,7,-37
+2019-06-10T14:31:29.019663> splitted in: [1, 16, 118, 99, 19, 7, -37]
+2019-06-10T14:31:29.019964> (dst=1 type=0x10(DATA) src=118 seq=99 len=19 SNR=7 RSSI=-37)
+2019-06-10T14:31:29.020261> rcv ctrl radio info (^r): 125,5,12
+2019-06-10T14:31:29.020740> splitted in: [125, 5, 12]
+2019-06-10T14:31:29.021752> (BW=125 CR=5 SF=12)
+2019-06-10T14:31:29.022802> rcv timestamp (^t): 2019-06-10T14:31:29.010
+2019-06-10T14:31:29.023751> 
+2019-06-10T14:31:29.024685> Got first framing byte
+2019-06-10T14:31:29.025524> --> got LoRa data prefix
+2019-06-10T14:31:29.026079> valid app key: accept data
+2019-06-10T14:51:17.040339> no timezone support, time will be expressed only in local time
+2019-06-10T14:51:17.043484> post_processing_gw.py found an alert_conf section
+2019-06-10T14:51:17.043967> Starting thread to perform periodic gw status/tasks
+2019-06-10T14:51:17.044488> 2019-06-10 14:51:17.039236
+2019-06-10T14:51:17.044900> post status: gw ON
+2019-06-10T14:51:17.045319> post status: executing periodic tasks
+2019-06-10T14:51:18.041556> 
+2019-06-10T14:51:18.042269> Current working directory: /app
+2019-06-10T14:51:18.046329> SX1276 detected, starting.
+2019-06-10T14:51:18.049970> SX1276 LF/HF calibration
+2019-06-10T14:51:18.051548> ...
+2019-06-10T14:51:18.052678> **********Power ON: state 0
+2019-06-10T14:51:18.054644> Default sync word: 0x12
+2019-06-10T14:51:18.055310> LoRa mode 1
+2019-06-10T14:51:18.055766> Setting mode: state 0
+2019-06-10T14:51:18.056222> Frequency 865.200000: state 0
+2019-06-10T14:51:18.056696> Use PA_BOOST amplifier line
+2019-06-10T14:51:18.057386> Set LoRa power dBm to 14
+2019-06-10T14:51:18.057884> Power: state 0
+2019-06-10T14:51:18.058471> Get Preamble Length: state 0
+2019-06-10T14:51:18.058898> Preamble Length: 8
+2019-06-10T14:51:18.059285> LoRa addr 1: state 0
+2019-06-10T14:51:18.059763> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-10T14:51:18.060329> Low-level gw status ON
+2019-06-10T14:51:18.218704> no timezone support, time will be expressed only in local time
+2019-06-10T14:51:18.219134> post status: start running
+2019-06-10T14:51:19.366471> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-10T14:51:19.366909> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-10T14:51:19.367199> get_gps.py: invalid serial port
+2019-06-10T14:51:19.515347> post status: dynamic GPS is requested
+2019-06-10T14:51:19.515783> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-10T14:51:19.516163> post status get GPS: no GPS coordinates
+2019-06-10T14:51:19.516476> post status: show current GPS position
+2019-06-10T14:51:19.516760> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-10T14:51:19.517049> post status: exiting
+2019-06-10T14:52:19.001357> --- rxlora. dst=1 type=0x10 src=118 seq=119 len=19 SNR=8 RSSIpkt=-38 BW=125 CR=4/5 SF=12
+2019-06-10T14:52:19.001805> 2019-06-10T14:52:18.997345
+2019-06-10T14:52:19.002131> rcv ctrl pkt info (^p): 1,16,118,119,19,8,-38
+2019-06-10T14:52:19.002445> splitted in: [1, 16, 118, 119, 19, 8, -38]
+2019-06-10T14:52:19.002732> (dst=1 type=0x10(DATA) src=118 seq=119 len=19 SNR=8 RSSI=-38)
+2019-06-10T14:52:19.003633> rcv ctrl radio info (^r): 125,5,12
+2019-06-10T14:52:19.004117> splitted in: [125, 5, 12]
+2019-06-10T14:52:19.004446> (BW=125 CR=5 SF=12)
+2019-06-10T14:52:19.004741> rcv timestamp (^t): 2019-06-10T14:52:18.993
+2019-06-10T14:52:19.005032> 
+2019-06-10T14:52:19.005311> Got first framing byte
+2019-06-10T14:52:19.005593> --> got LoRa data prefix
+2019-06-10T14:52:19.005905> valid app key: accept data
+2019-06-11T09:58:33.242174> no timezone support, time will be expressed only in local time
+2019-06-11T09:58:33.244899> post_processing_gw.py found an alert_conf section
+2019-06-11T09:58:33.245352> Starting thread to perform periodic gw status/tasks
+2019-06-11T09:58:33.245801> 2019-06-11 09:58:33.239999
+2019-06-11T09:58:33.246367> post status: gw ON
+2019-06-11T09:58:33.246833> post status: executing periodic tasks
+2019-06-11T09:58:34.242024> 
+2019-06-11T09:58:34.242470> Current working directory: /app
+2019-06-11T09:58:34.242946> SX1276 detected, starting.
+2019-06-11T09:58:34.244044> SX1276 LF/HF calibration
+2019-06-11T09:58:34.244459> ...
+2019-06-11T09:58:34.244808> **********Power ON: state 0
+2019-06-11T09:58:34.245133> Default sync word: 0x12
+2019-06-11T09:58:34.245423> LoRa mode 1
+2019-06-11T09:58:34.245707> Setting mode: state 0
+2019-06-11T09:58:34.246051> Frequency 865.200000: state 0
+2019-06-11T09:58:34.246433> Use PA_BOOST amplifier line
+2019-06-11T09:58:34.246724> Set LoRa power dBm to 14
+2019-06-11T09:58:34.247009> Power: state 0
+2019-06-11T09:58:34.247286> Get Preamble Length: state 0
+2019-06-11T09:58:34.247557> Preamble Length: 8
+2019-06-11T09:58:34.247841> LoRa addr 1: state 0
+2019-06-11T09:58:34.248128> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-11T09:58:34.248416> Low-level gw status ON
+2019-06-11T09:58:34.339875> no timezone support, time will be expressed only in local time
+2019-06-11T09:58:34.340444> post status: start running
+2019-06-11T09:58:35.508075> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-11T09:58:35.508620> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-11T09:58:35.509018> get_gps.py: invalid serial port
+2019-06-11T09:58:35.646518> post status: dynamic GPS is requested
+2019-06-11T09:58:35.646980> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-11T09:58:35.647354> post status get GPS: no GPS coordinates
+2019-06-11T09:58:35.647667> post status: show current GPS position
+2019-06-11T09:58:35.647958> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-11T09:58:35.648336> post status: exiting
+2019-06-11T09:58:38.348788> --- rxlora. dst=1 type=0x10 src=118 seq=33 len=19 SNR=8 RSSIpkt=-39 BW=125 CR=4/5 SF=12
+2019-06-11T09:58:38.349327> 2019-06-11T09:58:38.348303
+2019-06-11T09:58:38.349764> rcv ctrl pkt info (^p): 1,16,118,33,19,8,-39
+2019-06-11T09:58:38.350181> splitted in: [1, 16, 118, 33, 19, 8, -39]
+2019-06-11T09:58:38.350502> (dst=1 type=0x10(DATA) src=118 seq=33 len=19 SNR=8 RSSI=-39)
+2019-06-11T09:58:38.350806> rcv ctrl radio info (^r): 125,5,12
+2019-06-11T09:58:38.351099> splitted in: [125, 5, 12]
+2019-06-11T09:58:38.351410> (BW=125 CR=5 SF=12)
+2019-06-11T09:58:38.351692> rcv timestamp (^t): 2019-06-11T09:58:38.344
+2019-06-11T09:58:38.352006> 
+2019-06-11T09:58:38.352311> Got first framing byte
+2019-06-11T09:58:38.352650> --> got LoRa data prefix
+2019-06-11T09:58:38.354596> valid app key: accept data
+2019-06-11T12:00:37.060693> no timezone support, time will be expressed only in local time
+2019-06-11T12:00:37.061328> post_processing_gw.py found an alert_conf section
+2019-06-11T12:00:37.061819> Starting thread to perform periodic gw status/tasks
+2019-06-11T12:00:37.062242> 2019-06-11 12:00:37.060833
+2019-06-11T12:00:37.062540> post status: gw ON
+2019-06-11T12:00:37.062829> post status: executing periodic tasks
+2019-06-11T12:00:38.063002> 
+2019-06-11T12:00:38.063428> Current working directory: /app
+2019-06-11T12:00:38.063918> SX1276 detected, starting.
+2019-06-11T12:00:38.065106> SX1276 LF/HF calibration
+2019-06-11T12:00:38.065504> ...
+2019-06-11T12:00:38.065926> **********Power ON: state 0
+2019-06-11T12:00:38.066390> Default sync word: 0x12
+2019-06-11T12:00:38.066776> LoRa mode 1
+2019-06-11T12:00:38.067174> Setting mode: state 0
+2019-06-11T12:00:38.067487> Frequency 865.200000: state 0
+2019-06-11T12:00:38.067809> Use PA_BOOST amplifier line
+2019-06-11T12:00:38.068131> Set LoRa power dBm to 14
+2019-06-11T12:00:38.068426> Power: state 0
+2019-06-11T12:00:38.068717> Get Preamble Length: state 0
+2019-06-11T12:00:38.069005> Preamble Length: 8
+2019-06-11T12:00:38.069287> LoRa addr 1: state 0
+2019-06-11T12:00:38.069627> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-11T12:00:38.069977> Low-level gw status ON
+2019-06-11T12:00:38.333726> no timezone support, time will be expressed only in local time
+2019-06-11T12:00:38.334289> post status: start running
+2019-06-11T12:00:39.492769> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-11T12:00:39.493451> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-11T12:00:39.493939> get_gps.py: invalid serial port
+2019-06-11T12:00:39.655683> post status: dynamic GPS is requested
+2019-06-11T12:00:39.656385> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-11T12:00:39.656942> post status get GPS: no GPS coordinates
+2019-06-11T12:00:39.657296> post status: show current GPS position
+2019-06-11T12:00:39.657817> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-11T12:00:39.658244> post status: exiting
+2019-06-11T12:01:45.324977> --- rxlora. dst=1 type=0x10 src=118 seq=131 len=19 SNR=8 RSSIpkt=-40 BW=125 CR=4/5 SF=12
+2019-06-11T12:01:45.325545> 2019-06-11T12:01:45.324536
+2019-06-11T12:01:45.326029> rcv ctrl pkt info (^p): 1,16,118,131,19,8,-40
+2019-06-11T12:01:45.326697> splitted in: [1, 16, 118, 131, 19, 8, -40]
+2019-06-11T12:01:45.327105> (dst=1 type=0x10(DATA) src=118 seq=131 len=19 SNR=8 RSSI=-40)
+2019-06-11T12:01:45.327479> rcv ctrl radio info (^r): 125,5,12
+2019-06-11T12:01:45.327845> splitted in: [125, 5, 12]
+2019-06-11T12:01:45.328189> (BW=125 CR=5 SF=12)
+2019-06-11T12:01:45.328506> rcv timestamp (^t): 2019-06-11T12:01:45.320
+2019-06-11T12:01:45.328803> 
+2019-06-11T12:01:45.329098> Got first framing byte
+2019-06-11T12:01:45.329410> --> got LoRa data prefix
+2019-06-11T12:01:45.331692> valid app key: accept data
+2019-06-11T14:11:03.488801> no timezone support, time will be expressed only in local time
+2019-06-11T14:11:03.491398> post_processing_gw.py found an alert_conf section
+2019-06-11T14:11:03.491958> Starting thread to perform periodic gw status/tasks
+2019-06-11T14:11:03.492431> 2019-06-11 14:11:03.487850
+2019-06-11T14:11:03.492793> post status: gw ON
+2019-06-11T14:11:03.493169> post status: executing periodic tasks
+2019-06-11T14:11:04.490329> 
+2019-06-11T14:11:04.490910> Current working directory: /app
+2019-06-11T14:11:04.491533> SX1276 detected, starting.
+2019-06-11T14:11:04.492267> SX1276 LF/HF calibration
+2019-06-11T14:11:04.492772> ...
+2019-06-11T14:11:04.493245> **********Power ON: state 0
+2019-06-11T14:11:04.493827> Default sync word: 0x12
+2019-06-11T14:11:04.494398> LoRa mode 1
+2019-06-11T14:11:04.494947> Setting mode: state 0
+2019-06-11T14:11:04.495561> Frequency 865.200000: state 0
+2019-06-11T14:11:04.496153> Use PA_BOOST amplifier line
+2019-06-11T14:11:04.496644> Set LoRa power dBm to 14
+2019-06-11T14:11:04.497131> Power: state 0
+2019-06-11T14:11:04.497715> Get Preamble Length: state 0
+2019-06-11T14:11:04.498229> Preamble Length: 8
+2019-06-11T14:11:04.498737> LoRa addr 1: state 0
+2019-06-11T14:11:04.499258> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-11T14:11:04.499866> Low-level gw status ON
+2019-06-11T14:11:04.654822> no timezone support, time will be expressed only in local time
+2019-06-11T14:11:04.655245> post status: start running
+2019-06-11T14:11:05.739216> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-11T14:11:05.739587> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-11T14:11:05.739892> get_gps.py: invalid serial port
+2019-06-11T14:11:05.877271> post status: dynamic GPS is requested
+2019-06-11T14:11:05.877751> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-11T14:11:05.878153> post status get GPS: no GPS coordinates
+2019-06-11T14:11:05.878485> post status: show current GPS position
+2019-06-11T14:11:05.878792> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-11T14:11:05.879105> post status: exiting
+2019-06-11T14:11:58.716383> --- rxlora. dst=1 type=0x10 src=118 seq=239 len=19 SNR=7 RSSIpkt=-40 BW=125 CR=4/5 SF=12
+2019-06-11T14:11:58.716834> 2019-06-11T14:11:58.715967
+2019-06-11T14:11:58.717186> rcv ctrl pkt info (^p): 1,16,118,239,19,7,-40
+2019-06-11T14:11:58.717491> splitted in: [1, 16, 118, 239, 19, 7, -40]
+2019-06-11T14:11:58.717773> (dst=1 type=0x10(DATA) src=118 seq=239 len=19 SNR=7 RSSI=-40)
+2019-06-11T14:11:58.718063> rcv ctrl radio info (^r): 125,5,12
+2019-06-11T14:11:58.718359> splitted in: [125, 5, 12]
+2019-06-11T14:11:58.718634> (BW=125 CR=5 SF=12)
+2019-06-11T14:11:58.718910> rcv timestamp (^t): 2019-06-11T14:11:58.712
+2019-06-11T14:11:58.719183> 
+2019-06-11T14:11:58.719464> Got first framing byte
+2019-06-11T14:11:58.719738> --> got LoRa data prefix
+2019-06-11T14:11:58.720068> valid app key: accept data
+2019-06-12T07:34:16.062280> no timezone support, time will be expressed only in local time
+2019-06-12T07:34:16.064166> post_processing_gw.py found an alert_conf section
+2019-06-12T07:34:16.071365> Starting thread to perform periodic gw status/tasks
+2019-06-12T07:34:16.078943> 2019-06-12 07:34:16.063332
+2019-06-12T07:34:16.079958> post status: gw ON
+2019-06-12T07:34:16.080822> post status: executing periodic tasks
+2019-06-12T07:34:17.069040> 
+2019-06-12T07:34:17.069477> Current working directory: /app
+2019-06-12T07:34:17.069920> SX1276 detected, starting.
+2019-06-12T07:34:17.070236> SX1276 LF/HF calibration
+2019-06-12T07:34:17.070532> ...
+2019-06-12T07:34:17.071014> **********Power ON: state 0
+2019-06-12T07:34:17.071309> Default sync word: 0x12
+2019-06-12T07:34:17.071599> LoRa mode 1
+2019-06-12T07:34:17.071968> Setting mode: state 0
+2019-06-12T07:34:17.072270> Frequency 865.200000: state 0
+2019-06-12T07:34:17.072590> Use PA_BOOST amplifier line
+2019-06-12T07:34:17.073153> Set LoRa power dBm to 14
+2019-06-12T07:34:17.073554> Power: state 0
+2019-06-12T07:34:17.073866> Get Preamble Length: state 0
+2019-06-12T07:34:17.074239> Preamble Length: 8
+2019-06-12T07:34:17.074550> LoRa addr 1: state 0
+2019-06-12T07:34:17.074904> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-12T07:34:17.075207> Low-level gw status ON
+2019-06-12T07:34:17.311655> no timezone support, time will be expressed only in local time
+2019-06-12T07:34:17.312085> post status: start running
+2019-06-12T07:34:18.435724> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-12T07:34:18.436332> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-12T07:34:18.437629> get_gps.py: invalid serial port
+2019-06-12T07:34:18.586675> post status: dynamic GPS is requested
+2019-06-12T07:34:18.587099> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-12T07:34:18.587458> post status get GPS: no GPS coordinates
+2019-06-12T07:34:18.587785> post status: show current GPS position
+2019-06-12T07:34:18.588143> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-12T07:34:18.588528> post status: exiting
+2019-06-12T07:35:45.569136> no timezone support, time will be expressed only in local time
+2019-06-12T07:35:45.569665> post_processing_gw.py found an alert_conf section
+2019-06-12T07:35:45.570045> Starting thread to perform periodic gw status/tasks
+2019-06-12T07:35:45.570419> 2019-06-12 07:35:45.569369
+2019-06-12T07:35:45.570710> post status: gw ON
+2019-06-12T07:35:45.571007> post status: executing periodic tasks
+2019-06-12T07:35:46.571429> 
+2019-06-12T07:35:46.571866> Current working directory: /app
+2019-06-12T07:35:46.572341> SX1276 detected, starting.
+2019-06-12T07:35:46.573550> SX1276 LF/HF calibration
+2019-06-12T07:35:46.574006> ...
+2019-06-12T07:35:46.574347> **********Power ON: state 0
+2019-06-12T07:35:46.574670> Default sync word: 0x12
+2019-06-12T07:35:46.574975> LoRa mode 1
+2019-06-12T07:35:46.575273> Setting mode: state 0
+2019-06-12T07:35:46.575627> Frequency 865.200000: state 0
+2019-06-12T07:35:46.575988> Use PA_BOOST amplifier line
+2019-06-12T07:35:46.576312> Set LoRa power dBm to 14
+2019-06-12T07:35:46.576611> Power: state 0
+2019-06-12T07:35:46.576924> Get Preamble Length: state 0
+2019-06-12T07:35:46.577213> Preamble Length: 8
+2019-06-12T07:35:46.577504> LoRa addr 1: state 0
+2019-06-12T07:35:46.577795> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-12T07:35:46.578086> Low-level gw status ON
+2019-06-12T07:35:46.724733> no timezone support, time will be expressed only in local time
+2019-06-12T07:35:46.725252> post status: start running
+2019-06-12T07:35:47.879576> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-12T07:35:47.880081> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-12T07:35:47.880471> get_gps.py: invalid serial port
+2019-06-12T07:35:48.033547> post status: dynamic GPS is requested
+2019-06-12T07:35:48.033962> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-12T07:35:48.034396> post status get GPS: no GPS coordinates
+2019-06-12T07:35:48.034841> post status: show current GPS position
+2019-06-12T07:35:48.035256> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-12T07:35:48.035667> post status: exiting
+2019-06-12T07:36:58.097989> --- rxlora. dst=1 type=0x10 src=118 seq=19 len=19 SNR=8 RSSIpkt=-39 BW=125 CR=4/5 SF=12
+2019-06-12T07:36:58.098479> 2019-06-12T07:36:58.097522
+2019-06-12T07:36:58.098814> rcv ctrl pkt info (^p): 1,16,118,19,19,8,-39
+2019-06-12T07:36:58.099114> splitted in: [1, 16, 118, 19, 19, 8, -39]
+2019-06-12T07:36:58.099397> (dst=1 type=0x10(DATA) src=118 seq=19 len=19 SNR=8 RSSI=-39)
+2019-06-12T07:36:58.099674> rcv ctrl radio info (^r): 125,5,12
+2019-06-12T07:36:58.099949> splitted in: [125, 5, 12]
+2019-06-12T07:36:58.100221> (BW=125 CR=5 SF=12)
+2019-06-12T07:36:58.100494> rcv timestamp (^t): 2019-06-12T07:36:58.093
+2019-06-12T07:36:58.100766> 
+2019-06-12T07:36:58.101036> Got first framing byte
+2019-06-12T07:36:58.101308> --> got LoRa data prefix
+2019-06-12T07:36:58.101652> valid app key: accept data

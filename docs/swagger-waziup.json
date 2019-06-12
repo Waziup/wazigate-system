@@ -397,6 +397,23 @@
          }
       },
       
+    "/location":{
+	      "get":{
+            "tags":[
+               "Maintenance"
+            ],
+            "summary":"Retrieves regional infrmation based on the gateway's IP address. This API uses an external service which can be set in the configs.",
+            "produces":[
+               "application/json"
+            ],
+            "responses":{
+               "201":{
+                  "description":"successful operation"
+               }
+            }
+         }
+      },       
+      
     "/system/logs50":{
 	      "get":{
             "tags":[
