@@ -56,8 +56,8 @@
     "loragna_g": "2G",
     "autoReload": null
   },
-  "ext_services":{
-  	"geoip_API_key": "152397295a11f5a0a63f1c4fb5b02ae0",
-  	"map_token": "Not_implemented_yet"
+  "ext_services": {
+    "geoip_API_key": "152397295a11f5a0a63f1c4fb5b02ae0",
+    "map_token": "Not_implemented_yet"
   }
 }

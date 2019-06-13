@@ -27855,3 +27855,51 @@
 2019-06-12T07:36:58.101036> Got first framing byte
 2019-06-12T07:36:58.101308> --> got LoRa data prefix
 2019-06-12T07:36:58.101652> valid app key: accept data
+2019-06-13T06:48:32.154995> no timezone support, time will be expressed only in local time
+2019-06-13T06:48:32.162039> post_processing_gw.py found an alert_conf section
+2019-06-13T06:48:32.162486> Starting thread to perform periodic gw status/tasks
+2019-06-13T06:48:32.162842> 2019-06-13 06:48:32.154011
+2019-06-13T06:48:32.163127> post status: gw ON
+2019-06-13T06:48:32.163655> post status: executing periodic tasks
+2019-06-13T06:48:33.156793> 
+2019-06-13T06:48:33.157894> Current working directory: /app
+2019-06-13T06:48:33.159419> SX1276 detected, starting.
+2019-06-13T06:48:33.170745> SX1276 LF/HF calibration
+2019-06-13T06:48:33.171748> ...
+2019-06-13T06:48:33.172600> **********Power ON: state 0
+2019-06-13T06:48:33.173568> Default sync word: 0x12
+2019-06-13T06:48:33.174499> LoRa mode 1
+2019-06-13T06:48:33.175199> Setting mode: state 0
+2019-06-13T06:48:33.176061> Frequency 865.200000: state 0
+2019-06-13T06:48:33.176556> Use PA_BOOST amplifier line
+2019-06-13T06:48:33.177020> Set LoRa power dBm to 14
+2019-06-13T06:48:33.177443> Power: state 0
+2019-06-13T06:48:33.177834> Get Preamble Length: state 0
+2019-06-13T06:48:33.178191> Preamble Length: 8
+2019-06-13T06:48:33.178526> LoRa addr 1: state 0
+2019-06-13T06:48:33.178875> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-13T06:48:33.179234> Low-level gw status ON
+2019-06-13T06:48:33.271266> no timezone support, time will be expressed only in local time
+2019-06-13T06:48:33.271901> post status: start running
+2019-06-13T06:48:34.346064> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-13T06:48:34.346681> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-13T06:48:34.347262> get_gps.py: invalid serial port
+2019-06-13T06:48:34.484162> post status: dynamic GPS is requested
+2019-06-13T06:48:34.484629> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-13T06:48:34.485009> post status get GPS: no GPS coordinates
+2019-06-13T06:48:34.485318> post status: show current GPS position
+2019-06-13T06:48:34.485943> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-13T06:48:34.486506> post status: exiting
+2019-06-13T06:48:38.629518> --- rxlora. dst=1 type=0x10 src=118 seq=126 len=19 SNR=8 RSSIpkt=-39 BW=125 CR=4/5 SF=12
+2019-06-13T06:48:38.629983> 2019-06-13T06:48:38.629082
+2019-06-13T06:48:38.630312> rcv ctrl pkt info (^p): 1,16,118,126,19,8,-39
+2019-06-13T06:48:38.630619> splitted in: [1, 16, 118, 126, 19, 8, -39]
+2019-06-13T06:48:38.630912> (dst=1 type=0x10(DATA) src=118 seq=126 len=19 SNR=8 RSSI=-39)
+2019-06-13T06:48:38.631190> rcv ctrl radio info (^r): 125,5,12
+2019-06-13T06:48:38.631468> splitted in: [125, 5, 12]
+2019-06-13T06:48:38.631740> (BW=125 CR=5 SF=12)
+2019-06-13T06:48:38.632028> rcv timestamp (^t): 2019-06-13T06:48:38.625
+2019-06-13T06:48:38.632301> 
+2019-06-13T06:48:38.632577> Got first framing byte
+2019-06-13T06:48:38.632853> --> got LoRa data prefix
+2019-06-13T06:48:38.633193> valid app key: accept data
