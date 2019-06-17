@@ -93,5 +93,3 @@ def start_config_from_json() :
 	
 if __name__ == "__main__":
 	start_config_from_json();
-#	os.system( 'python '+ PATH +'/api.py');
-

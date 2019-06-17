@@ -13,8 +13,7 @@ API_VER		=	"v1";
 
 #Path to the root of framework
 PATH		=	os.path.dirname(os.path.abspath(__file__));
-SCRIPTS		=	PATH + '/scripts/';
-CONF_FILE	=	PATH + '/conf.json'; 
+CONF_FILE	=	PATH + '/conf/conf.json'; 
 LOGS_PATH	=	PATH + '/logs/';
 
 WIFI_DEVICE = 'wlan0'; #'wlp2s0'; # The wifi device which connects to the internet. e.g. wlan0
