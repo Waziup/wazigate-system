@@ -182,7 +182,8 @@ def wifi_get():
 	
 	#cmd = 'sudo ifconfig | awk \'{print $1}\' | grep "'+ WIFI_DEVICE +':"';
 	#cmd = 'nmcli connection show --active | awk \'{print $4}\' | grep "'+ WIFI_DEVICE +'"';
-	cmd = 'cat /proc/net/wireless | grep '+ WIFI_DEVICE;
+	#cmd = 'cat /proc/net/wireless | grep '+ WIFI_DEVICE;
+	cmd = 'ip link show up '+ WIFI_DEVICE;
 	enabled = len( os.popen( cmd).read().strip()) > 0;	
 
 	#cmd = 'iwconfig '+ WIFI_DEVICE +' | grep SSID | awk \'{match($0,/ESSID:"([^\"]+)"/,a)}END{print a[1]}\'';
@@ -209,8 +210,10 @@ def wifi_set():
 	if( 'enabled' in request.json):
 		if( request.json['enabled'] == '1' or request.json['enabled'] == True):
 			status = 'connect';
+			print( os.popen( 'ip link set '+ WIFI_DEVICE +' up').read());
 		else:
 			status = 'disconnect';
+			print( os.popen( 'ip link set '+ WIFI_DEVICE +' down').read());
 		cmd = 'nmcli dev '+ status +' "'+ WIFI_DEVICE +'" ';
 		res.append( os.popen( cmd).read().strip());
 		#iface wlx0013eff1186f inet manual in /etc/network/interfaces
@@ -238,6 +241,7 @@ def wifi_set():
 def wifi_scan():
 	#
 	#cmd = 'nmcli -f SSID,SIGNAL,SECURITY dev wifi list ifname '+ WIFI_DEVICE;
+	#os.popen( 'ip link set '+ WIFI_DEVICE +' up').read();
 	cmd = 'iw '+ WIFI_DEVICE +' scan | awk -f '+ PATH +'/scan.awk'; #| sort -k1,1 -u
 	#lines = os.popen( cmd).read().strip().split( os.linesep);
 	lines = os.popen( cmd).read().strip();

@@ -9,7 +9,7 @@ from shutil import copyfile
 #Check if the conf.json file exist
 if( os.path.isfile( api.CONF_FILE) == False):
 	#Copying from default file
-	copyfile( api.PATH +'/conf/conf.default.json', api.CONF_FILE);
+	copyfile( api.PATH +'/setup/conf.default.json', api.CONF_FILE);
 
 #------------------------#
 
