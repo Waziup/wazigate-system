@@ -1063,7 +1063,6 @@ while True:
 					tdata = localdt.replace( microsecond = 0).isoformat()
 
 				# Moji Modified this part as we have only one edge cloud.
-				cloud_conf = json_array["cloud_conf"]
 				try:
 					cloud_script = "python "+ api.PATH +"/data_acq/edgeCall.py";
 					print( "uploading with "+ cloud_script);
@@ -1078,7 +1077,7 @@ while True:
 					try:
 						os.system( cmd_arg);
 					except:
-						print( "Error when uploading data to the cloud");
+						print( "Error when uploading data to the Edge!");
 
 				print( "--> cloud end");
 
@@ -1217,31 +1216,21 @@ while True:
 						lorapktstr_b64=base64.b64encode(lorapktstr)
 						print( "--> FYI base64 of LoRaWAN frame w/MIC: "+lorapktstr_b64);
 						
-						print( "--> number of enabled clouds is %d" % len(_cloud_for_lorawan_encrypted_data));
-						
-						if len(_cloud_for_lorawan_encrypted_data)==0:
-							print( "--> discard encrypted data");
-						else:					
-							#loop over all enabled clouds to upload data
-							#once again, it is up to the corresponding cloud script to handle the data format
-							#
-							for cloud_index in range(0,len(_cloud_for_lorawan_encrypted_data)):
-								
-								try:
-									print( "--> LoRaWAN encrypted cloud[%d]" % cloud_index);
-									cloud_script=_cloud_for_lorawan_encrypted_data[cloud_index]
-									print( "uploading with "+cloud_script);
-									sys.stdout.flush()
-									cmd_arg=cloud_script+" \""+lorapktstr_b64.replace('\n','')+"\""+" \""+pdata.replace('\n','')+"\""+" \""+rdata.replace('\n','')+"\""+" \""+tdata.replace('\n','')+"\""+" \""+_gwid.replace('\n','')+"\""
-								except UnicodeDecodeError as ude:
-									print( ude);
-								else:
-									print( cmd_arg);
-									sys.stdout.flush()
-									try:
-										os.system(cmd_arg)
-									except:
-										print( "Error when uploading data to LoRaWAN encrypted cloud");
+						try:
+							print( "--> LoRaWAN encrypted cloud[%d]" % cloud_index);
+							cloud_script = "python "+ api.PATH +"/data_acq/edgeCall.py";
+							print( "uploading with "+cloud_script);
+							sys.stdout.flush()
+							cmd_arg=cloud_script+" \""+lorapktstr_b64.replace('\n','')+"\""+" \""+pdata.replace('\n','')+"\""+" \""+rdata.replace('\n','')+"\""+" \""+tdata.replace('\n','')+"\""+" \""+_gwid.replace('\n','')+"\""
+						except UnicodeDecodeError as ude:
+							print( ude);
+						else:
+							print( cmd_arg);
+							sys.stdout.flush()
+							try:
+								os.system(cmd_arg)
+							except:
+								print( "Error when uploading data to LoRaWAN encrypted cloud");
 								
 							print( "--> LoRaWAN encrypted cloud end");
 							
@@ -1320,35 +1309,25 @@ while True:
 						print( "--> DATA encrypted: local decryption not activated");
 						lorapktstr_b64=base64.b64encode(lorapktstr)
 						print( "--> FYI base64 of encrypted frame w/MIC: "+lorapktstr_b64);
+					
+						#update pdata with new data length
+						pdata="%d,%d,%d,%d,%d,%d,%d" % (dst,ptype,src,seq,datalen,SNR,RSSI)
 						
-						print( "--> number of enabled clouds is %d" % len(_cloud_for_encrypted_data));
-						
-						if len(_cloud_for_encrypted_data)==0:
-							print( "--> discard encrypted data");
-						else:					
-							#update pdata with new data length
-							pdata="%d,%d,%d,%d,%d,%d,%d" % (dst,ptype,src,seq,datalen,SNR,RSSI)
-							
-							#loop over all enabled clouds to upload data
-							#once again, it is up to the corresponding cloud script to handle the data format
-							#							
-							for cloud_index in range(0,len(_cloud_for_encrypted_data)):
-								
-								try:
-									print( "--> encrypted cloud[%d]" % cloud_index);
-									cloud_script=_cloud_for_encrypted_data[cloud_index]
-									print( "uploading with "+cloud_script);
-									sys.stdout.flush()
-									cmd_arg=cloud_script+" \""+lorapktstr_b64.replace('\n','')+"\""+" \""+pdata.replace('\n','')+"\""+" \""+rdata.replace('\n','')+"\""+" \""+tdata.replace('\n','')+"\""+" \""+_gwid.replace('\n','')+"\""
-								except UnicodeDecodeError as ude:
-									print( ude);
-								else:
-									print( cmd_arg);
-									sys.stdout.flush()
-									try:
-										os.system(cmd_arg)
-									except:
-										print( "Error when uploading data to encrypted cloud");
+						try:
+							print( "--> encrypted cloud[%d]" % cloud_index);
+							cloud_script = "python "+ api.PATH +"/data_acq/edgeCall.py";
+							print( "uploading with "+cloud_script);
+							sys.stdout.flush()
+							cmd_arg=cloud_script+" \""+lorapktstr_b64.replace('\n','')+"\""+" \""+pdata.replace('\n','')+"\""+" \""+rdata.replace('\n','')+"\""+" \""+tdata.replace('\n','')+"\""+" \""+_gwid.replace('\n','')+"\""
+						except UnicodeDecodeError as ude:
+							print( ude);
+						else:
+							print( cmd_arg);
+							sys.stdout.flush()
+							try:
+								os.system(cmd_arg)
+							except:
+								print( "Error when uploading data to encrypted cloud");
 
 							print( "--> encrypted cloud end"	);
 			else:
@@ -1462,3 +1441,4 @@ while True:
 	
 	#print( ch, type(ch));
 	sys.stdout.buffer.write( ch);
+

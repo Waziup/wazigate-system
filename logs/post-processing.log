@@ -1,0 +1,170 @@
+2019-06-18T14:32:59.339437> no timezone support, time will be expressed only in local time
+2019-06-18T14:32:59.340061> post_processing_gw.py found an alert_conf section
+2019-06-18T14:32:59.340461> Starting thread to perform periodic gw status/tasks
+2019-06-18T14:32:59.340834> 2019-06-18 14:32:59.339561
+2019-06-18T14:32:59.341126> post status: gw ON
+2019-06-18T14:32:59.341457> post status: executing periodic tasks
+2019-06-18T14:33:00.342273> 
+2019-06-18T14:33:00.343084> Current working directory: /app
+2019-06-18T14:33:00.343738> SX1276 detected, starting.
+2019-06-18T14:33:00.344356> SX1276 LF/HF calibration
+2019-06-18T14:33:00.345113> ...
+2019-06-18T14:33:00.345696> **********Power ON: state 0
+2019-06-18T14:33:00.346237> Default sync word: 0x12
+2019-06-18T14:33:00.346771> LoRa mode 1
+2019-06-18T14:33:00.347305> Setting mode: state 0
+2019-06-18T14:33:00.347903> Frequency 865.200000: state 0
+2019-06-18T14:33:00.348600> Use PA_BOOST amplifier line
+2019-06-18T14:33:00.349291> Set LoRa power dBm to 14
+2019-06-18T14:33:00.349838> Power: state 0
+2019-06-18T14:33:00.350373> Get Preamble Length: state 0
+2019-06-18T14:33:00.350903> Preamble Length: 8
+2019-06-18T14:33:00.351435> LoRa addr 1: state 0
+2019-06-18T14:33:00.351966> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-18T14:33:01.057620> Low-level gw status ON
+2019-06-18T14:33:37.101364> --- rxlora. dst=1 type=0x10 src=118 seq=142 len=19 SNR=8 RSSIpkt=-45 BW=125 CR=4/5 SF=12
+2019-06-18T14:33:37.101841> 2019-06-18T14:33:37.100918
+2019-06-18T14:33:37.102152> rcv ctrl pkt info (^p): 1,16,118,142,19,8,-45
+2019-06-18T14:33:37.102425> splitted in: <map object at 0x75a7c030>
+2019-06-18T14:37:31.895789> no timezone support, time will be expressed only in local time
+2019-06-18T14:37:31.896317> post_processing_gw.py found an alert_conf section
+2019-06-18T14:37:31.896621> Starting thread to perform periodic gw status/tasks
+2019-06-18T14:37:31.896943> 2019-06-18 14:37:31.895907
+2019-06-18T14:37:31.897213> post status: gw ON
+2019-06-18T14:37:31.897481> post status: executing periodic tasks
+2019-06-18T14:37:32.898212> Error when executing post_status_processing_gw.py
+2019-06-18T14:37:32.898889> 
+2019-06-18T14:37:32.899440> Current working directory: /app
+2019-06-18T14:37:32.900054> SX1276 detected, starting.
+2019-06-18T14:37:32.900660> SX1276 LF/HF calibration
+2019-06-18T14:37:32.901196> ...
+2019-06-18T14:37:32.901819> **********Power ON: state 0
+2019-06-18T14:37:32.902357> Default sync word: 0x12
+2019-06-18T14:37:32.902889> LoRa mode 1
+2019-06-18T14:37:32.903417> Setting mode: state 0
+2019-06-18T14:37:32.903946> Frequency 865.200000: state 0
+2019-06-18T14:37:32.904684> Use PA_BOOST amplifier line
+2019-06-18T14:37:32.905227> Set LoRa power dBm to 14
+2019-06-18T14:37:32.905759> Power: state 0
+2019-06-18T14:37:32.906290> Get Preamble Length: state 0
+2019-06-18T14:37:32.906817> Preamble Length: 8
+2019-06-18T14:37:32.907349> LoRa addr 1: state 0
+2019-06-18T14:37:32.907878> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-18T14:37:33.623392> Low-level gw status ON
+2019-06-18T14:38:05.144392> --- rxlora. dst=1 type=0x10 src=118 seq=146 len=19 SNR=8 RSSIpkt=-46 BW=125 CR=4/5 SF=12
+2019-06-18T14:38:05.144843> 2019-06-18T14:38:05.143985
+2019-06-18T14:38:05.145140> rcv ctrl pkt info (^p): 1,16,118,146,19,8,-46
+2019-06-18T14:38:05.145462> splitted in: [1, 16, 118, 146, 19, 8, -46]
+2019-06-18T14:38:05.145748> (dst=1 type=0x10(DATA) src=118 seq=146 len=19 SNR=8 RSSI=-46)
+2019-06-18T14:38:05.146015> rcv ctrl radio info (^r): 125,5,12
+2019-06-18T14:38:05.146282> splitted in: [125, 5, 12]
+2019-06-18T14:38:05.146562> (BW=125 CR=5 SF=12)
+2019-06-18T14:38:05.146836> rcv timestamp (^t): 2019-06-18T14:38:05.141
+2019-06-18T14:38:05.147106> 
+2019-06-18T14:38:05.147425> 2019-06-18T14:49:34.304704> no timezone support, time will be expressed only in local time
+2019-06-18T14:49:34.305315> post_processing_gw.py found an alert_conf section
+2019-06-18T14:49:34.305717> Starting thread to perform periodic gw status/tasks
+2019-06-18T14:49:34.306095> 2019-06-18 14:49:34.304875
+2019-06-18T14:49:34.306496> post status: gw ON
+2019-06-18T14:49:34.306807> post status: executing periodic tasks
+2019-06-18T14:49:35.302000> no timezone support, time will be expressed only in local time
+2019-06-18T14:49:35.302410> post status: start running
+2019-06-18T14:49:35.309075> 
+2019-06-18T14:49:35.309587> Current working directory: /app
+2019-06-18T14:49:35.309993> SX1276 detected, starting.
+2019-06-18T14:49:35.310793> SX1276 LF/HF calibration
+2019-06-18T14:49:35.311251> ...
+2019-06-18T14:49:35.311608> **********Power ON: state 0
+2019-06-18T14:49:35.312012> Default sync word: 0x12
+2019-06-18T14:49:35.312361> LoRa mode 1
+2019-06-18T14:49:35.312663> Setting mode: state 0
+2019-06-18T14:49:35.313001> Frequency 865.200000: state 0
+2019-06-18T14:49:35.313412> Use PA_BOOST amplifier line
+2019-06-18T14:49:35.313810> Set LoRa power dBm to 14
+2019-06-18T14:49:35.314339> Power: state 0
+2019-06-18T14:49:35.314704> Get Preamble Length: state 0
+2019-06-18T14:49:35.314977> Preamble Length: 8
+2019-06-18T14:49:35.315245> LoRa addr 1: state 0
+2019-06-18T14:49:35.315513> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-18T14:49:35.403654> post status: dynamic GPS is requested
+2019-06-18T14:49:35.404060> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-18T14:49:35.404335> post status get GPS: no GPS coordinates
+2019-06-18T14:49:35.404613> post status: show current GPS position
+2019-06-18T14:49:35.404912> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-18T14:49:35.405204> post status: exiting
+2019-06-18T14:49:35.964434> Low-level gw status ON
+2019-06-18T14:54:14.528666> no timezone support, time will be expressed only in local time
+2019-06-18T14:54:14.529231> post_processing_gw.py found an alert_conf section
+2019-06-18T14:54:14.529612> Starting thread to perform periodic gw status/tasks
+2019-06-18T14:54:14.529984> 2019-06-18 14:54:14.528794
+2019-06-18T14:54:14.530271> post status: gw ON
+2019-06-18T14:54:14.530557> post status: executing periodic tasks
+2019-06-18T14:54:15.530798> 
+2019-06-18T14:54:15.531222> Current working directory: /app
+2019-06-18T14:54:15.602969> SX1276 detected, starting.
+2019-06-18T14:54:15.603360> SX1276 LF/HF calibration
+2019-06-18T14:54:15.603666> ...
+2019-06-18T14:54:15.603954> **********Power ON: state 0
+2019-06-18T14:54:15.604239> Default sync word: 0x12
+2019-06-18T14:54:15.604525> LoRa mode 1
+2019-06-18T14:54:15.604822> Setting mode: state 0
+2019-06-18T14:54:15.605110> Frequency 865.200000: state 0
+2019-06-18T14:54:15.605398> Use PA_BOOST amplifier line
+2019-06-18T14:54:15.605680> Set LoRa power dBm to 14
+2019-06-18T14:54:15.605960> Power: state 0
+2019-06-18T14:54:15.606245> Get Preamble Length: state 0
+2019-06-18T14:54:15.606530> Preamble Length: 8
+2019-06-18T14:54:15.606818> LoRa addr 1: state 0
+2019-06-18T14:54:15.607116> SX1272/76 configured as LR-BS. Waiting RF input for transparent RF-serial bridge
+2019-06-18T14:54:15.607412> no timezone support, time will be expressed only in local time
+2019-06-18T14:54:15.607685> post status: start running
+2019-06-18T14:54:16.236972> Low-level gw status ON
+2019-06-18T14:54:16.552170> get_gps.py: removing /app/logs/gateway_gps.txt file
+2019-06-18T14:54:16.552673> get_gps.py: no /app/logs/gateway_gps.txt file
+2019-06-18T14:54:16.553082> get_gps.py: invalid serial port
+2019-06-18T14:54:16.688692> post status: dynamic GPS is requested
+2019-06-18T14:54:16.689196> post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position
+2019-06-18T14:54:16.689525> post status get GPS: no GPS coordinates
+2019-06-18T14:54:16.689817> post status: show current GPS position
+2019-06-18T14:54:16.690101> post status show GPS: current GPS coordinate: gw lat 43.51 long -1.36
+2019-06-18T14:54:16.690384> post status: exiting
+2019-06-18T14:54:34.456264> --- rxlora. dst=1 type=0x10 src=118 seq=159 len=19 SNR=7 RSSIpkt=-42 BW=125 CR=4/5 SF=12
+2019-06-18T14:54:34.456705> 2019-06-18T14:54:34.455848
+2019-06-18T14:54:34.457056> rcv ctrl pkt info (^p): 1,16,118,159,19,7,-42
+2019-06-18T14:54:34.457412> splitted in: [1, 16, 118, 159, 19, 7, -42]
+2019-06-18T14:54:34.457704> (dst=1 type=0x10(DATA) src=118 seq=159 len=19 SNR=7 RSSI=-42)
+2019-06-18T14:54:34.458130> rcv ctrl radio info (^r): 125,5,12
+2019-06-18T14:54:34.458558> splitted in: [125, 5, 12]
+2019-06-18T14:54:34.458906> (BW=125 CR=5 SF=12)
+2019-06-18T14:54:34.459207> rcv timestamp (^t): 2019-06-18T14:54:34.452
+2019-06-18T14:54:34.459515> 
+2019-06-18T14:54:34.459892> Got first framing byte
+2019-06-18T14:54:34.460190> --> got LoRa data prefix
+2019-06-18T14:54:34.460496> valid app key: accept data
+2019-06-18T14:54:34.460836> uploading with python /app/data_acq/edgeCall.py
+2019-06-18T14:54:34.461187> python /app/data_acq/edgeCall.py "TC/24.00/HU/53.00" "1,16,118,159,19,7,-42" "125,5,12" "2019-06-18T14:54:34.452" "B827EB4E30A8"
+2019-06-18T14:54:36.147616> Received data (from 118):  {'TC': '24.00', 'HU': '53.00'}
+2019-06-18T14:54:36.148296> HTTPConnectionPool(host='localhost', port=880): Max retries exceeded with url: /devices/aed2992a838b576a8f0097979be492ac/sensors/TC/value (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x75adcbf0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2019-06-18T14:54:36.148797> HTTPConnectionPool(host='localhost', port=880): Max retries exceeded with url: /devices/aed2992a838b576a8f0097979be492ac/sensors/HU/value (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x75adcd70>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2019-06-18T14:54:36.308771> --> cloud end
+2019-06-18T14:54:36.309169> 
+2019-06-18T14:55:10.332500> --- rxlora. dst=1 type=0x10 src=118 seq=160 len=19 SNR=6 RSSIpkt=-46 BW=125 CR=4/5 SF=12
+2019-06-18T14:55:10.332999> 2019-06-18T14:55:10.332098
+2019-06-18T14:55:10.333353> rcv ctrl pkt info (^p): 1,16,118,160,19,6,-46
+2019-06-18T14:55:10.333661> splitted in: [1, 16, 118, 160, 19, 6, -46]
+2019-06-18T14:55:10.333951> (dst=1 type=0x10(DATA) src=118 seq=160 len=19 SNR=6 RSSI=-46)
+2019-06-18T14:55:10.334233> rcv ctrl radio info (^r): 125,5,12
+2019-06-18T14:55:10.334539> splitted in: [125, 5, 12]
+2019-06-18T14:55:10.334888> (BW=125 CR=5 SF=12)
+2019-06-18T14:55:10.335213> rcv timestamp (^t): 2019-06-18T14:55:10.328
+2019-06-18T14:55:10.335524> 
+2019-06-18T14:55:10.335932> Got first framing byte
+2019-06-18T14:55:10.336271> --> got LoRa data prefix
+2019-06-18T14:55:10.336566> valid app key: accept data
+2019-06-18T14:55:10.336882> uploading with python /app/data_acq/edgeCall.py
+2019-06-18T14:55:10.337239> python /app/data_acq/edgeCall.py "TC/24.00/HU/95.00" "1,16,118,160,19,6,-46" "125,5,12" "2019-06-18T14:55:10.328" "B827EB4E30A8"
+2019-06-18T14:55:12.012022> Received data (from 118):  {'TC': '24.00', 'HU': '95.00'}
+2019-06-18T14:55:12.012560> HTTPConnectionPool(host='localhost', port=880): Max retries exceeded with url: /devices/aed2992a838b576a8f0097979be492ac/sensors/TC/value (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x75b08bb0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2019-06-18T14:55:12.012976> HTTPConnectionPool(host='localhost', port=880): Max retries exceeded with url: /devices/aed2992a838b576a8f0097979be492ac/sensors/HU/value (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x75b08d30>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2019-06-18T14:55:12.174455> --> cloud end
+2019-06-18T14:55:12.174866> 

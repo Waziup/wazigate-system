@@ -47,36 +47,6 @@ import api
 
 gw_json_array = api.conf_read();
 
-#------------------------------------------------------------
-# Open clouds.json file 
-#------------------------------------------------------------
-"""
-#name of json file containing the cloud declarations
-cloud_filename = "clouds.json"
-
-#open json file to retrieve enabled clouds
-f = open(os.path.expanduser(cloud_filename),"r")
-string = f.read()
-f.close()
-	
-#change it into a python array
-json_array = json.loads(string)
-
-#retrieving all cloud declarations
-clouds = json_array["clouds"]
-"""
-
-#clouds = gw_json_array["cloud_conf"]; # Later we will develop it in a better way
-
-
-#------------------------------------------------------------
-#open gateway_conf.json file 
-#------------------------------------------------------------
-
-
-#------------------------------------------------------------
-#add you own functions here 
-#------------------------------------------------------------
 
 #------------------------------------------------------------
 #show GPS coordinates stored in gateway_conf.json
@@ -111,6 +81,7 @@ def get_gps():
 	print( 'post status get GPS: use sensors_in_raspi/get_gps.py to get GPS position');
 	try:
 		os.system('python '+ api.PATH +'/data_acq/sensors_in_raspi/get_gps.py '+gps_port)
+		
 	except:
 		print( 'post status get GPS: Error when executing sensors_in_raspi/get_gps.py');
 		

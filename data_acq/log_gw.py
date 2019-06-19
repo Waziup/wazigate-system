@@ -131,7 +131,7 @@ while the_line:
 	f = open( os.path.expanduser( _parselog_filename), "a");
 	now = datetime.datetime.now()
 	f.write( now.isoformat()+'> ')
-	#f.write( str( the_line.encode('utf-8', 'surrogateescape')));
+#	f.write( str( the_line.encode('utf-8', 'surrogateescape')));
 	f.write( the_line);
 	f.close()
 	sys.stdout.write(the_line)
