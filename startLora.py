@@ -28,7 +28,7 @@
 # Congduc.Pham@univ-pau.fr
 
 # Apr 2019. Redesigned by Mojtaba Eskandari to be used in a container in WaziEdge framework
-# eskandari@fbk.eu
+# email: eskandari@fbk.eu
 
 import json
 import os
