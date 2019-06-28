@@ -51,7 +51,7 @@ def sendToEdge( devId, sensorId, value):
 		devId = md5( conf['gateway_conf']['gateway_ID'].encode("utf-8")).hexdigest();
 
 	sensorURL	= EdgeURL +'/devices/'+ devId +'/sensors/'+ sensorId +'/value';
-	sensorValue	= json.dumps( value);
+	sensorValue	= json.dumps( { "value": value } );
 
 	try:
 		response = requests.post( sensorURL, headers = EdgeHeaders, data = sensorValue, timeout = 30);
@@ -63,7 +63,7 @@ def sendToEdge( devId, sensorId, value):
 			response = requests.get( url, headers = EdgeHeaders, timeout = 30);
 			
 			if( response.status_code == 404): #The device does not exist, Creating it
-				url = EdgeURL +'/devices/';
+				url = EdgeURL +'/devices';
 				newDeviceData = json.dumps( { "id": devId, "name": devId});
 				response = requests.post( url, headers = EdgeHeaders, data = newDeviceData, timeout = 30);
 				if( response.ok):
@@ -80,7 +80,7 @@ def sendToEdge( devId, sensorId, value):
 			#print( response.url, response.status_code);
 
 			if( response.status_code == 404): #The Sensor does not exist, Creating it
-				url = EdgeURL +'/devices/'+ devId +'/sensors/';
+				url = EdgeURL +'/devices/'+ devId +'/sensors';
 				newSensorData = json.dumps( { "id": sensorId, "name": sensorId});
 				response = requests.post( url, headers = EdgeHeaders, data = newSensorData, timeout = 30);
 				if( response.ok):
@@ -96,7 +96,7 @@ def sendToEdge( devId, sensorId, value):
 			#print( response.url, response.status_code);
 			
 		if response.ok:
-			print( 'Edge: upload success', sensorId, value);
+			print( 'Edge: upload success', sensorId, sensorValue);
 #			print( response.url, response.status_code);
 		else:
 			print( 'Edge: bad request');
