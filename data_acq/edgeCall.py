@@ -47,8 +47,8 @@ if( len( addr) > 1 and len( addr[1]) > 0):
 def sendToEdge( devId, sensorId, value):
 
 	if( len( devId) == 0):
-		#If there is no Device ID use the hash of the Gateway ID instead
-		devId = md5( conf['gateway_conf']['gateway_ID'].encode("utf-8")).hexdigest();
+		#If there is no Device ID use the Gateway ID instead
+		devId = conf['gateway_conf']['gateway_ID'].lower();
 
 	sensorURL	= EdgeURL +'/devices/'+ devId +'/sensors/'+ sensorId +'/value';
 	sensorValue	= json.dumps( { "value": value } );

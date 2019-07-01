@@ -66,7 +66,7 @@ def start_config_from_json() :
 		pass
 	
 	try:		
-		if gateway_json_array["radio_conf"]["mode"] != -1 :
+		if( len( str( gateway_json_array["radio_conf"]["mode"])) > 0 and gateway_json_array["radio_conf"]["mode"] != -1):
 			call_string_cpp += " --mode %s" % str(gateway_json_array["radio_conf"]["mode"])
 		else :
 			call_string_cpp += " --bw %s --cr %s --sf %s" % (str(gateway_json_array["radio_conf"]["bw"]),str(gateway_json_array["radio_conf"]["cr"]),str(gateway_json_array["radio_conf"]["sf"]))
@@ -74,9 +74,9 @@ def start_config_from_json() :
 		call_string_cpp += " --mode 1"
 	
 	try:		
-		if gateway_json_array["radio_conf"]["ch"] != -1 :
+		if( len( str( gateway_json_array["radio_conf"]["ch"])) > 0 and gateway_json_array["radio_conf"]["ch"] != -1):
 			call_string_cpp += " --ch %s" % str(gateway_json_array["radio_conf"]["ch"])
-		elif gateway_json_array["radio_conf"]["freq"] != -1:
+		elif( len( str( gateway_json_array["radio_conf"]["freq"])) > 0 and gateway_json_array["radio_conf"]["freq"] != -1):
 			call_string_cpp += " --freq %s" % str(gateway_json_array["radio_conf"]["freq"])
 	except KeyError:
 		pass
