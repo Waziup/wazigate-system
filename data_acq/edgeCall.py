@@ -46,16 +46,12 @@ if( len( addr) > 1 and len( addr[1]) > 0):
 
 def sendToEdge( devId, sensorId, value):
 
-	if( len( devId) == 0):
-		#If there is no Device ID use the Gateway ID instead
-		devId = conf['gateway_conf']['gateway_ID'].lower();
-
 	sensorURL	= EdgeURL +'/devices/'+ devId +'/sensors/'+ sensorId +'/value';
 	sensorValue	= json.dumps( { "value": value } );
-
+	
 	try:
 		response = requests.post( sensorURL, headers = EdgeHeaders, data = sensorValue, timeout = 30);
-		#print( response.url, response.status_code);
+		print( response.url, response.status_code);
 
 		if( response.status_code == 404): #The device or the sensor do not exist
 			
@@ -66,6 +62,8 @@ def sendToEdge( devId, sensorId, value):
 				url = EdgeURL +'/devices';
 				newDeviceData = json.dumps( { "id": devId, "name": devId});
 				response = requests.post( url, headers = EdgeHeaders, data = newDeviceData, timeout = 30);
+				print( response.url, response.status_code);
+
 				if( response.ok):
 					print( 'New device created with ID: ', devId);
 				else:
@@ -83,6 +81,7 @@ def sendToEdge( devId, sensorId, value):
 				url = EdgeURL +'/devices/'+ devId +'/sensors';
 				newSensorData = json.dumps( { "id": sensorId, "name": sensorId});
 				response = requests.post( url, headers = EdgeHeaders, data = newSensorData, timeout = 30);
+				print( response.url, response.status_code);
 				if( response.ok):
 					print( 'New sensor created with ID: ', sensorId);
 				else:
@@ -93,7 +92,7 @@ def sendToEdge( devId, sensorId, value):
 			#---------#
 			
 			response = requests.post( sensorURL, headers = EdgeHeaders, data = sensorValue, timeout = 30);
-			#print( response.url, response.status_code);
+			print( response.url, response.status_code);
 			
 		if response.ok:
 			print( 'Edge: upload success', sensorId, sensorValue);
@@ -150,7 +149,10 @@ if __name__ == "__main__":
 	if( 'UID' in data):
 		devId = data['UID'];
 		del data['UID'];
+		
+	if( len( devId) == 0):
+		#If there is no Device ID use the Gateway ID + Node address instead
+		devId = conf['gateway_conf']['gateway_ID'].lower() +"_"+ src_str;
 
 	for sensorId in data:
 		sendToEdge( devId, sensorId, data[ sensorId]);
-
