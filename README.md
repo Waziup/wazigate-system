@@ -1,6 +1,6 @@
 # wazigate-system
 
-WaziGate-System is a part of the [Waziup gateway)(https://github.com/Waziup/waziup-gateway).
+WaziGate-System is a part of the [Waziup gateway](https://github.com/Waziup/waziup-gateway).
 
 ## Development & testing
 
