@@ -16,9 +16,27 @@ PATH		=	os.path.dirname(os.path.abspath(__file__));
 CONF_FILE	=	PATH + '/conf/conf.json'; 
 LOGS_PATH	=	PATH + '/logs/';
 
-WIFI_DEVICE = 'wlan0'; #'wlp2s0'; # The wifi device which connects to the internet. e.g. wlan0
-WIFI_DONGLE = 'wlan1';
+WIFI_DEVICE = '';
+WIFI_DONGLE = '';
 ETH_DEVICE  = 'eth0';
+
+#------------------------#
+
+#init:
+#cmd = 'iw dev | awk \'$1=="Interface"{print $2}\'';
+cmd = 'ls /sys/class/net/'; #load all devices
+devs = os.popen( cmd).read().strip().split( os.linesep);
+for dev in devs:
+	cmd = 'udevadm info /sys/class/net/'+ dev +' | grep "DEVTYPE=wlan"'; # is it wireless
+	res = os.popen( cmd).read().strip();
+	if( len( res) == 0):
+		continue;
+	cmd = 'udevadm info /sys/class/net/'+ dev +' | grep -i usb';
+	res = os.popen( cmd).read().strip();
+	if( len( res) > 0): #IF it is a USB Dongle
+		WIFI_DONGLE = dev;
+	else:
+		WIFI_DEVICE = dev;
 
 if( 'WIFI_DEVICE' in os.environ):
 	WIFI_DEVICE = os.environ['WIFI_DEVICE'];
@@ -28,7 +46,6 @@ if( 'WIFI_DONGLE' in os.environ):
 	
 if( 'ETH_DEVICE' in os.environ):
 	ETH_DEVICE = os.environ['ETH_DEVICE'];
-
 
 #------------------------#
 
@@ -221,16 +238,23 @@ def wifi_set():
 	if( 'ssid' in request.json):
 		print( os.popen( 'ip link set '+ WIFI_DEVICE +' up').read());
 		
-		print( os.popen( 'nmcli connection delete id "'+ request.json['ssid'] +'"').read()); #avoid duplication
-		print( os.popen( 'nmcli connection up ifname '+ WIFI_DEVICE +'').read());
+		#print( os.popen( 'nmcli connection delete id "'+ request.json['ssid'] +'"').read()); #avoid duplication
+		#print( os.popen( 'nmcli connection up ifname '+ WIFI_DEVICE +'').read());
 
-		cmd  = 'nmcli dev wifi connect "'+ request.json['ssid'] +'"'
+		cmd  = 'wpa_passphrase "'+ request.json['ssid'] +'"'
 		if( len( request.json['password']) >= 8):
-			cmd += ' password "'+ request.json['password'] +'"';
-		cmd += ' ifname '+ WIFI_DEVICE +' ';
+			cmd += ' "'+ request.json['password'] +'"';
+		cmd += ' > /etc/wpa_supplicant.conf';
+		print( os.popen( cmd).read());
 		
+		cmd = 'wpa_supplicant -B -i '+ WIFI_DEVICE +' -c /etc/wpa_supplicant.conf';
 		res.append( os.popen( cmd).read());
 
+		cmd = 'dhclient '+ WIFI_DEVICE +'';
+		res.append( os.popen( cmd).read());
+		
+		cmd = 'ip -4 addr show '+ WIFI_DEVICE +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\'';
+		res.append( os.popen( cmd).read().strip());
 
 	return json.dumps( res), 201;
 
@@ -292,9 +316,18 @@ def wifi_get_ap():
 	cmd = 'egrep "^wpa_passphrase=" /etc/hostapd/hostapd.conf | awk \'{match($0, /wpa_passphrase=([^\"]+)/, a)} END{print a[1]}\'';
 	password = os.popen( cmd).read().strip();
 	
+	cmd = 'iw dev | awk \'$1=="Interface"{print $2}\' | grep "'+ WIFI_DONGLE +'"';
+	deviceRes = os.popen( cmd).read().strip();
+	
+	cmd = 'ip -4 addr show '+ WIFI_DONGLE +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\'';
+	ip = os.popen( cmd).read().strip();
+
 	res = {
-		'SSID'		: ssid,
-		'password'	: password
+		'available'	:	len( deviceRes) > 0,
+		'device'	:	WIFI_DONGLE,
+		'SSID'		:	ssid,
+		'password'	:	password,
+		'ip'		:	ip
 	};
 	
 	return json.dumps( res), 201;
@@ -410,7 +443,6 @@ def remoteIT():
 	except OSError:
 		res = 0
 
-	
 	return json.dumps( res), 201;
 
 #------------------------#
@@ -456,3 +488,11 @@ if __name__ == "__main__":
 
 	app.run( host = apiHost, debug = debugMode, port = apiPort);
 
+#For future
+#	from tornado.wsgi import WSGIContainer
+#	from tornado.httpserver import HTTPServer
+#	from tornado.ioloop import IOLoop
+
+#	http_server = HTTPServer( WSGIContainer( app))
+#	http_server.listen( 5544)
+#	IOLoop.instance().start( autoreload=True)
