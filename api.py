@@ -17,8 +17,10 @@ CONF_FILE	=	PATH + '/conf/conf.json';
 LOGS_PATH	=	PATH + '/logs/';
 
 WIFI_DEVICE = 'wlan0';
-WIFI_AP 	= 'ap0';
+WIFI_DONGLE = '';
 ETH_DEVICE  = 'eth0';
+
+#------------------------#
 
 WAZIGATE_HOST_ADDR = 'localhost:5544';
 
@@ -37,12 +39,13 @@ if( 'WAZIGATE_HOST_ADDR' in os.environ):
 	if( len( addr) > 0 and len( addr[1]) > 0):
 		WAZIGATE_HOST_ADDR += ':'+ addr[1];
 
+#------------------------#
 
 if( 'WIFI_DEVICE' in os.environ):
 	WIFI_DEVICE = os.environ['WIFI_DEVICE'];
 
-if( 'WIFI_AP' in os.environ):
-	WIFI_AP = os.environ['WIFI_AP'];
+if( 'WIFI_DONGLE' in os.environ):
+	WIFI_DONGLE = os.environ['WIFI_DONGLE'];
 	
 if( 'ETH_DEVICE' in os.environ):
 	ETH_DEVICE = os.environ['ETH_DEVICE'];
@@ -225,8 +228,6 @@ def wifi_set():
 	res = [];
 	
 	if( 'enabled' in request.json):
-		res.append( wifi_mode_wlan()); #Active WiFi Client Mode
-
 		if( request.json['enabled'] == '1' or request.json['enabled'] == True):
 			status = 'connect';
 			print( os.popen( 'ip link set '+ WIFI_DEVICE +' up').read());
@@ -235,68 +236,101 @@ def wifi_set():
 			print( os.popen( 'ip link set '+ WIFI_DEVICE +' down').read());
 		cmd = 'nmcli dev '+ status +' "'+ WIFI_DEVICE +'" ';
 		res.append( os.popen( cmd).read().strip());
-
+		#iface wlx0013eff1186f inet manual in /etc/network/interfaces
 		
 	if( 'ssid' in request.json):
 		print( os.popen( 'ip link set '+ WIFI_DEVICE +' up').read());
 		
 		#print( os.popen( 'nmcli connection delete id "'+ request.json['ssid'] +'"').read()); #avoid duplication
 		#print( os.popen( 'nmcli connection up ifname '+ WIFI_DEVICE +'').read());
-		
-		cmd  = 'cat >/etc/wpa_supplicant/wpa_supplicant-wlan0.conf <<EOF'+ os.linesep;
-		cmd += 'country=DE'+ os.linesep;
-		cmd += 'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev'+ os.linesep;
-		cmd += 'update_config=1'+ os.linesep;
-		cmd += 'EOF'+ os.linesep;
 
-		cmd += 'wpa_passphrase "'+ request.json['ssid'] +'"'
+		cmd  = 'cp /etc/wpa_supplicant/wpa_supplicant.conf.orig /etc/wpa_supplicant/wpa_supplicant.conf;';
+		print( os.popen( cmd).read());
+		
+		cmd = 'wpa_passphrase "'+ request.json['ssid'] +'"';
 		if( len( request.json['password']) >= 8):
 			cmd += ' "'+ request.json['password'] +'"';
-		cmd += ' >> /etc/wpa_supplicant/wpa_supplicant-wlan0.conf';
+		cmd += ' >> /etc/wpa_supplicant/wpa_supplicant.conf; ';
+		print( os.popen( cmd).read());
+		
+		wifi_mode_wlan(); # save the setting and reboot
+		
+		#cmd = 'wpa_supplicant -B -i '+ WIFI_DEVICE +' -c /etc/wpa_supplicant.conf';
+		#cmd = 'systemctl disable hostapd.service;'
 		#print( os.popen( cmd).read());
-		#res.append( cmd);
-		subprocess.run( cmd, shell=True, check=True, executable='/bin/bash', stdout=subprocess.PIPE);
 		
-		res.append( wifi_mode_wlan()[0]); #Active WiFi Client Mode
+		#cmd = 'mv /etc/network/interfaces /etc/network/interfaces_old;'
+		#print( os.popen( cmd).read());
 		
-		#cmd = 'wpa_supplicant -B -i '+ WIFI_DEVICE +' -c /etc/wpa_supplicant/wpa_supplicant-wlan0.conf';
-		#res.append( os.popen( cmd).read());
+		#time.sleep(1);
+		#system_shutdown( 'reboot');
 
 		#cmd = 'dhclient '+ WIFI_DEVICE +'';
 		#res.append( os.popen( cmd).read());
 		
-		cmd = 'ip -4 addr show '+ WIFI_DEVICE +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\'';
-		res.append( os.popen( cmd).read().strip());
+		#cmd = 'ip -4 addr show '+ WIFI_DEVICE +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\'';
+		#res.append( os.popen( cmd).read().strip());
 
 	return json.dumps( res), 201;
+
+#------------------------#
+
+#------------------------#
+
+def wifi_mode_wlan():
+	import requests
+	try:
+
+		url  = 'http://'+ WAZIGATE_HOST_ADDR +'/wifi/mode/wlan';
+		rs	 = requests.post( url, timeout = 30, verify=False);
+		res  = json.loads( rs.content);
+
+	except requests.exceptions.RequestException as e:
+		print(e);
+		res = e;
+	
+	return res, 201;
+
+#------------------------#
+
+@app.route( '/api/'+ API_VER +'/system/wifi/mode/ap', methods=['PUT', 'POST'])
+def wifi_mode_to_ap():
+
+	res = [];
+	
+	WAZIGATE_HOST_ADDR
+	
+	cmd = 'Goooooz';
+	os.popen( cmd).read();
+	res.append( "Interface saved.");
+
+	#print( res);
+	return json.dumps( res), 201;
+
+#------------------------#
+
+def wifi_active_mode():
+	
+	cmd	= 'iw dev | grep "Interface '+ WIFI_DEVICE +'"';
+	res	= os.popen( cmd).read().strip();
+	if( len( res) > 0):
+		return dev;
+
+	return '';
 
 #------------------------#
 
 @app.route('/api/'+ API_VER +'/system/wifi/scanning', methods=['GET'])
 @app.route('/api/'+ API_VER +'/system/wifi/scan', methods=['GET'])
 def wifi_scan():
-	
-	WIFI_DEVICE = wifi_active_mode();
-	
-	#-----------------#
-	
-	lines = [];
-	for i in range(3): # we need to repeat it couple of times to avoid errors
+	#
+	#cmd = 'nmcli -f SSID,SIGNAL,SECURITY dev wifi list ifname '+ WIFI_DEVICE;
+	#os.popen( 'ip link set '+ WIFI_DEVICE +' up').read();
+	cmd = 'iw '+ WIFI_DEVICE +' scan | awk -f '+ PATH +'/scan.awk'; #| sort -k1,1 -u
+	#lines = os.popen( cmd).read().strip().split( os.linesep);
+	lines = os.popen( cmd).read().strip();
+	lines = lines.split( os.linesep);
 
-		os.popen( 'ip link set '+ WIFI_DEVICE +' up').read();
-		
-		cmd = 'iw '+ WIFI_DEVICE +' scan | awk -f '+ PATH +'/scan.awk'; #| sort -k1,1 -u
-		pipe = subprocess.run( cmd, shell=True, check=True, executable='/bin/bash', stdout=subprocess.PIPE, stderr=subprocess.PIPE);
-		
-		if ( len( pipe.stderr) == 0):
-			lines = str( pipe.stdout.strip(), 'utf-8').split( os.linesep);
-			#print( cmd);
-			break;
-		
-		time.sleep(1);
-
-	#-----------------#
-	
 	res = []
 	for ln in lines:
 		wrd = ln.split();
@@ -312,7 +346,6 @@ def wifi_scan():
 
 #------------------------#
 
-#This api is deprecated, we just keep it for a while to avoid errors!
 @app.route('/api/'+ API_VER +'/system/wifi/ssid', methods=['POST'])
 def wifi_save_ssid():
 #	cmd = SCRIPTS +'prepare_wifi_client.sh';
@@ -371,7 +404,7 @@ def wifi_set_ap_api():
 
 	return json.dumps( wifi_set_ap( request.json)), 201;
 
-#------------------------#
+#.............#
 
 def wifi_set_ap( req):
 
@@ -399,59 +432,12 @@ def wifi_set_ap( req):
 
 #------------------------#
 
-@app.route( '/api/'+ API_VER +'/system/wifi/mode/ap', methods=['PUT', 'POST'])
-def wifi_mode_to_ap():
-
-	res = [];
-	
-	WAZIGATE_HOST_ADDR
-	
-	cmd = 'Goooooz';
-	os.popen( cmd).read();
-	res.append( "Interface saved.");
-
-	#print( res);
-	return json.dumps( res), 201;
-
-#------------------------#
-
-def wifi_active_mode():
-	
-	devices = [ WIFI_AP, WIFI_DEVICE];
-	
-	for dev in devices:
-		cmd	= 'iw dev | grep "Interface '+ dev +'"';
-		res	= os.popen( cmd).read().strip();
-		if( len( res) > 0):
-			return dev;
-
-	return '';
-
-#------------------------#
-
-def wifi_mode_wlan():
-	import requests
-	try:
-
-		url = 'http://'+ WAZIGATE_HOST_ADDR +'/wifi/mode/wlan';
-		rs	= requests.post( url, timeout = 30, verify=False);
-		res  = json.loads( rs.content);
-
-	except requests.exceptions.RequestException as e:
-		print(e);
-		res = e;
-	
-	return res, 201;
-
-#------------------------#
-
-#------------------------#
-
 @app.route( '/api/'+ API_VER +'/system/<status>', methods=['PUT'])
 def system_shutdown( status):
 
 	if( status == 'reboot'):
 		cmd = 'shutdown -r now';
+		#cmd = 'reboot';
 
 	else:
 		if( status == 'shutdown'):
@@ -459,7 +445,7 @@ def system_shutdown( status):
 		else:
 			return 1, 201
 	
-	res = cmd;
+	#res = cmd;
 	res = os.popen( cmd).read();
 	return json.dumps( res), 201;
 
@@ -546,16 +532,6 @@ def whereAmI():
 	
 #------------------------#
 
-
-
-#------------------------#
-
-@app.route( '/api/'+ API_VER +'/lora', methods=['GET'])
-def get_lora_status():
-	return 'xxx';
-
-#------------------------#
-
 if __name__ == "__main__":
 	debugMode	= os.environ['DEBUG_MODE'] == '1';
 	apiAddr		= os.environ['WAZIGATE_SYSTEM_ADDR'];
@@ -565,10 +541,10 @@ if __name__ == "__main__":
 	apiHost = "0.0.0.0";
 	apiPort = 5000;
 
-	if( len( addr) > 0 and len( addr[0]) > 0):
+	if( len( addr) > 0 in addr and len( addr[0]) > 0):
 		apiHost = addr[0];
 
-	if( len( addr) > 1 and len( addr[1]) > 0):
+	if( len( addr) > 1 in addr and len( addr[1]) > 0):
 		apiPort = int( addr[1]);
 
 	app.run( host = apiHost, debug = debugMode, port = apiPort);
