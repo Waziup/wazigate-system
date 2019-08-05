@@ -1,7 +1,7 @@
 {
   "setup_conf": {
     "gwid_done": true,
-    "wizard": true
+    "wizard": false
   },
   "radio_conf": {
     "mode": 1,
@@ -9,13 +9,13 @@
     "cr": 5,
     "sf": 12,
     "ch": -1,
-    "freq": "",
+    "freq": 865.2,
     "band": "868MHz"
   },
   "gateway_conf": {
     "gateway_ID": "B827EB4E30A8",
-    "ref_latitude": 46.0052,
-    "ref_longitude": 11.1979,
+    "ref_latitude": 43.51,
+    "ref_longitude": -1.36,
     "wappkey_enabled": false,
     "wappkey": "",
     "raw": false,
@@ -44,9 +44,9 @@
     "use_sms": false,
     "pin": 1234,
     "contact_sms": [
-      "+45XXXXXXXXX",
+      "+33XXXXXXXXX",
       "+33XXXXXXXXZ",
-      "+39xxxxxxxxxx"
+      "+3911safsd132Z"
     ],
     "gammurc_file": "/home/pi/.gammurc"
   },
