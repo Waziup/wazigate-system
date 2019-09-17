@@ -1,14 +1,25 @@
-FROM python:latest
+FROM python:alpine as compile
 
 MAINTAINER Moji eskandari@fbk.eu
 
-RUN apt-get update -y && \
-    apt-get install -y python-pip python-dev iw gawk network-manager nano wvdial gammu python-gammu
-   
-RUN pip install flask wifi requests pyserial 
+RUN apk update && \
+    apk add iw gawk networkmanager nano python-dev zlib-dev jpeg-dev linux-headers gcc g++ make libffi-dev openssl-dev 
+    # wvdial gammu python-gammu
 
+WORKDIR /app
+COPY requirements.txt /app
+RUN pip install --user -r requirements.txt
+
+
+FROM python:alpine as run
+
+RUN apk update && \
+    apk add iw gawk networkmanager nano 
+
+
+WORKDIR /app
+COPY --from=compile /root/.local /root/.local
 COPY . /app
-WORKDIR /app/
 
 RUN chmod +x ./start.sh
 ENTRYPOINT [ "sh", "./start.sh" ]
