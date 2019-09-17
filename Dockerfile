@@ -3,7 +3,7 @@ FROM python:alpine as compile
 MAINTAINER Moji eskandari@fbk.eu
 
 RUN apk update && \
-    apk add iw gawk networkmanager nano python-dev zlib-dev jpeg-dev linux-headers gcc g++ make libffi-dev openssl-dev 
+    apk add python-dev zlib-dev jpeg-dev linux-headers gcc g++ make libffi-dev openssl-dev 
     # wvdial gammu python-gammu
 
 WORKDIR /app
