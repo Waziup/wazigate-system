@@ -14,7 +14,7 @@ RUN pip install --user -r requirements.txt
 FROM python:alpine as run
 
 RUN apk update && \
-    apk add iw gawk networkmanager nano wpa_supplicant 
+    apk add iw gawk networkmanager nano wpa_supplicant grep 
 
 
 WORKDIR /app
