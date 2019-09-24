@@ -1,3 +1,4 @@
+#Image for compiling
 FROM python:alpine as compile
 
 MAINTAINER Moji eskandari@fbk.eu
@@ -10,15 +11,15 @@ WORKDIR /app
 COPY requirements.txt /app
 RUN pip install --user -r requirements.txt
 
-
+#Minimal image for execution
 FROM python:alpine as run
 
 RUN apk update && \
     apk add iw gawk networkmanager nano wpa_supplicant grep 
 
-
-WORKDIR /app
+#Copy build results
 COPY --from=compile /root/.local /root/.local
+WORKDIR /app
 COPY . /app
 
 RUN chmod +x ./start.sh
