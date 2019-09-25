@@ -1,9 +1,13 @@
+function ltrim(s) { sub(/^[ \t\r\n]+/, "", s); return s }
+function rtrim(s) { sub(/[ \t\r\n]+$/, "", s); return s }
+function trim(s) { return rtrim(ltrim(s)); }
+
 $1 == "BSS" {
     MAC = $2
     wifi[MAC]["enc"] = "-"
 }
 $1 == "SSID:" {
-    wifi[MAC]["SSID"] = $2
+    wifi[MAC]["SSID"] = rtrim( $2" "$3" "$4" "$5" "$6)
 }
 $1 == "freq:" {
     wifi[MAC]["freq"] = $NF
@@ -22,6 +26,7 @@ END {
     #printf "%s\t%s\t%s\n","SSID","Signal","Encryption"
 
     for (w in wifi) {
+    	#printf "[%s]\n",wifi[w]["SSID"]
         printf "%s\t%s\t%s\n",wifi[w]["SSID"],wifi[w]["sig"],wifi[w]["enc"]
     }
 }

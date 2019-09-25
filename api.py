@@ -333,8 +333,8 @@ def wifi_scan():
 
 	res = []
 	for ln in lines:
-		wrd = ln.split();
-		if( len( wrd) == 3):
+		wrd = ln.split('\t');
+		if( len( wrd) == 3 and len( wrd[0]) > 0):
 			rw = {
 				'name'		: wrd[0],
 				'signal'	: wrd[1],
