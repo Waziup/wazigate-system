@@ -15,7 +15,7 @@ RUN pip install --user -r requirements.txt
 FROM python:alpine as run
 
 RUN apk update && \
-    apk add iw gawk networkmanager nano wpa_supplicant grep 
+    apk add iw gawk networkmanager nano wpa_supplicant grep libc6-compat  
 
 #Copy build results
 COPY --from=compile /root/.local /root/.local
