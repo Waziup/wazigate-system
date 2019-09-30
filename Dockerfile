@@ -4,12 +4,18 @@ FROM python:alpine as compile
 MAINTAINER Moji eskandari@fbk.eu
 
 RUN apk update && \
-    apk add python-dev zlib-dev jpeg-dev linux-headers gcc g++ make libffi-dev openssl-dev 
+    apk add python-dev zlib-dev jpeg-dev linux-headers gcc g++ make libffi-dev openssl-dev build-base
     # wvdial gammu python-gammu
 
+#installing Python packages
 WORKDIR /app
 COPY requirements.txt /app
 RUN pip install --user -r requirements.txt
+
+#compiling lora_gateway C executable
+WORKDIR /app/data_acq/lora
+COPY data_acq/lora /app/data_acq/lora
+RUN make lora_gateway_pi2
 
 #Minimal image for execution
 FROM python:alpine as run
@@ -19,6 +25,7 @@ RUN apk update && \
 
 #Copy build results
 COPY --from=compile /root/.local /root/.local
+COPY --from=compile /app/data_acq/lora/lora_gateway /app/data_acq/lora/lora_gateway 
 WORKDIR /app
 COPY . /app
 
