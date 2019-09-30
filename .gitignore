@@ -124,9 +124,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-.swo
-.swp
-.swn
+*.swo
+*.swp
+*.swn
 
 # Prerequisites
 *.d
@@ -180,3 +180,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Ignore executable
+lora_gateway
