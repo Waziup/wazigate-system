@@ -1,33 +1,14 @@
-#Image for compiling
-FROM python:alpine as compile
+FROM python:latest
 
-MAINTAINER Moji eskandari@fbk.eu
+MAINTAINER Moji mojtaba.eskandari@waziup.org
 
-RUN apk update && \
-    apk add python-dev zlib-dev jpeg-dev linux-headers gcc g++ make libffi-dev openssl-dev build-base
-    # wvdial gammu python-gammu
+RUN apt-get update -y && \
+    apt-get install -y python-pip python-dev iw gawk network-manager nano wvdial gammu python-gammu
+   
+RUN pip install flask wifi requests pyserial 
 
-#installing Python packages
-WORKDIR /app
-COPY requirements.txt /app
-RUN pip install --user -r requirements.txt
-
-#compiling lora_gateway C executable
-WORKDIR /app/data_acq/lora
-COPY data_acq/lora /app/data_acq/lora
-RUN make lora_gateway_pi2
-
-#Minimal image for execution
-FROM python:alpine as run
-
-RUN apk update && \
-    apk add iw gawk networkmanager nano wpa_supplicant grep libc6-compat  
-
-#Copy build results
-COPY --from=compile /root/.local /root/.local
-COPY --from=compile /app/data_acq/lora/lora_gateway /app/data_acq/lora/lora_gateway 
-WORKDIR /app
 COPY . /app
+WORKDIR /app/
 
 RUN chmod +x ./start.sh
 ENTRYPOINT [ "sh", "./start.sh" ]

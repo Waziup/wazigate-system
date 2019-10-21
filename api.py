@@ -17,7 +17,6 @@ CONF_FILE	=	PATH + '/conf/conf.json';
 LOGS_PATH	=	PATH + '/logs/';
 
 WIFI_DEVICE = 'wlan0';
-WIFI_DONGLE = '';
 ETH_DEVICE  = 'eth0';
 
 #------------------------#
@@ -44,9 +43,6 @@ if( 'WAZIGATE_HOST_ADDR' in os.environ):
 if( 'WIFI_DEVICE' in os.environ):
 	WIFI_DEVICE = os.environ['WIFI_DEVICE'];
 
-if( 'WIFI_DONGLE' in os.environ):
-	WIFI_DONGLE = os.environ['WIFI_DONGLE'];
-	
 if( 'ETH_DEVICE' in os.environ):
 	ETH_DEVICE = os.environ['ETH_DEVICE'];
 
@@ -158,7 +154,7 @@ def net_get():
 	cmd = 'cat /sys/class/net/'+ dev +'/address';
 	mac = os.popen( cmd).read().strip();
 	
-	cmd = 'ip -4 addr show '+ dev +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\'';
+	cmd = 'ip -4 addr show '+ dev +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\' | head -n 1';
 	ip = os.popen( cmd).read().strip();
 	
 	res = {
@@ -207,7 +203,8 @@ def wifi_get():
 	enabled = len( os.popen( cmd).read().strip()) > 0;	
 
 	#cmd = 'iwconfig '+ WIFI_DEVICE +' | grep SSID | awk \'{match($0,/ESSID:"([^\"]+)"/,a)}END{print a[1]}\'';
-	cmd = 'iw '+ WIFI_DEVICE +' info | grep ssid | awk \'{print $2}\'';
+	#cmd = 'iw '+ WIFI_DEVICE +' info | grep ssid | awk \'{print $2}\'';
+	cmd = 'iw '+ WIFI_DEVICE +' info | grep ssid | awk \'{print $2" "$3" "$4" "$5" "$6}\'';
 	ssid = os.popen( cmd).read().strip();
 	
 	res = {
@@ -293,12 +290,13 @@ def wifi_mode_wlan():
 
 #------------------------#
 
+#Not used here, this function as the button is handled by the host itself. so we will remove this thing from here.
 @app.route( '/api/'+ API_VER +'/system/wifi/mode/ap', methods=['PUT', 'POST'])
 def wifi_mode_to_ap():
 
 	res = [];
 	
-	WAZIGATE_HOST_ADDR
+	WAZIGATE_HOST_ADDR;
 	
 	cmd = 'Goooooz';
 	os.popen( cmd).read();
@@ -376,15 +374,15 @@ def wifi_get_ap():
 	cmd = 'egrep "^wpa_passphrase=" /etc/hostapd/hostapd.conf | awk \'{match($0, /wpa_passphrase=([^\"]+)/, a)} END{print a[1]}\'';
 	password = os.popen( cmd).read().strip();
 	
-	cmd = 'iw dev | awk \'$1=="Interface"{print $2}\' | grep "'+ WIFI_DONGLE +'"';
+	cmd = 'iw dev | awk \'$1=="Interface"{print $2}\' | grep "'+ WIFI_DEVICE +'"';
 	deviceRes = os.popen( cmd).read().strip();
 	
-	cmd = 'ip -4 addr show '+ WIFI_DONGLE +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\'';
+	cmd = 'ip -4 addr show '+ WIFI_DEVICE +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\'';
 	ip = os.popen( cmd).read().strip();
 
 	res = {
 		'available'	:	len( deviceRes) > 0,
-		'device'	:	WIFI_DONGLE,
+		'device'	:	WIFI_DEVICE,
 		'SSID'		:	ssid,
 		'password'	:	password,
 		'ip'		:	ip
@@ -432,22 +430,21 @@ def wifi_set_ap( req):
 
 #------------------------#
 
-@app.route( '/api/'+ API_VER +'/system/<status>', methods=['PUT'])
+@app.route( '/api/'+ API_VER +'/system/<status>', methods=['PUT', 'POST'])
 def system_shutdown( status):
+	import requests
+	try:
 
-	if( status == 'reboot'):
-		cmd = 'shutdown -r now';
-		#cmd = 'reboot';
+		url  = 'http://'+ WAZIGATE_HOST_ADDR +'/system/shutdown/'+ status;
+		rs	 = requests.post( url, timeout = 30, verify=False);
+		res  = json.loads( rs.content);
 
-	else:
-		if( status == 'shutdown'):
-			cmd = 'shutdown -h now';
-		else:
-			return 1, 201
+	except requests.exceptions.RequestException as e:
+		print(e);
+		res = e;
 	
-	#res = cmd;
-	res = os.popen( cmd).read();
-	return json.dumps( res), 201;
+	return res, 201;	
+
 
 #------------------------#
 
@@ -479,35 +476,6 @@ def get_logs( n = 0):
 
 #------------------------#
 
-@app.route( '/api/'+ API_VER +'/remote.it', methods=['GET'])
-def remoteIT():
-
-	ongoingF = PATH + '/remote.it/ongoing.txt';
-	if( os.path.isfile( ongoingF)):
-		res = {
-			'msg'	: 'Registring started...'
-		};
-		return json.dumps( res), 201;
-	
-	doneF = PATH + '/remote.it/done.txt';
-	if( os.path.isfile( doneF) == False):
-		return json.dumps( False), 201;
-
-	try:
-		with open( doneF) as f:
-			regId = f.read();
-		res = {
-			'time'	: time.ctime( os.path.getmtime( doneF)),
-			'id'	: regId
-		};
-
-	except OSError:
-		res = 0
-
-	return json.dumps( res), 201;
-
-#------------------------#
-
 @app.route( '/api/'+ API_VER +'/location', methods=['GET'])
 def whereAmI():
 
@@ -526,6 +494,7 @@ def whereAmI():
 
 	except requests.exceptions.RequestException as e:
 		print(e);
+		#res = { "Error": e};
 		res = e;
 	
 	return res, 201;
