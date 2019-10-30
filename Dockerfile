@@ -4,8 +4,9 @@ FROM python:alpine as compile
 MAINTAINER Moji mojtaba.eskandari@waziup.org
 
 RUN apk update && \
-    apk add python-dev zlib-dev jpeg-dev linux-headers gcc g++ make libffi-dev openssl-dev build-base python-pip iw gawk network-manager nano wvdial gammu python-gammu
+    apk add python-dev zlib-dev jpeg-dev linux-headers gcc g++ make libffi-dev openssl-dev build-base networkmanager wpa_supplicant grep libc6-compat
     # wvdial gammu python-gammu
+
 
 #installing Python packages
 WORKDIR /app
@@ -21,7 +22,8 @@ RUN make lora_gateway_pi2
 FROM python:alpine as run
 
 RUN apk update && \
-    apk add iw gawk networkmanager nano wpa_supplicant grep libc6-compat  
+    apk add nano gammu iw gawk 
+    # wvdial
 
 #Copy build results
 COPY --from=compile /root/.local /root/.local
@@ -29,5 +31,11 @@ COPY --from=compile /app/data_acq/lora/lora_gateway /app/data_acq/lora/lora_gate
 WORKDIR /app
 COPY . /app
 
-RUN chmod +x ./start.sh
-ENTRYPOINT [ "sh", "./start.sh" ]
+# Let's leave the 3G support to the next version
+#RUN wget https://github.com/wlach/wvdial/archive/master.zip
+#RUN unzip master.zip && \
+#	cd wvdial-master && \
+#	make && make install
+
+RUN chmod +x start.sh
+ENTRYPOINT [ "sh", "start.sh" ]

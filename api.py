@@ -154,7 +154,8 @@ def net_get():
 	cmd = 'cat /sys/class/net/'+ dev +'/address';
 	mac = os.popen( cmd).read().strip();
 	
-	cmd = 'ip -4 addr show '+ dev +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\' | head -n 1';
+	#cmd = 'ip -4 addr show '+ dev +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\' | head -n 1';
+	cmd = 'ip -4 addr show '+ dev +' | awk \'$1 == "inet" {gsub(/\/.*$/, "", $2); print $2}\'';
 	ip = os.popen( cmd).read().strip();
 	
 	res = {
@@ -193,7 +194,8 @@ def wifi_devices():
 def wifi_get():
 	
 	#cmd = 'ifconfig '+ WIFI_DEVICE +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\'';
-	cmd = 'ip -4 addr show '+ WIFI_DEVICE +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\'';
+	#cmd = 'ip -4 addr show '+ WIFI_DEVICE +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\'';
+	cmd = 'ip -4 addr show '+ WIFI_DEVICE +' | awk \'$1 == "inet" {gsub(/\/.*$/, "", $2); print $2}\'';
 	ip = os.popen( cmd).read().strip();
 	
 	#cmd = 'sudo ifconfig | awk \'{print $1}\' | grep "'+ WIFI_DEVICE +':"';
@@ -377,7 +379,8 @@ def wifi_get_ap():
 	cmd = 'iw dev | awk \'$1=="Interface"{print $2}\' | grep "'+ WIFI_DEVICE +'"';
 	deviceRes = os.popen( cmd).read().strip();
 	
-	cmd = 'ip -4 addr show '+ WIFI_DEVICE +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\'';
+	#cmd = 'ip -4 addr show '+ WIFI_DEVICE +' | grep -oP \'(?<=inet\s)\d+(\.\d+){3}\'';
+	cmd = 'ip -4 addr show '+ WIFI_DEVICE +' | awk \'$1 == "inet" {gsub(/\/.*$/, "", $2); print $2}\'';
 	ip = os.popen( cmd).read().strip();
 
 	res = {

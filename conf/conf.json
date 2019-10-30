@@ -1,7 +1,7 @@
 {
   "setup_conf": {
     "gwid_done": true,
-    "wizard": false
+    "wizard": true
   },
   "radio_conf": {
     "mode": 1,

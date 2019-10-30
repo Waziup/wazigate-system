@@ -1441,4 +1441,3 @@ while True:
 	
 	#print( ch, type(ch));
 	sys.stdout.buffer.write( ch);
-
