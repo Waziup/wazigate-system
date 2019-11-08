@@ -13,7 +13,7 @@
     "band": "868MHz"
   },
   "gateway_conf": {
-    "gateway_ID": "B827EB4E30A8",
+    "gateway_ID": "b827eb206796",
     "ref_latitude": 43.51,
     "ref_longitude": -1.36,
     "wappkey_enabled": false,

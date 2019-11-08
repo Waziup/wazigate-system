@@ -170,11 +170,21 @@ def net_get():
 
 @app.route('/api/'+ API_VER +'/system/gwid', methods=['GET'])
 def gwid():
-	netRes = net_get();
-	netInfo = json.loads( netRes[0]);
+	
+	cmd = 'cat /sys/class/net/eth0/address';
+	mac = os.popen( cmd).read().strip();
+	
+	if( len( mac) == 0):
+		cmd = 'cat /sys/class/net/wlan0/address';
+		mac = os.popen( cmd).read().strip();
+
+	#netRes = net_get();
+	#netInfo = json.loads( netRes[0]);
+	
+	mac = mac.replace(':', '');
 
 	conf = {
-		'gateway_conf': { 'gateway_ID' : netInfo['mac'].replace(':', '').upper()}
+		'gateway_conf': { 'gateway_ID' : mac}
 	};
 	conf_set( conf);
 

@@ -22,7 +22,7 @@ RUN make lora_gateway_pi2
 FROM python:alpine as run
 
 RUN apk update && \
-    apk add nano gammu iw gawk 
+    apk add nano gammu iw gawk wpa_supplicant
     # wvdial
 
 #Copy build results

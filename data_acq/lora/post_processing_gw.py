@@ -165,7 +165,9 @@ json_array = api.conf_read();
 #------------------------------------------------------------
 
 #set the gateway_address for having different log filenames
-_gwid = json_array["gateway_conf"]["gateway_ID"]
+#_gwid = json_array["gateway_conf"]["gateway_ID"]
+jres = api.gwid();
+_gwid = json.loads( jres[0]);
 
 #------------------------------------------------------------
 #raw format?
@@ -176,7 +178,7 @@ except KeyError:
 	_rawFormat = 0
 	
 if _rawFormat:
-	print( "raw output from low-level gateway. post_processing_gw will handle packet format"	);
+	print( "raw output from low-level gateway. post_processing_gw will handle packet format");
 	
 #------------------------------------------------------------
 #local aes?

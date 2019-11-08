@@ -6,7 +6,7 @@ chmod +x /app/data_acq/lora/lora_gateway
 apk add iw
 apk add gawk
 apk add nano
-
+apk add wpa_supplicant
 
 python /app/setup.py
 
