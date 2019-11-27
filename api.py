@@ -21,7 +21,7 @@ ETH_DEVICE  = 'eth0';
 
 #------------------------#
 
-WAZIGATE_HOST_ADDR = 'localhost:5544';
+WAZIGATE_HOST_ADDR = 'localhost:5200';
 
 #------------------------#
 
@@ -222,7 +222,8 @@ def wifi_get():
 	res = {
 		'ip'		:	ip,
 		'enabled'	:	enabled,
-		'ssid'		:	ssid
+		'ssid'		:	ssid,
+		'ap_mode'	:	is_ap_mode()
 	};
 	
 	return json.dumps( res), 201;	
@@ -305,17 +306,38 @@ def wifi_mode_wlan():
 #Not used here, this function as the button is handled by the host itself. so we will remove this thing from here.
 @app.route( '/api/'+ API_VER +'/system/wifi/mode/ap', methods=['PUT', 'POST'])
 def wifi_mode_to_ap():
-
 	res = [];
-	
-	WAZIGATE_HOST_ADDR;
-	
-	cmd = 'Goooooz';
-	os.popen( cmd).read();
-	res.append( "Interface saved.");
+	import requests
+	try:
+		url  = 'http://'+ WAZIGATE_HOST_ADDR +'/wifi/mode/ap';
+		rs	 = requests.post( url, timeout = 30, verify=False);
+		res  = json.loads( rs.content);
 
+	except requests.exceptions.RequestException as e:
+		print(e);
+		res = e;
+	
+	#return res, 201;
 	#print( res);
 	return json.dumps( res), 201;
+
+#------------------------#
+
+def is_ap_mode():
+	cmd = 'systemctl is-active --quiet hostapd && echo 1'
+	
+	import requests
+	try:
+
+		url = 'http://'+ WAZIGATE_HOST_ADDR +'/cmd';
+		rs	= requests.post( url, timeout = 30, data = cmd, verify=False);
+		res	= str( rs.content, encoding='utf-8')
+		return res == "1"
+
+	except requests.exceptions.RequestException as e:
+		print(e);
+
+	return 'Error'
 
 #------------------------#
 
@@ -517,6 +539,8 @@ def whereAmI():
 if __name__ == "__main__":
 	debugMode	= os.environ['DEBUG_MODE'] == '1';
 	apiAddr		= os.environ['WAZIGATE_SYSTEM_ADDR'];
+
+	#print( WAZIGATE_HOST_ADDR);
 	
 	addr = apiAddr.split(':');
 	

@@ -1,8 +1,6 @@
 #Image for compiling
 FROM python:alpine as compile
 
-MAINTAINER Moji mojtaba.eskandari@waziup.org
-
 RUN apk update && \
     apk add python-dev zlib-dev jpeg-dev linux-headers gcc g++ make libffi-dev openssl-dev build-base networkmanager wpa_supplicant grep libc6-compat
     # wvdial gammu python-gammu
