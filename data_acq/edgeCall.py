@@ -22,6 +22,7 @@ import json
 import re
 from hashlib import md5
 #import shlex
+from ast import literal_eval
 
 #import sys
 sys.path.insert( 0, os.path.dirname( os.path.dirname( os.path.abspath(__file__))));
@@ -46,9 +47,16 @@ if( len( addr) > 1 and len( addr[1]) > 0):
 
 def sendToEdge( devId, sensorId, value):
 
+	#Convert the value type into its correct type
+	try:
+		value = literal_eval( value);
+	except ValueError:
+		#If fails, it falls back into string
+		pass
+
 	sensorURL	= EdgeURL +'/devices/'+ devId +'/sensors/'+ sensorId +'/value';
 	sensorValue	= json.dumps( { "value": value } );
-	
+
 	try:
 		response = requests.post( sensorURL, headers = EdgeHeaders, data = sensorValue, timeout = 30);
 		print( response.url, response.status_code);

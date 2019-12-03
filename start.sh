@@ -1,17 +1,16 @@
 #!/bin/bash
 chmod +x /app/data_acq/lora/lora_gateway
 
-python -u /app/setup.py
+#Check if all requirements are installed. which usually have problems in installation during the image building
+#if ! [ -x "$(which iw)" ]; then  fi;
+apk add iw
+apk add gawk
+apk add nano
+apk add wpa_supplicant
 
-python -u /app/api.py & 
+python /app/setup.py
 
-noLora=$NO_LORA
-if [ "$noLora" = true ]; then
-      echo "Lora not started"
-else
-      python -u /app/startLora.py &
-fi
+python /app/api.py & 
+python /app/startLora.py
 
-#Waiting for Ctrl-C
-while :; do sleep 1; done
-
+#python /app/api.py

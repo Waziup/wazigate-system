@@ -33,8 +33,8 @@ gwid = json.loads( jres[0]);
 
 ap_conf = {
 	'SSID'		:	'WAZIGATE_'+ gwid,
-	'password'	:	'loragateway',
-	'interface'	:	api.WIFI_DONGLE
+	'password'	:	'loragateway'
+#	'interface'	:	api.WIFI_DONGLE
 };
 
 print( api.wifi_set_ap( ap_conf));
@@ -49,4 +49,4 @@ api.conf_set( newConf);
 #--------------------------------------------------------------------#
 
 #Reboot now...
-print( api.system_shutdown( 'reboot'));
+#print( api.system_shutdown( 'reboot'));
