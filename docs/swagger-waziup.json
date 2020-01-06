@@ -6,7 +6,7 @@
       "title":"Waziup Gateway"
    },
    "host":"",
-   "basePath":"/api/v1",
+   "basePath":"",
 
 
    "tags":[
@@ -302,7 +302,7 @@
                "Network"
             ],
             "summary":"Chnages the WiFi hotspot SSID and password.",
-            "operationId":"saveConf",
+            "operationId":"saveConfAP",
             "consumes":[
                "application/json"
             ],
@@ -333,7 +333,7 @@
                "Network"
             ],
             "summary":"Chnages the WiFi hotspot SSID and password.",
-            "operationId":"saveConf",
+            "operationId":"saveConfAP",
             "consumes":[
                "application/json"
             ],
@@ -360,6 +360,72 @@
             }
          }
       },
+
+
+      "/system/wifi/mode/ap":{
+         "put":{
+            "tags":[
+               "Network"
+            ],
+            "summary":"Chnages the WiFi mode to hotspot/Access point",
+            "operationId":"saveConfAPMode",
+            "consumes":[
+               "application/json"
+            ],
+            "produces":[
+               "application/json"
+            ],
+            "parameters":[
+               {
+                  "in":"body",
+                  "name":"body",
+                  "required":false,
+                  "schema":{
+                     "$ref":"#/definitions/wifi-mode-ap"
+                  }
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"Invalid input"
+               },
+			   "200":{
+                  "description":"successful operation"
+               }
+            }
+         },
+         "post":{
+            "tags":[
+               "Network"
+            ],
+            "summary":"Chnages the WiFi mode to hotspot/Access point",
+            "operationId":"saveConfAPMode",
+            "consumes":[
+               "application/json"
+            ],
+            "produces":[
+               "application/json"
+            ],
+            "parameters":[
+               {
+                  "in":"body",
+                  "name":"body",
+                  "required":false,
+                  "schema":{
+                     "$ref":"#/definitions/wifi-mode-ap"
+                  }
+               }
+            ],
+            "responses":{
+               "400":{
+                  "description":"Invalid input"
+               },
+			   "200":{
+                  "description":"successful operation"
+               }
+            }
+         }
+      },      
       
       
     	"/system/reboot":{
@@ -372,7 +438,7 @@
                "application/json"
             ],
             "responses":{
-               "201":{
+               "200":{
                   "description":"successful operation"
                }
             }

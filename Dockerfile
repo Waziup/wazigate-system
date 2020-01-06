@@ -1,38 +1,47 @@
-#Image for compiling
-FROM python:alpine as compile
+FROM alpine:latest AS development
 
-RUN apk update && \
-    apk add python-dev zlib-dev jpeg-dev linux-headers gcc g++ make libffi-dev openssl-dev build-base networkmanager wpa_supplicant grep libc6-compat
-    # wvdial gammu python-gammu
+COPY . /go/src/wazigate-system/
+ENV GOPATH=/go/
 
+RUN apk add --no-cache \
+    go \
+    git \
+    iw \
+    gawk \
+    curl \
+    gcc \
+    musl-dev \
+    && cd $GOPATH   \
+    && go get -v -u \
+        "github.com/julienschmidt/httprouter" \
+        "periph.io/x/periph/conn/gpio" \
+	    "periph.io/x/periph/host" \
+	    "periph.io/x/periph/conn/gpio/gpioreg" \
+        "periph.io/x/periph/conn/i2c/i2creg" \
+        "periph.io/x/periph/devices/ssd1306" \
+        "periph.io/x/periph/devices/ssd1306/image1bit" \
+        "golang.org/x/image/font" \
+        "golang.org/x/image/font/basicfont" \
+        "golang.org/x/image/math/fixed" \  
+    && mkdir /build/ \
+    && cp /go/src/wazigate-system/scan.awk /build \
+    && cp -r /go/src/wazigate-system/docs /build \
+    && go build -o /build/wazigate-system -i /go/src/wazigate-system/
 
-#installing Python packages
-WORKDIR /app
-COPY requirements.txt /app
-RUN pip install --user -r requirements.txt
+WORKDIR /go/src/wazigate-system/
+ENTRYPOINT ["tail", "-f", "/dev/null"]
 
-#compiling lora_gateway C executable
-WORKDIR /app/data_acq/lora
-COPY data_acq/lora /app/data_acq/lora
-RUN make lora_gateway_pi2
+#----------------------------#
 
-#Minimal image for execution
-FROM python:alpine as run
+FROM alpine:latest AS production
 
-RUN apk update && \
-    apk add nano gammu iw gawk wpa_supplicant curl
+WORKDIR /app/
+COPY --from=development /build .
+RUN apk --no-cache add \
+    ca-certificates \
+    tzdata \
+    iw \
+    gawk \
+    curl
 
-#Copy build results
-COPY --from=compile /root/.local /root/.local
-COPY --from=compile /app/data_acq/lora/lora_gateway /app/data_acq/lora/lora_gateway 
-WORKDIR /app
-COPY . /app
-
-# Let's leave the 3G support to the next version
-#RUN wget https://github.com/wlach/wvdial/archive/master.zip
-#RUN unzip master.zip && \
-#	cd wvdial-master && \
-#	make && make install
-
-RUN chmod +x start.sh
-ENTRYPOINT [ "sh", "start.sh" ]
+ENTRYPOINT ["./wazigate-system"]
