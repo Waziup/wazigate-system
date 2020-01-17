@@ -16,7 +16,7 @@ import (
 	// "io/ioutil"
 
 
-	"wazigate-system/api"
+	"github.com/Waziup/wazigate-system/api"
 	routing "github.com/julienschmidt/httprouter"
 )
 

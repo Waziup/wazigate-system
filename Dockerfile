@@ -12,17 +12,6 @@ RUN apk add --no-cache \
     gcc \
     musl-dev \
     && cd $GOPATH   \
-    && go get -v -u \
-        "github.com/julienschmidt/httprouter" \
-        "periph.io/x/periph/conn/gpio" \
-	    "periph.io/x/periph/host" \
-	    "periph.io/x/periph/conn/gpio/gpioreg" \
-        "periph.io/x/periph/conn/i2c/i2creg" \
-        "periph.io/x/periph/devices/ssd1306" \
-        "periph.io/x/periph/devices/ssd1306/image1bit" \
-        "golang.org/x/image/font" \
-        "golang.org/x/image/font/basicfont" \
-        "golang.org/x/image/math/fixed" \  
     && mkdir /build/ \
     && cp /go/src/wazigate-system/scan.awk /build \
     && cp -r /go/src/wazigate-system/docs /build \

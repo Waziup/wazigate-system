@@ -195,6 +195,8 @@ func systemShutdown( status string) {
 
 	log.Printf( "[Info  ] System %s", status)
 
+	oledHalt()
+	
 	stdout := execOnHost( cmd, nil)
 	log.Printf( "[Info  ] %s", stdout)
 }
