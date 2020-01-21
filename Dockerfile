@@ -1,6 +1,7 @@
 FROM alpine:latest AS development
 
-COPY . /go/src/wazigate-system/
+COPY . /go/src/github.com/Waziup/wazigate-system/
+WORKDIR /go/src/github.com/Waziup/wazigate-system/
 ENV GOPATH=/go/
 
 RUN apk add --no-cache \
@@ -11,14 +12,10 @@ RUN apk add --no-cache \
     curl \
     gcc \
     musl-dev \
-    && cd $GOPATH   \
     && mkdir /build/ \
-    && cp /go/src/wazigate-system/scan.awk /build \
-    && cp -r /go/src/wazigate-system/docs /build \
-    && go build -o /build/wazigate-system -i /go/src/wazigate-system/
-
-WORKDIR /go/src/wazigate-system/
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+    && cp scan.awk /build \
+    && cp -r docs /build \
+    && go build -o /build/wazigate-system -i .
 
 #----------------------------#
 
