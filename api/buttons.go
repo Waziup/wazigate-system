@@ -101,12 +101,15 @@ func ButtonsLoop(){
 						log.Printf( "[BTN   ] %s held long enough. Triggering the action!", btnPin)
 					}
 					systemShutdown( "shutdown")
+					return;
 				}
 			}
 		}
 	}()	
 
 	/*---------*/
+
+	log.Printf( "[Info  ] Button manager initialized.")
 }
 
 /*-------------------------*/

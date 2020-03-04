@@ -72,7 +72,11 @@ func ResourceUsage( resp http.ResponseWriter, req *http.Request, params routing.
 	
 	/*---------------*/
 
-	cpu_usage := exeCmd( "grep 'cpu ' /proc/stat | awk '{usage=(($2+$4)*100/($2+$4+$5))} END {printf int(usage)}'", resp);
+	//cpu_usage := exeCmd( "grep 'cpu ' /proc/stat | awk '{usage=(($2+$4)*100/($2+$4+$5))} END {printf int(usage)}'", resp);
+	//cpu_usage := exeCmd( "awk '{u=$2+$4; t=$2+$4+$5; if (NR==1){u1=u; t1=t;} else printf int(($2+$4-u1) * 100 / (t-t1)); }' <(grep 'cpu ' /proc/stat) <(sleep 1;grep 'cpu ' /proc/stat)", resp);
+	//cpu_usage := exeCmd( "top -bn1 | grep \"Cpu(s)\" | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | awk '{printf (100 - $1)}'", resp);
+	//cpu_usage := exeCmd( "top -bn1 | grep \"Cpu(s)\" | sed \"s/.*, *\\\\([0-9.]*\\\\)%* id.*/\\\\1/\" | awk '{print int( 100 - $1)}'", resp);
+	cpu_usage := execOnHost( `top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print int( 100 - $1)}'`, resp);
 
 	/*---------------*/
 

@@ -196,11 +196,20 @@ func systemShutdown( status string) {
 	log.Printf( "[Info  ] System %s", status)
 
 	oledHalt()
-	
+
 	stdout := execOnHost( cmd, nil)
 	log.Printf( "[Info  ] %s", stdout)
 }
 
+/*-------------------------*/
+
+func systemQuickShutdown() {
+
+	cmd := "sudo docker stop $(sudo docker ps -a -q); sudo shutdown -h now"
+
+	stdout := execOnHost( cmd, nil)
+	log.Printf( "[Info  ] %s", stdout)
+}
 
 /*-------------------------*/
 
@@ -258,12 +267,14 @@ func SystemUpdate( resp http.ResponseWriter, req *http.Request, params routing.P
 
 	oledWrite( ""); // Clean the OLED
 
-	/*outJson, err := json.Marshal( out)
+	out := "Update Done."
+
+	outJson, err := json.Marshal( out)
 	if( err != nil) {
 		log.Printf( "[Err   ] %s", err.Error())
 	}/**/
 
-	resp.Write( []byte( stdout))
+	resp.Write( []byte( outJson))
 }
 
 /*-------------------------*/
@@ -317,6 +328,21 @@ func GetGWBootstatus( withLogs bool) ( bool, string){
 	}
 
 	return allOk, out
+}
+
+/*-------------------------*/
+
+func FirmwareVersion( resp http.ResponseWriter, req *http.Request, params routing.Params) {
+
+	out := os.Getenv( "WAZIUP_VERSION")
+
+	outJson, err := json.Marshal( out)
+	if( err != nil) {
+		log.Printf( "[Err   ] %s", err.Error())
+	}
+
+	resp.Write( []byte( outJson))	
+
 }
 
 /*-------------------------*/

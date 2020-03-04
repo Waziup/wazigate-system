@@ -82,10 +82,17 @@ func oledInit(){
 
 func oledHalt(){
 
+	if( oledDev == nil){
+		log.Printf( "[Err   ] OLED halt: No OLED Found!")
+		return;
+	}
 	oledShow( "\n\n   Screen OFF", false);
 	time.Sleep( 1 * time.Second)
 	oledHalted = true
-	oledDev.Halt()
+	err := oledDev.Halt()
+	if err != nil {
+		log.Printf( "[Err   ] OLED halt: %s ", err.Error())
+	}
 }
 
 /*-------------------------*/
@@ -144,102 +151,107 @@ func oledShow( msg string, withLogs bool){
 
 func OledLoop(){
 
-	oledInit()
+	go func(){
+		oledInit()
 
-	if oledDoesNotExist {
-		return
-	}
+		if oledDoesNotExist {
+			return
+		}
+		
+		OledBuffer		= ""		// Clear the buffer
+		autoClearTimer	:= 0		// Automatically clear a message if it is not removed after let's say 13 seconds
+
+		allBootedOK		:= false
+		GWStatusCheck	:= 0 		// Check the containers status in every let's say 7 seconds.
+
+		heartbeat := false 			// Just a toggle varianle to show heartbeat on the screen
+
+		oledHaltCounter := 0
+
+		for {
+
+			/*---------*/
+
+			if autoClearTimer > 12 {
+				OledBuffer = ""
+				oledShow( "", false)
+			}
+			
+			if len( OledBuffer) > 0 {
+				oledShow( OledBuffer, true)
+				autoClearTimer++
+				time.Sleep( 1 * time.Second)
+				continue;
+			}
+			autoClearTimer = 0
+
+			if( oledHalted){
+				time.Sleep( 1 * time.Second)
+				continue
+			}
+
+			if( oledHaltCounter > oledHaltTimeout){
+				oledHalt();
+				oledHaltCounter = 0;
+				continue;
+			}
+
+			oledHaltCounter++
+
+			/*---------*/
+			
+			heartTxt :=	"  "
+			heartbeat =	! heartbeat
+			if heartbeat {
+				heartTxt = "* "
+			}
+
+			netTxt := "[ Internet XX ]"
+			if( CloudAccessible( false /*Without Logs*/)){
+				netTxt = "[ Internet OK ]"
+			}
+
+			OledMsg := heartTxt + netTxt
+
+			/*---------*/
+
+			eip, wip, aip, ssid := GetAllIPs()
+
+			if len( eip) > 0 {
+				// msg.append( "Ethernet: "+ eip);
+				OledMsg += "\nEth: " + eip
+			}
+
+			if len( wip) > 0 {
+				OledMsg += "\n\nWiFi: ("+ ssid +")\n " + wip
+			}
+
+			if len( aip) > 0 {
+				OledMsg += "\n\nAP: ("+ ssid +")\n " + aip
+			}
+
+			/*---------*/
+
+			oledShow( OledMsg, false);
+			time.Sleep( 1 * time.Second)
+
+			GWStatusCheck++
+			if GWStatusCheck > 7 {
+				GWStatusCheck = 0;
+				allBootedOK, _ = GetGWBootstatus( false)
+			}
+
+			if ! allBootedOK {
+				allBootedOK, OledMsg = GetGWBootstatus( false)
+				oledShow( OledMsg, false)
+				time.Sleep( 1 * time.Second)
+			}
+
+		} // End of `for`
+
+	}()
 	
-	OledBuffer		= ""		// Clear the buffer
-	autoClearTimer	:= 0		// Automatically clear a message if it is not removed after let's say 13 seconds
-
-	allBootedOK		:= false
-	GWStatusCheck	:= 0 		// Check the containers status in every let's say 7 seconds.
-
-	heartbeat := false 			// Just a toggle varianle to show heartbeat on the screen
-
-	oledHaltCounter := 0
-
-	for {
-
-		/*---------*/
-
-		if autoClearTimer > 12 {
-			OledBuffer = ""
-			oledShow( "", false)
-		}
-		
-		if len( OledBuffer) > 0 {
-			oledShow( OledBuffer, true)
-			autoClearTimer++
-			time.Sleep( 1 * time.Second)
-			continue;
-		}
-		autoClearTimer = 0
-
-		if( oledHalted){
-			time.Sleep( 1 * time.Second)
-			continue
-		}
-
-		if( oledHaltCounter > oledHaltTimeout){
-			oledHalt();
-			oledHaltCounter = 0;
-			continue;
-		}
-
-		oledHaltCounter++
-
-		/*---------*/
-		
-		heartTxt :=	"  "
-		heartbeat =	! heartbeat
-		if heartbeat {
-			heartTxt = "* "
-		}
-
-		netTxt := "[ Internet XX ]"
-		if( CloudAccessible( false /*Without Logs*/)){
-			netTxt = "[ Internet OK ]"
-		}
-
-		OledMsg := heartTxt + netTxt
-
-		/*---------*/
-
-		eip, wip, aip, ssid := GetAllIPs()
-
-		if len( eip) > 0 {
-			// msg.append( "Ethernet: "+ eip);
-			OledMsg += "\nEth: " + eip
-		}
-
-		if len( wip) > 0 {
-			OledMsg += "\n\nWiFi: ("+ ssid +")\n " + wip
-		}
-
-		if len( aip) > 0 {
-			OledMsg += "\n\nAP: ("+ ssid +")\n " + aip
-		}
-
-		/*---------*/
-
-		oledShow( OledMsg, false);
-		time.Sleep( 1 * time.Second)
-
-		GWStatusCheck++
-		if GWStatusCheck > 7 {
-			GWStatusCheck = 0;
-			allBootedOK, _ = GetGWBootstatus( false)
-		}
-
-		if ! allBootedOK {
-			allBootedOK, OledMsg = GetGWBootstatus( false)
-			oledShow( OledMsg, false)
-			time.Sleep( 1 * time.Second)
-		}
-
-	} // End of `for`
+	log.Printf( "[Info  ] OLED manager initialized.")
 	
 }
 

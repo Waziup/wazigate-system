@@ -185,3 +185,7 @@ dkms.conf
 # Ignore executable
 lora_gateway
 /.project
+
+/ui/.vscode
+/ui/node_modules
+

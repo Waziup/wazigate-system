@@ -191,7 +191,16 @@ func SetNetWiFi( resp http.ResponseWriter, req *http.Request, params routing.Par
 		CheckWlanConn() // Check if the WiFi connection was successfull otherwise revert to AP mode
 	}
 
-	resp.Write( []byte( "WiFi configs set successfully"))
+	out := "WiFi set successfully";
+
+	outJson, err := json.Marshal( out)
+	if( err != nil) {
+		log.Printf( "[Err   ] %s", err.Error())
+	}
+
+	resp.Write( []byte( outJson))
+
+	// resp.Write( []byte( "WiFi configs set successfully"))
 }
 
 /*-------------------------*/
@@ -262,7 +271,16 @@ func ActivateAPMode() {
 func SetNetAPMode( resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	ActivateAPMode()
-	resp.Write( []byte( "OK"))
+
+	out := "Access Point mode Activated.";
+
+	outJson, err := json.Marshal( out)
+	if( err != nil) {
+		log.Printf( "[Err   ] %s", err.Error())
+	}
+
+	resp.Write( []byte( outJson))	
+	// resp.Write( []byte( "OK"))
 }
 
 /*-------------------------*/
@@ -363,6 +381,8 @@ func SetNetAP( resp http.ResponseWriter, req *http.Request, params routing.Param
     }
 
 	var cmd string
+
+	out := ""
 	
 	if ssid, exist := reqJson["SSID"]; exist{
 		if str, ok := ssid.(string); ok{
@@ -372,7 +392,7 @@ func SetNetAP( resp http.ResponseWriter, req *http.Request, params routing.Param
 			// cmd = "echo "+ str +" | tee /etc/hostapd/custom_ssid.txt > /dev/null"
 			// exeCmd( cmd, resp)
 
-			resp.Write( []byte( "SSID saved."))
+			out += "SSID ";
 		}
 	}
 
@@ -381,9 +401,19 @@ func SetNetAP( resp http.ResponseWriter, req *http.Request, params routing.Param
 			cmd = "sed -i 's/^wpa_passphrase.*/wpa_passphrase="+ str +"/g' /etc/hostapd/hostapd.conf"
 			execOnHost( cmd, resp)
 
-			resp.Write( []byte( "Password saved."))
+			out += "and Password ";
 		}
 	}
+
+
+	out += "saved.";
+
+	outJson, err := json.Marshal( out)
+	if( err != nil) {
+		log.Printf( "[Err   ] %s", err.Error())
+	}
+
+	resp.Write( []byte( outJson))	
 
 }
 

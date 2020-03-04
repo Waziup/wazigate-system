@@ -59,34 +59,24 @@ func init() {
 
 	/*-----------*/
 
-	go func(){
-		OledLoop()
-		log.Printf( "[Info  ] OLED manager initialized.")
-	}()
+	BlackoutLoop()
+	ButtonsLoop()
+	OledLoop()
+	FanLoop()
 
 	/*-----------*/
 
+	// Connecting might take some time, so throw it into another thread ;)
 	go func(){
-		FanLoop()
-		log.Printf( "[Info  ] Fan manager initialized.")
-	}()
 
-	/*-----------*/
-
-	go func(){
-		ButtonsLoop()
-		log.Printf( "[Info  ] Button manager initialized.")
-	}()
-
-	/*-----------*/
-
-	// Check WiFi Connectivity
-	if CheckWlanConn() {
-		oledWrite( "\n WiFi Connected " );
-		if( DEBUG_MODE){
-			log.Println( "[Info  ] WiFi Connected.")
+		// Check WiFi Connectivity
+		if CheckWlanConn() {
+			oledWrite( "\n WiFi Connected " );
+			if( DEBUG_MODE){
+				log.Println( "[Info  ] WiFi Connected.")
+			}
 		}
-	}
+	}()
 
 	/*-----------*/
 
@@ -104,6 +94,16 @@ func HomeLink( resp http.ResponseWriter, req *http.Request, params routing.Param
 // var server = http.FileServer( http.Dir("./"))
 func APIDocs( resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	// log.Println( req.URL.Path)
+	http.FileServer( http.Dir("./")).ServeHTTP( resp, req)
+}
+
+/*-------------------------*/
+
+// var server = http.FileServer( http.Dir("./"))
+func UI( resp http.ResponseWriter, req *http.Request, params routing.Params) {
+	// log.Println( req.URL.Path)
+	// log.Println( params.ByName( "file_path"))
+
 	http.FileServer( http.Dir("./")).ServeHTTP( resp, req)
 }
 

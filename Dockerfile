@@ -15,7 +15,7 @@ RUN apk add --no-cache \
     && mkdir /build/ \
     && cp scan.awk /build \
     && cp -r docs /build \
-    && go build -o /build/wazigate-system -i .
+    && go build -o /build/wazigate-system -i . 
 
 #----------------------------#
 
