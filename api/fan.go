@@ -12,7 +12,7 @@ import (
 /*-------------------------*/
 
 const FAN_PIN 		=	"GPIO5"		// PIN #29
-const TRIGGER_TEMP 	=	62.0		// Trigger the FAN once the CPU temperature goes above this (Celsius)
+// const TRIGGER_TEMP 	=	62.0		// Trigger the FAN once the CPU temperature goes above this (Celsius)
 
 /*-------------------------*/
 
@@ -39,7 +39,7 @@ func FanLoop(){
 				// log.Printf( "[Info  ] CPU Temperature: [ %f ]", temp)
 			}
 
-			if( ! fanIsOn && temp > TRIGGER_TEMP){
+			if( ! fanIsOn && temp > Config.Fan_trigger_temp){
 				log.Printf( "[Info  ] CPU Temperature: [ %f ]", temp)
 				if err := pin.Out( gpio.High); err != nil {
 					
@@ -52,7 +52,7 @@ func FanLoop(){
 
 			}
 
-			if( fanIsOn && temp <= TRIGGER_TEMP - 3){
+			if( fanIsOn && temp <= Config.Fan_trigger_temp - 3){
 				log.Printf( "[Info  ] CPU Temperature: [ %f ]", temp)
 				if err := pin.Out( gpio.Low); err != nil {
 

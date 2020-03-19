@@ -6,10 +6,10 @@ import (
 	"log"
 	"time"
 	"strings"
-	"strconv"
+	// "strconv"
 	"net/http"
 	
-	"os"
+	// "os"
 	// "os/exec"
 	// "path/filepath"
 	"io/ioutil"
@@ -36,7 +36,7 @@ var OledCurrentMsg		string		// The message which is showing on the OLED at the m
 var oledDev 			*ssd1306.Dev
 var oledDoesNotExist	bool		// We check if the OLED does not exist, we just ignore it.
 
-var oledHaltTimeout		int			// Off timeout value in seconds
+// var oledHaltTimeout		int			// Off timeout value in seconds
 var oledHalted			bool		// If OLED is off (we turn it off after some time of not use and come back after a push button)
 
 /*-------------------------*/
@@ -47,14 +47,14 @@ func oledInit(){
 	oledHalted = false
 
 	//Handle halt timeout 
-	oledHaltTimeout = 5 * 60 //default value seconds
-	oledHaltTimeoutTxt := os.Getenv( "OLED_TIMEOUT")
-	if oledHaltTimeoutTxt == "" {
-		oledHaltTimeoutInt, err := strconv.Atoi( oledHaltTimeoutTxt)
-		if( err == nil && oledHaltTimeoutInt > 0){
-			oledHaltTimeout = oledHaltTimeoutInt
-		}
-	}
+	// oledHaltTimeout = 5 * 60 //default value seconds
+	// oledHaltTimeoutTxt := os.Getenv( "OLED_TIMEOUT")
+	// if oledHaltTimeoutTxt == "" {
+	// 	oledHaltTimeoutInt, err := strconv.Atoi( oledHaltTimeoutTxt)
+	// 	if( err == nil && oledHaltTimeoutInt > 0){
+	// 		oledHaltTimeout = oledHaltTimeoutInt
+	// // 	}
+	// }
 
 
 	// Make sure periph is initialized.
@@ -143,6 +143,10 @@ func oledShow( msg string, withLogs bool){
 
 	if err := oledDev.Draw( oledDev.Bounds(), img, image.Point{}); err != nil {
 		log.Printf( "[Err   ] OLED [ %s ] command. \n\tError: [ %s ]", msg, err.Error())
+		
+		//Wait for a while and try again after failure
+		time.Sleep( 2 * time.Second)
+		oledInit()
 	}
 
 }
@@ -190,7 +194,7 @@ func OledLoop(){
 				continue
 			}
 
-			if( oledHaltCounter > oledHaltTimeout){
+			if( oledHaltCounter > Config.OLED_halt_timeout){
 				oledHalt();
 				oledHaltCounter = 0;
 				continue;

@@ -17,7 +17,10 @@ import (
 
 func ResourceUsage( resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	
-	temp	:= execOnHost( "vcgencmd measure_temp | egrep -o '[0-9]*\\.[0-9]*'", resp);
+	// temp	:= execOnHost( "vcgencmd measure_temp | egrep -o '[0-9]*\\.[0-9]*'", resp);
+	// tempInt, _	:= strconv.ParseInt( execOnHost( `cat /sys/class/thermal/thermal_zone0/temp`, resp), 10, 64);
+	// temp	:=	string( tempInt / 1000);
+	temp := execOnHost( `echo "$(($(cat /sys/class/thermal/thermal_zone0/temp)/1000))"`, resp);
 	// config	:= execOnHost( "vcgencmd get_config int", resp);
 	
 	/*---------*/

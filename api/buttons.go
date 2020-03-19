@@ -45,7 +45,13 @@ func ButtonsLoop(){
 		for btnPin.WaitForEdge(-1) {
 
 			if( oledHalted){
-				oledShow( "\n\n   Screen ON", false)
+				
+				//Since power button and OLED shared a pin, we need to wait for the oled to be re-initialized
+				go func(){
+					time.Sleep( 1 * time.Second)
+					oledShow( "\n\n   Screen ON", false)
+				}()
+				
 			}
 			
 			if( DEBUG_MODE){

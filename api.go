@@ -15,7 +15,6 @@ import (
 	// "path/filepath"
 	// "io/ioutil"
 
-
 	"github.com/Waziup/wazigate-system/api"
 	routing "github.com/julienschmidt/httprouter"
 )
@@ -38,6 +37,11 @@ func init() {
 	router.PUT(  "/docker/:cId/:action",	api.DockerAction)
 	router.GET(  "/docker/:cId/logs",		api.DockerLogs)
 	router.GET(  "/docker/:cId/logs/:tail",	api.DockerLogs)
+
+	router.GET(  "/apps",	api.DockerInstallAppGetStatus)
+	router.POST( "/apps",	api.DockerInstallApp)
+
+	
 
 	router.GET( "/usage", api.ResourceUsage)
 	router.GET( "/blackout", api.BlackoutEnabled)

@@ -20,8 +20,41 @@ import (
 
 /*-------------------------*/
 
+
 type Configuration struct {
-	Setup_wizard    bool `json:"setup_wizard"`
+	Setup_wizard 			bool	`json:"setup_wizard"`
+	WiFi_AP_auto			bool	`json:"wifi_ap_auto"`	 		// Check if WiFi is not connected, wait for n seconds then switch to AP mode and keep searching
+	WiFi_AP_no_Internet		bool	`json:"wifi_ap_no_internet"`	// Check if there is no internet, switch to AP mode or try to find another WiFi
+	WiFi_timeout			int		`json:"wifi_timeout"`			// How many seconds wait before doing an action on the WiFi
+	Fan_trigger_temp		float64	`json:"fan_trigger_temp"`		// At which temperature the Fan should start
+	OLED_halt_timeout		int		`json:"oled_halt_timeout"`		// After what time the OLED goes off
+}
+
+/*----------------*/
+
+func loadConfigs() Configuration {
+
+	filename := GetRootPath() +"/conf.json"
+	bytes, err := ioutil.ReadFile( filename)
+	if err != nil {
+		log.Printf( "[Err   ] %s", err.Error())
+		return Configuration{
+			false,
+			true,
+			true,
+			60,		
+			62.1,	// in CC
+			1 * 60, // 5 minutes
+		}
+	}
+
+	var c Configuration
+	err = json.Unmarshal( bytes, &c)
+	if err != nil {
+		log.Printf( "[Err   ] %s", err.Error())
+		return Configuration{}
+	}
+	return c
 }
 
 /*-------------------------*/
@@ -209,26 +242,6 @@ func systemQuickShutdown() {
 
 	stdout := execOnHost( cmd, nil)
 	log.Printf( "[Info  ] %s", stdout)
-}
-
-/*-------------------------*/
-
-func loadConfigs() Configuration {
-
-	filename := GetRootPath() +"/conf.json"
-	bytes, err := ioutil.ReadFile( filename)
-	if err != nil {
-		log.Printf( "[Err   ] %s", err.Error())
-		return Configuration{}
-	}
-
-	var c Configuration
-	err = json.Unmarshal( bytes, &c)
-	if err != nil {
-		log.Printf( "[Err   ] %s", err.Error())
-		return Configuration{}
-	}
-	return c
 }
 
 /*-------------------------*/
