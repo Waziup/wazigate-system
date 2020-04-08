@@ -102,9 +102,13 @@ func execOnHostWithLogs( cmd string, withLogs bool) ( string, error) {
 	response, err := SocketReqest(socketAddr, "cmd", "POST", "application/json", strings.NewReader(cmd), withLogs)
 
 	if err != nil {
+<<<<<<< HEAD
 		if response != nil && response.Body != nil{
 			response.Body.Close()
 		}
+=======
+		response.Body.Close()
+>>>>>>> branch 'master' of https://github.com/Waziup/wazigate-system.git
 		if( withLogs){
 			log.Printf( "[Err   ]: %s ", err.Error())
 		}
@@ -365,6 +369,11 @@ func SocketReqest(socketAddr string, url string, method string, contentType stri
 		},
 	}
 
+<<<<<<< HEAD
+=======
+	
+
+>>>>>>> branch 'master' of https://github.com/Waziup/wazigate-system.git
 	req, err := http.NewRequest( method, "http://localhost/"+url, body)
 	
 	if err != nil {

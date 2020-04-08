@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+#FROM alpine:latest AS development
+>>>>>>> branch 'master' of https://github.com/Waziup/wazigate-system.git
 FROM golang:alpine AS development
 
 COPY . /go/src/github.com/Waziup/wazigate-system/
