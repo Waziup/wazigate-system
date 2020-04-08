@@ -17,11 +17,11 @@ import (
 
 func ResourceUsage( resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	
-	// temp	:= execOnHost( "vcgencmd measure_temp | egrep -o '[0-9]*\\.[0-9]*'", resp);
-	// tempInt, _	:= strconv.ParseInt( execOnHost( `cat /sys/class/thermal/thermal_zone0/temp`, resp), 10, 64);
+	// temp	:= execOnHost( "vcgencmd measure_temp | egrep -o '[0-9]*\\.[0-9]*'");
+	// tempInt, _	:= strconv.ParseInt( execOnHost( `cat /sys/class/thermal/thermal_zone0/temp`), 10, 64);
 	// temp	:=	string( tempInt / 1000);
-	temp := execOnHost( `echo "$(($(cat /sys/class/thermal/thermal_zone0/temp)/1000))"`, resp);
-	// config	:= execOnHost( "vcgencmd get_config int", resp);
+	temp, _ := execOnHost( `echo "$(($(cat /sys/class/thermal/thermal_zone0/temp)/1000))"`);
+	// config	:= execOnHost( "vcgencmd get_config int");
 	
 	/*---------*/
 	
@@ -63,7 +63,8 @@ func ResourceUsage( resp http.ResponseWriter, req *http.Request, params routing.
 	
 	/*---------------*/
 
-	dres := strings.Fields( string( strings.Split( exeCmd( "df -B 1 /", resp), "\n")[1]));
+	outc, _ := exeCmd( "df -B 1 /")
+	dres := strings.Fields( string( strings.Split( outc, "\n")[1]));
 	disk := map[string]string{
 		"device"	:	dres[0],
 		"size"		:	dres[1],
@@ -79,11 +80,12 @@ func ResourceUsage( resp http.ResponseWriter, req *http.Request, params routing.
 	//cpu_usage := exeCmd( "awk '{u=$2+$4; t=$2+$4+$5; if (NR==1){u1=u; t1=t;} else printf int(($2+$4-u1) * 100 / (t-t1)); }' <(grep 'cpu ' /proc/stat) <(sleep 1;grep 'cpu ' /proc/stat)", resp);
 	//cpu_usage := exeCmd( "top -bn1 | grep \"Cpu(s)\" | sed \"s/.*, *\\([0-9.]*\\)%* id.*/\\1/\" | awk '{printf (100 - $1)}'", resp);
 	//cpu_usage := exeCmd( "top -bn1 | grep \"Cpu(s)\" | sed \"s/.*, *\\\\([0-9.]*\\\\)%* id.*/\\\\1/\" | awk '{print int( 100 - $1)}'", resp);
-	cpu_usage := execOnHost( `top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print int( 100 - $1)}'`, resp);
+	cpu_usage, _ := execOnHost( `top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print int( 100 - $1)}'`);
 
 	/*---------------*/
 
-	mres := strings.Fields( exeCmd( "free | grep Mem", resp))
+	outc, _ = exeCmd( "free | grep Mem")
+	mres := strings.Fields( outc)
 	mem_usage := map[string]string{
 		"total"		:	mres[1],
 		"used"		:	mres[2],

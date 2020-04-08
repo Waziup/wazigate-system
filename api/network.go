@@ -19,12 +19,12 @@ import (
 
 func GetNetInfo( resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	
-	dev := exeCmd( "ip route show default | head -n 1 | awk '/default/ {print $5}'", resp)
-	mac := exeCmd( "cat /sys/class/net/"+ dev +"/address", resp)
+	dev, _ := exeCmd( "ip route show default | head -n 1 | awk '/default/ {print $5}'")
+	mac, _ := exeCmd( "cat /sys/class/net/"+ dev +"/address")
 	
 	
 	cmd := "ip -4 addr show "+ dev +" | awk '$1 == \"inet\" {gsub(/\\/.*$/, \"\", $2); print $2}'";
-	ip := exeCmd( cmd, resp)
+	ip, _ := exeCmd( cmd)
 	
 	/*---------------*/
 
@@ -96,22 +96,25 @@ func GetNetWiFi( resp http.ResponseWriter, req *http.Request, params routing.Par
 	/*-----*/
 
 	cmd := "ip -4 addr show "+ WIFI_DEVICE +" | awk '$1 == \"inet\" {gsub(/\\/.*$/, \"\", $2); print $2}'";
-	ip := exeCmd( cmd, resp);
+	ip, _ := exeCmd( cmd);
 
 	/*-----*/
 	
 	cmd = "ip link show up "+ WIFI_DEVICE;
-	enabled := exeCmd( cmd, resp) != "";
+	outc, _ := exeCmd( cmd)
+	enabled := outc != "";
 	
 	/*-----*/
 
 	cmd = "iw "+ WIFI_DEVICE +" info | grep ssid | awk '{print $2\" \"$3\" \"$4\" \"$5\" \"$6}'";
-	ssid := exeCmd( cmd, resp);
+	outc, _ = exeCmd( cmd)
+	ssid := outc
 
 	/*-----*/
 
 	cmd = "systemctl is-active --quiet hostapd && echo 1"
-	ap_mode := execOnHost( cmd, resp) == "1"
+	outc, _ = execOnHost( cmd)
+	ap_mode := outc == "1"
 
 	/*---------------*/
 
@@ -153,18 +156,18 @@ func SetNetWiFi( resp http.ResponseWriter, req *http.Request, params routing.Par
 
 	if enabled, exist := reqJson["enabled"]; exist{
 		if enabled == true || enabled == "1"{
-			exeCmd( "ip link set "+ WIFI_DEVICE +" up", resp)
+			exeCmd( "ip link set "+ WIFI_DEVICE +" up")
 		}else{
-			exeCmd( "ip link set "+ WIFI_DEVICE +" down", resp)
+			exeCmd( "ip link set "+ WIFI_DEVICE +" down")
 		}
 	}
 
 	if ssid, exist := reqJson["ssid"]; exist{
-		exeCmd( "ip link set "+ WIFI_DEVICE +" up", resp)
+		exeCmd( "ip link set "+ WIFI_DEVICE +" up")
 	
 		cmd := "sudo cp /etc/wpa_supplicant/wpa_supplicant.conf.orig /etc/wpa_supplicant/wpa_supplicant.conf;"
-		// exeCmd( cmd, resp)
-		execOnHost( cmd, resp)
+		// exeCmd( cmd)
+		execOnHost( cmd)
 		
 		cmd = ""
 		if str, ok := ssid.(string); ok{
@@ -178,13 +181,13 @@ func SetNetWiFi( resp http.ResponseWriter, req *http.Request, params routing.Par
 		}
 
 		cmd += " >> /etc/wpa_supplicant/wpa_supplicant.conf; ";
-		// exeCmd( cmd, resp)
-		execOnHost( cmd, resp)
+		// exeCmd( cmd)
+		execOnHost( cmd)
 		
 		// save the setting and switch to the WiFi Client
 
 		oledWrite( "\nConnecting to\n   WiFi...")
-		stdout := execOnHost( "sudo bash start_wifi.sh", resp)
+		stdout, _ := execOnHost( "sudo bash start_wifi.sh")
 		log.Printf( "[Info   ] %s", stdout)
 		oledWrite( "") // Clean the OLED msg
 
@@ -207,7 +210,7 @@ func SetNetWiFi( resp http.ResponseWriter, req *http.Request, params routing.Par
 
 func apMode( withLogs bool) bool {
 
-	apAtive := execOnHostWithLogs( "systemctl is-active --quiet hostapd && echo 1", withLogs, nil)
+	apAtive, _ := execOnHostWithLogs( "systemctl is-active --quiet hostapd && echo 1", withLogs)
 	return apAtive == "1"
 }
 
@@ -226,7 +229,7 @@ func CheckWlanConn() bool{
 
 		oledWrite( "\nChecking WiFi." + strings.Repeat( ".", i));
 		
-		wifiRes := execOnHost( "iwgetid", nil)
+		wifiRes, _ := execOnHost( "iwgetid")
 		if wifiRes != ""{
 			oledWrite( ""); // Clean the OLED
 			return true
@@ -256,7 +259,7 @@ func ActivateAPMode() {
 
 	oledWrite( "\nActivating\n Access point mode...");
 
-	stdout := execOnHost( "sudo bash start_hotspot.sh", nil)
+	stdout, _ := execOnHost( "sudo bash start_hotspot.sh")
 	if( DEBUG_MODE){
 		log.Printf( "[Info  ] %s", stdout)
 	}
@@ -288,7 +291,8 @@ func SetNetAPMode( resp http.ResponseWriter, req *http.Request, params routing.P
 func NetWiFiScan( resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	
 	cmd := "iw "+ WIFI_DEVICE +" scan | awk -f scan.awk"
-	lines := strings.Split( exeCmd( cmd, resp), "\n")
+	out, _ := exeCmd( cmd)
+	lines := strings.Split( out, "\n")
 
 	resp.Header().Set("Content-Type", "application/json")
 	resp.Write([]byte{'['})
@@ -333,16 +337,16 @@ func GetNetAP( resp http.ResponseWriter, req *http.Request, params routing.Param
 	var cmd string
 
 	cmd = "egrep \"^ssid=\" /etc/hostapd/hostapd.conf | awk '{match($0, /ssid=([^\"]+)/, a)} END{print a[1]}'"
-	ssid := execOnHost( cmd, resp)
+	ssid, _ := execOnHost( cmd)
 
 	cmd = "egrep \"^wpa_passphrase=\" /etc/hostapd/hostapd.conf | awk '{match($0, /wpa_passphrase=([^\"]+)/, a)} END{print a[1]}'"
-	password := execOnHost( cmd, resp)
+	password, _ := execOnHost( cmd)
 	
 	cmd = "iw dev | awk '$1==\"Interface\"{print $2}' | grep \""+ WIFI_DEVICE +"\""
-	deviceRes := exeCmd( cmd, resp)
+	deviceRes, _ := exeCmd( cmd)
 	
 	cmd = "ip -4 addr show "+ WIFI_DEVICE +" | awk '$1 == \"inet\" {gsub(/\\/.*$/, \"\", $2); print $2}'"
-	ip := exeCmd( cmd, resp)
+	ip, _ := exeCmd( cmd)
 
 	out := map[string]interface{}{
 		"available"	:	deviceRes != "",
@@ -387,10 +391,10 @@ func SetNetAP( resp http.ResponseWriter, req *http.Request, params routing.Param
 	if ssid, exist := reqJson["SSID"]; exist{
 		if str, ok := ssid.(string); ok{
 			cmd = "sed -i 's/^ssid.*/ssid="+ str +"/g' /etc/hostapd/hostapd.conf"
-			execOnHost( cmd, resp)
+			execOnHost( cmd)
 
 			// cmd = "echo "+ str +" | tee /etc/hostapd/custom_ssid.txt > /dev/null"
-			// exeCmd( cmd, resp)
+			// exeCmd( cmd)
 
 			out += "SSID ";
 		}
@@ -399,7 +403,7 @@ func SetNetAP( resp http.ResponseWriter, req *http.Request, params routing.Param
 	if password, exist := reqJson["password"]; exist{
 		if str, ok := password.(string); ok{
 			cmd = "sed -i 's/^wpa_passphrase.*/wpa_passphrase="+ str +"/g' /etc/hostapd/hostapd.conf"
-			execOnHost( cmd, resp)
+			execOnHost( cmd)
 
 			out += "and Password ";
 		}
@@ -422,7 +426,7 @@ func SetNetAP( resp http.ResponseWriter, req *http.Request, params routing.Param
 func CloudAccessible( withLogs bool) bool{
 
 	cmd := "timeout 3 curl -Is https://waziup.io | head -n 1 | awk '{print $2}'"
-	rCode := exeCmdWithLogs( cmd, withLogs, nil)
+	rCode, _ := exeCmdWithLogs( cmd, withLogs)
 
 	return rCode == "200"
 }
@@ -448,14 +452,14 @@ func InternetAccessible( resp http.ResponseWriter, req *http.Request, params rou
 func GetAllIPs() (string, string, string, string) {
 
 	cmd := "iw "+ WIFI_DEVICE +" info | grep ssid | awk '{print $2\" \"$3\" \"$4\" \"$5\" \"$6}'";
-	ssid := exeCmdWithLogs( cmd, false, nil)
+	ssid, _ := exeCmdWithLogs( cmd, false)
 	
 	cmd = "status=$(ip addr show "+ WIFI_DEVICE +" | grep \"state UP\"); if [ \"$status\" == \"\" ]; then echo \"\"; else echo $(ip -4 addr show "+ WIFI_DEVICE +" | awk '$1 == \"inet\" {gsub(/\\/.*$/, \"\", $2); print $2}');  fi;"
-	wip := exeCmdWithLogs( cmd, false, nil)
+	wip, _ := exeCmdWithLogs( cmd, false)
 	aip := wip
 
 	cmd = "status=$(ip addr show "+ ETH_DEVICE +" | grep \"state UP\"); if [ \"$status\" == \"\" ]; then echo \"NO Ethernet\"; else echo $(ip -4 addr show "+ ETH_DEVICE +" | awk '$1 == \"inet\" {gsub(/\\/.*$/, \"\", $2); print $2}');  fi;"
-	eip := exeCmdWithLogs( cmd, false, nil)
+	eip, _ := exeCmdWithLogs( cmd, false)
 
 	if apMode( false){
 		wip = ""

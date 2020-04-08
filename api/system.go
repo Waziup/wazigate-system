@@ -8,6 +8,9 @@ import (
 	"strings"
 	"regexp"
 	// "strconv"
+	"io"
+	"context"
+	"net"
 	"net/http"
 	
 	"os"
@@ -59,7 +62,7 @@ func loadConfigs() Configuration {
 
 /*-------------------------*/
 
-func exeCmdWithLogs( cmd string, withLogs bool, resp http.ResponseWriter) string {
+func exeCmdWithLogs( cmd string, withLogs bool) ( string, error) {
 
 	if( withLogs && DEBUG_MODE){
 		log.Printf( "[Info  ] executing [ %s ] ", cmd)
@@ -71,78 +74,59 @@ func exeCmdWithLogs( cmd string, withLogs bool, resp http.ResponseWriter) string
     if( err != nil) {
 		if( withLogs){
 			log.Printf( "[Err   ] executing [ %s ] command. \n\tError: [ %s ]", cmd, err.Error())
-
-			errorDesc := ""
-			if( DEBUG_MODE){ errorDesc = err.Error()}
-
-			if( resp != nil){
-				http.Error( resp, "[Err   ]: "+ errorDesc, http.StatusInternalServerError)
-			}
 		}
-        return ""
+        return "", err
 	}
-	return strings.Trim( string( stdout), " \n\t\r")
+	return strings.Trim( string( stdout), " \n\t\r"), nil
 }
 
 /*-------------------------*/
 
-func exeCmd( cmd string, resp http.ResponseWriter) string {
-	return exeCmdWithLogs( cmd, true, resp)
+func exeCmd( cmd string) ( string, error) {
+	return exeCmdWithLogs( cmd, true)
 }
 
 /*-------------------------*/
 
-func execOnHostWithLogs( cmd string, withLogs bool, resp http.ResponseWriter) string {
+func execOnHostWithLogs( cmd string, withLogs bool) ( string, error) {
 
 	if( withLogs && DEBUG_MODE){
 		log.Printf( "[Exec  ]: Host Command [ %s ]", cmd)
 	}
-	
-	addr := os.Getenv( "WAZIGATE_HOST_ADDR")
-	if addr == "" {
-		addr = ":5200" // Default address for the Host
+
+	socketAddr := os.Getenv( "WAZIGATE_HOST_ADDR")
+	if socketAddr == "" {
+		socketAddr = "/var/run/wazigate-host.sock" // Default address for the Host
 	}
-	
-	resCall, err := http.Post( "http://"+ addr +"/cmd", "text/html", strings.NewReader( cmd))
-	if( err != nil) {
-		
+
+	response, err := SocketReqest(socketAddr, "cmd", "POST", "application/json", strings.NewReader(cmd), withLogs)
+
+	if err != nil {
+		if response != nil && response.Body != nil{
+			response.Body.Close()
+		}
 		if( withLogs){
 			log.Printf( "[Err   ]: %s ", err.Error())
-
-			errorDesc := ""
-			if( DEBUG_MODE){ errorDesc = err.Error()}
-			if( resp != nil){
-				http.Error( resp, "[Err   ]: "+ errorDesc, http.StatusInternalServerError)
-			}
 		}
 
 		oledWrite( "\n\n  HOST ERROR!")
 
-		return ""
+		return "", err
 	}
 
-	body, err := ioutil.ReadAll( resCall.Body)
-	if( err != nil) {
-		if( withLogs){
-			log.Printf( "[Err   ]: %s ", err.Error())
-			
-			errorDesc := ""
-			if( DEBUG_MODE){ errorDesc = err.Error()}
-			if( resp != nil){
-				http.Error( resp, "[Err   ]: "+ errorDesc, http.StatusInternalServerError)
-			}
-		}
-		return ""
-	}	
-
-	return string( body)
-
+	resBody, err := ioutil.ReadAll(response.Body)
+	response.Body.Close()
+	if err != nil {
+		log.Printf( "[Err   ]: %s ", err.Error())
+		return "", err
+	}
+	return string( resBody), nil
 }
 
 /*-------------------------*/
 
-func execOnHost( cmd string, resp http.ResponseWriter) string {
-	return execOnHostWithLogs( cmd, true, resp)
+func execOnHost( cmd string) (string, error) {
+	return execOnHostWithLogs( cmd, true)
 }
 
 /*-------------------------*/
@@ -230,7 +214,7 @@ func systemShutdown( status string) {
 
 	oledHalt()
 
-	stdout := execOnHost( cmd, nil)
+	stdout, _ := execOnHost( cmd)
 	log.Printf( "[Info  ] %s", stdout)
 }
 
@@ -240,7 +224,7 @@ func systemQuickShutdown() {
 
 	cmd := "sudo docker stop $(sudo docker ps -a -q); sudo shutdown -h now"
 
-	stdout := execOnHost( cmd, nil)
+	stdout, _ := execOnHost( cmd)
 	log.Printf( "[Info  ] %s", stdout)
 }
 
@@ -271,7 +255,7 @@ func SystemUpdate( resp http.ResponseWriter, req *http.Request, params routing.P
 
 	cmd := "sudo bash update.sh | sudo tee update.logs &"; // Run it and unlock the thing
 
-	stdout := execOnHost( cmd, resp);
+	stdout, _ := execOnHost( cmd);
 	log.Printf( "[Info   ] %s", stdout)
 
 	oledWrite( "\nDONE.");
@@ -295,7 +279,11 @@ func SystemUpdate( resp http.ResponseWriter, req *http.Request, params routing.P
 func SystemUpdateStatus( resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	cmd := "[ -f update.logs ] && cat update.logs";
-	stdout := execOnHost( cmd, resp);
+	stdout, err := execOnHost( cmd);
+	if( err != nil) {
+		stdout = ""
+		log.Printf( "[Err   ] %s", err.Error())
+	}
 
 	outJson, err := json.Marshal( stdout)
 	if( err != nil) {
@@ -309,7 +297,7 @@ func SystemUpdateStatus( resp http.ResponseWriter, req *http.Request, params rou
 func GetGWBootstatus( withLogs bool) ( bool, string){
 
 	cmd := "curl -s --unix-socket /var/run/docker.sock http://localhost/containers/json?all=true"
-	outJsonStr := execOnHostWithLogs( cmd, withLogs, nil)
+	outJsonStr, _ := execOnHostWithLogs( cmd, withLogs)
 
 	var resJson []map[string]interface{}
 
@@ -356,6 +344,47 @@ func FirmwareVersion( resp http.ResponseWriter, req *http.Request, params routin
 
 	resp.Write( []byte( outJson))	
 
+}
+
+/*-------------------------*/
+
+// SocketReqest makes a request to a unix socket
+func SocketReqest(socketAddr string, url string, method string, contentType string, body io.Reader, withLogs bool) (*http.Response, error) {
+
+	if( withLogs && DEBUG_MODE){
+		log.Printf("[SOCK ] `%s` %s \"%s\" '%v'", socketAddr, method, url, body)
+	}
+	
+	httpc := http.Client{
+		Transport: &http.Transport{
+			DialContext: func(_ context.Context, _, _ string) (net.Conn, error) {
+				return net.Dial("unix", socketAddr)
+			},
+			MaxIdleConns:       50,
+			IdleConnTimeout:    3 * 60 * time.Second,
+		},
+	}
+
+	req, err := http.NewRequest( method, "http://localhost/"+url, body)
+	
+	if err != nil {
+		log.Printf("[Socket   ]: %s ", err.Error())
+		return nil, err
+	}
+	
+	if contentType != "" {
+		req.Header.Set("Content-Type", contentType)
+	}
+	
+	response, err := httpc.Do( req)
+	// defer response.Body.Close()
+	
+	if err != nil {
+		log.Printf("[Socket]: %s ", err.Error())
+		return nil, err
+	}
+
+	return response, nil
 }
 
 /*-------------------------*/

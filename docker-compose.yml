@@ -1,0 +1,37 @@
+version: '3'
+services:
+
+#-------------------------#
+
+  wazigate-system:
+    image: waziup/wazigate-system:dev
+    container_name: waziup.wazigate-system
+    build:
+      context: ./
+      dockerfile: Dockerfile-dev
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    volumes:
+      - ./:/root/app
+      - /var/run:/var/run
+      # - /var/run/dbus:/var/run/dbus
+      - /sys/class/gpio:/sys/class/gpio
+      - /dev/mem:/dev/mem
+      - ./:/go/src/wazigate-system
+    privileged: true
+    network_mode: host
+    environment:
+      - DEBUG_MODE=1                   # for debug has to be set to 1
+      - WAZIUP_VERSION=dev
+      #- WAZIGATE_HOST_ADDR=/var/run/wazigate-host.sock
+    healthcheck:
+      test: curl --fail http://localhost/ || exit 1
+      interval: 30s
+      retries: 10 # Will try for 5 minutes      
+    restart: always
+    # entrypoint: "./wazigate-system"
+
+#-------------------------#

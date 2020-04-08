@@ -4,7 +4,7 @@ import (
 	// "fmt"
 	"os"
 	"log"
-	// "time"
+	"net"
 	"net/http"
 	// "encoding/json"
 	// "strings"
@@ -20,6 +20,9 @@ import (
 )
 
 var router = routing.New()
+
+// Please do not change this line
+const sockAddr = "/root/app/proxy.sock"
 
 func init() {
 
@@ -37,11 +40,6 @@ func init() {
 	router.PUT(  "/docker/:cId/:action",	api.DockerAction)
 	router.GET(  "/docker/:cId/logs",		api.DockerLogs)
 	router.GET(  "/docker/:cId/logs/:tail",	api.DockerLogs)
-
-	router.GET(  "/apps",	api.DockerInstallAppGetStatus)
-	router.POST( "/apps",	api.DockerInstallApp)
-
-	
 
 	router.GET( "/usage", api.ResourceUsage)
 	router.GET( "/blackout", api.BlackoutEnabled)
@@ -86,18 +84,36 @@ func init() {
 
 /*-------------------------*/
 
+// ListenAndServeHTTP serves the APIs and the ui 
 func ListenAndServeHTTP() {
 
-	addr := os.Getenv( "WAZIGATE_SYSTEM_ADDR")
-	if addr == "" {
-		addr = ":5000"
+	log.Printf("Initializing...")
+
+	if err := os.RemoveAll(sockAddr); err != nil {
+		log.Fatal(err)
 	}
 
-	if( api.DEBUG_MODE){
-		log.Printf( "[Info  ] Serving on %s", addr)
+	server := http.Server{
+		Handler: router,
 	}
 
-	log.Fatal( http.ListenAndServe( addr, router))
+	l, e := net.Listen("unix", sockAddr)
+	if e != nil {
+		log.Fatal("listen error:", e)
+	}
+	log.Printf("Serving... on socket: [%v]", sockAddr)
+	server.Serve(l)	
+
+	// addr := os.Getenv( "WAZIGATE_SYSTEM_ADDR")
+	// if addr == "" {
+	// 	addr = ":5000"
+	// }
+
+	// if( api.DEBUG_MODE){
+	// 	log.Printf( "[Info  ] Serving on %s", addr)
+	// }
+
+	// log.Fatal( http.ListenAndServe( addr, router))
 }
 
 /*-------------------------*/

@@ -28,7 +28,7 @@ func FanLoop(){
 		fanIsOn := false
 
 		for{
-			tempStr := execOnHostWithLogs( "vcgencmd measure_temp | egrep -o '[0-9]*\\.[0-9]*'", false, nil);
+			tempStr, _ := execOnHostWithLogs( "vcgencmd measure_temp | egrep -o '[0-9]*\\.[0-9]*'", false);
 			
 			temp, err := strconv.ParseFloat( tempStr, 64)
 			if err != nil {
