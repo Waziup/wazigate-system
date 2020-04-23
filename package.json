@@ -18,7 +18,13 @@
 				"label": "System Settings",
 				"icon": "dist/img/2ee9c0acf05de75425f429762ef8c551.svg#settings",
 				"href": "#/apps/waziup.wazigate-system/ui/",
-				"items": []
+				"items": [
+					{
+						"label": "WiFi",
+						"icon": "dist/img/2ee9c0acf05de75425f429762ef8c551.svg#wifi",
+						"href": "#/apps/waziup.wazigate-system/ui/#/internet"
+					}
+				]
 			}
 		]
 	}

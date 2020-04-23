@@ -23,6 +23,14 @@ func FanLoop(){
 			log.Printf( "[Err   ]: %s ", err.Error())
 		}
 
+		// Wait for the host to come up before sending any command
+		for{
+			if hostReady() {
+				break;
+			}
+			time.Sleep( 5 * time.Second)
+		}
+
 		pin := gpioreg.ByName( FAN_PIN) // FAN pin
 		pin.Out( gpio.Low)
 		fanIsOn := false

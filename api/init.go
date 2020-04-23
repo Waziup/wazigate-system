@@ -8,6 +8,7 @@ import (
 	// "path/filepath"
 	"log"
 	// "encoding/json"
+	"time"
 
 	routing "github.com/julienschmidt/httprouter"
 )
@@ -68,6 +69,17 @@ func init() {
 
 	// Connecting might take some time, so throw it into another thread ;)
 	go func(){
+
+		// Wait for the host to come up before sending any command
+		for{
+			if hostReady() {
+				oledWrite( "");
+				break;
+			}
+			log.Println( "[Info  ] Waiting for the HOST...")
+			oledWrite( "\n Waiting\n     for \n   the HOST" );
+			time.Sleep( 2 * time.Second)
+		}
 
 		// Check WiFi Connectivity
 		if CheckWlanConn() {
