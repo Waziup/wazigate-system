@@ -1,0 +1,8 @@
+{
+  "setup_wizard": false,
+  "wifi_ap_auto": true,
+  "wifi_ap_no_internet": true,
+  "wifi_timeout": 60,
+  "fan_trigger_temp": 60,
+  "oled_halt_timeout": 120
+}

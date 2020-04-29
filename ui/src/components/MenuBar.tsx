@@ -67,10 +67,10 @@ class MenuBar extends React.Component<MenuProps, MenuState> {
               <NavDropdown.Item href="#logs">
                 <MDBIcon icon="file-alt" /> Logs
               </NavDropdown.Item>
-              <NavDropdown.Divider />
+              {/* <NavDropdown.Divider />
               <NavDropdown.Item href="#update">
                 <MDBIcon icon="sync" /> Update
-              </NavDropdown.Item>
+              </NavDropdown.Item> */}
             </NavDropdown>
           </Nav>
           <Nav className="navbar-right">
