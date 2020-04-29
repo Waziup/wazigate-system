@@ -5,18 +5,24 @@ import ErrorComp from "../Error";
 import LoadingSpinner from "../LoadingSpinner";
 
 import { Accordion, Card } from "react-bootstrap";
+declare function Notify(msg: string): any;
 
 import {
   MDBContainer,
   MDBRow,
   MDBCol,
   // MDBInput,
-  // MDBBtn,
+  MDBBtn,
   MDBAlert,
   MDBIcon,
-  MDBCard,
-  MDBCardBody,
-  MDBCardTitle
+  MDBModal,
+  MDBModalBody,
+  MDBModalHeader,
+  MDBModalFooter,
+
+  // MDBCard,
+  // MDBCardBody,
+  // MDBCardTitle,
   // MDBCardText,
 } from "mdbreact";
 
@@ -30,6 +36,14 @@ export interface State {
   error: any;
   WiFiInfo: API.WiFiInfo;
   WiFiLoading: boolean;
+  modal: {
+    visible: boolean;
+    title: string;
+    msg: string;
+    func: string;
+  };
+  shutdownLoading: boolean;
+  rebootLoading: boolean;
 }
 
 class PagesOverview extends React.Component<Props, State> {
@@ -41,7 +55,15 @@ class PagesOverview extends React.Component<Props, State> {
       blackout: null,
       WiFiInfo: null,
       WiFiLoading: true,
-      error: null
+      error: null,
+      modal: {
+        visible: false,
+        title: "",
+        msg: "",
+        func: "",
+      },
+      shutdownLoading: false,
+      rebootLoading: false,
     };
   }
 
@@ -50,16 +72,16 @@ class PagesOverview extends React.Component<Props, State> {
   componentDidMount() {
     this._isMounted = true;
     API.getNetInfo().then(
-      res => {
+      (res) => {
         this.setState({
           netInfo: res,
-          error: null
+          error: null,
         });
       },
-      error => {
+      (error) => {
         this.setState({
           netInfo: null,
-          error: error
+          error: error,
         });
       }
     );
@@ -82,14 +104,14 @@ class PagesOverview extends React.Component<Props, State> {
     // );
 
     API.getBlackout().then(
-      res => {
+      (res) => {
         this.setState({
-          blackout: res
+          blackout: res,
         });
       },
-      error => {
+      (error) => {
         this.setState({
-          blackout: null
+          blackout: null,
         });
       }
     );
@@ -107,26 +129,26 @@ class PagesOverview extends React.Component<Props, State> {
     if (!this._isMounted) return;
 
     this.setState({
-      WiFiLoading: true
+      WiFiLoading: true,
     });
 
     API.getWiFiInfo().then(
-      WiFiInfo => {
+      (WiFiInfo) => {
         // console.log(WiFiInfo);
         this.setState({
           WiFiInfo: WiFiInfo,
           error: null,
-          WiFiLoading: false
+          WiFiLoading: false,
         });
         setTimeout(() => {
           this.updateWiFiInfo();
         }, 5000); // Check every 5 seconds
       },
-      error => {
+      (error) => {
         this.setState({
           WiFiInfo: null,
           error: error,
-          WiFiLoading: false
+          WiFiLoading: false,
         });
         setTimeout(() => {
           this.updateWiFiInfo();
@@ -134,6 +156,91 @@ class PagesOverview extends React.Component<Props, State> {
       }
     );
   }
+
+  /**------------- */
+
+  shutdown() {
+    if (!this._isMounted) return;
+
+    this.setState({
+      shutdownLoading: true,
+    });
+
+    API.shutdown().then(
+      (res) => {
+        Notify(res);
+      },
+      (error) => {
+        Notify(error);
+        this.setState({
+          shutdownLoading: false,
+        });
+      }
+    );
+  }
+
+  /**------------- */
+
+  reboot() {
+    if (!this._isMounted) return;
+
+    this.setState({
+      rebootLoading: true,
+    });
+
+    API.reboot().then(
+      (res) => {
+        Notify(res);
+      },
+      (error) => {
+        Notify(error);
+        this.setState({
+          rebootLoading: false,
+        });
+      }
+    );
+  }
+  /**------------- */
+
+  showModal(title: string, msg: string, func: string) {
+    this.setState({
+      modal: {
+        visible: true,
+        title: title,
+        msg: msg,
+        func: func,
+      },
+    });
+  }
+
+  /**------------- */
+
+  modalClick = () => {
+    switch (this.state.modal.func) {
+      case "reboot":
+        this.reboot();
+        break;
+      case "shutdown":
+        this.shutdown();
+        break;
+      default:
+        console.log("No function found: ", this.state.modal.func);
+    }
+    this.toggleModal();
+  };
+
+  /**------------- */
+
+  toggleModal = () => {
+    this.setState({
+      modal: {
+        visible: !this.state.modal.visible,
+        title: this.state.modal.title,
+        msg: this.state.modal.msg,
+        func: this.state.modal.func,
+      },
+    });
+  };
 
   /**------------- */
 
@@ -281,6 +388,55 @@ class PagesOverview extends React.Component<Props, State> {
           <MDBCol>
             <div className="card mb-3 mt-3 m-l3 mb-3">
               <h4 className="card-header">
+                <MDBIcon icon="power-off" /> Gateway Shutdown
+              </h4>
+              <div className="card-body">
+                <MDBBtn
+                  disabled={this.state.shutdownLoading}
+                  onClick={() =>
+                    this.showModal(
+                      "Shutdown the Wazigate",
+                      "Are you sure that you want to shutdown the gateway?",
+                      "shutdown"
+                    )
+                  }
+                >
+                  <MDBIcon
+                    icon={this.state.shutdownLoading ? "cog" : "power-off"}
+                    className="ml-2"
+                    size="1x"
+                    spin={this.state.shutdownLoading}
+                  />{" "}
+                  Shutdown
+                </MDBBtn>
+
+                <MDBBtn
+                  disabled={this.state.rebootLoading}
+                  onClick={() =>
+                    this.showModal(
+                      "Restart the Wazigate",
+                      "Are you sure that you want to restart the gateway?",
+                      "reboot"
+                    )
+                  }
+                >
+                  <MDBIcon
+                    icon={this.state.rebootLoading ? "cog" : "redo"}
+                    className="ml-2"
+                    size="1x"
+                    spin={this.state.rebootLoading}
+                  />{" "}
+                  Restart
+                </MDBBtn>
+              </div>
+            </div>
+          </MDBCol>
+
+          {/* ------------------- */}
+
+          <MDBCol>
+            <div className="card mb-3 mt-3 m-l3 mb-3">
+              <h4 className="card-header">
                 <MDBIcon icon="bolt" /> Blackout Protection
               </h4>
               <div className="card-body h-100">
@@ -302,17 +458,22 @@ class PagesOverview extends React.Component<Props, State> {
           </MDBCol>
 
           {/* ------------------- */}
-
-          {/* <MDBRow> */}
-          {/* <MDBCol>
-						<div className="card mb-3 mt-3 m-l3 mb-3">
-							<h4 className="card-header">
-								<MDBIcon icon="heartbeat" /> Gateway Sensors
-							</h4>
-							<div className="card-body">{sensors}</div>
-						</div>
-					</MDBCol> */}
         </MDBRow>
+
+        <MDBModal isOpen={this.state.modal.visible} toggle={this.toggleModal}>
+          <MDBModalHeader toggle={this.toggleModal}>
+            {this.state.modal.title}
+          </MDBModalHeader>
+          <MDBModalBody>{this.state.modal.msg}</MDBModalBody>
+          <MDBModalFooter>
+            <MDBBtn color="secondary" onClick={this.toggleModal}>
+              No
+            </MDBBtn>
+            <MDBBtn color="danger" onClick={this.modalClick}>
+              Yes
+            </MDBBtn>
+          </MDBModalFooter>
+        </MDBModal>
       </MDBContainer>
     );
   }

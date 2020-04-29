@@ -288,3 +288,29 @@ export async function setConf(data: any) {
 }
 
 /*---------------*/
+
+export async function shutdown() {
+  var resp = await fetch(URL + "shutdown", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!resp.ok) await failResp(resp);
+  return await resp.text();
+  // return await resp.json();
+}
+
+export async function reboot() {
+  var resp = await fetch(URL + "reboot", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!resp.ok) await failResp(resp);
+  return await resp.text();
+  // return await resp.json();
+}
+
+/*---------------*/
