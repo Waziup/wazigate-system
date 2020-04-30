@@ -12,20 +12,19 @@
 	},
 	"author": "Moji",
 	"license": "ISC",
-	"wazigate": {
-		"menu": [
-			{
-				"label": "System Settings",
-				"icon": "dist/img/2ee9c0acf05de75425f429762ef8c551.svg#settings",
+	"waziapp": {
+		"menu": {
+			"settings": {
+				"primary": "Settings",
+				"iconSrc": "ui/src/img/settings.svg",
 				"href": "#/apps/waziup.wazigate-system/ui/",
-				"items": [
-					{
-						"label": "WiFi",
-						"icon": "dist/img/2ee9c0acf05de75425f429762ef8c551.svg#wifi",
-						"href": "#/apps/waziup.wazigate-system/ui/#/internet"
-					}
-				]
+				"prio": 60
+			},
+			"settings.wifi": {
+				"primary": "Wifi",
+				"iconSrc": "ui/src/img/wifi.svg",
+				"href": "#/apps/waziup.wazigate-system/ui/#/internet"
 			}
-		]
+		}
 	}
 }
