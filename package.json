@@ -1,5 +1,5 @@
 {
-	"name": "wazigate-system",
+	"name": "System",
 	"version": "1.0.0",
 	"description": "Wazigate System",
 	"types": "dashboard.d.ts",
@@ -10,21 +10,21 @@
 		"watch": "npx webpack --env.entry=index --watch",
 		"http-server": "http-server"
 	},
-	"author": "Moji",
+	"author": "Waziup",
 	"license": "ISC",
 	"waziapp": {
-		"menu": {
-			"settings": {
-				"primary": "Settings",
-				"iconSrc": "ui/src/img/settings.svg",
-				"href": "#/apps/waziup.wazigate-system/ui/",
-				"prio": 60
-			},
-			"settings.wifi": {
-				"primary": "Wifi",
-				"iconSrc": "ui/src/img/wifi.svg",
-				"href": "#/apps/waziup.wazigate-system/ui/#/internet"
-			}
-		}
-	}
+      "menu": {
+        "settings": {
+          "primary": "Settings",
+          "iconSrc": "ui/icons/settings.svg",
+          "href": "#/apps/waziup.wazigate-system/ui/",
+          "prio": 60
+        },
+        "settings.wifi": {
+          "primary": "Wifi",
+          "iconSrc": "ui/icons/wifi.svg",
+          "href": "#/apps/waziup.wazigate-system/ui/#/internet"
+        }
+      }
+    }
 }

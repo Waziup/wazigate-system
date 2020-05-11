@@ -11,11 +11,13 @@ RUN apk add --no-cache \
     curl \
     gcc \
     musl-dev \
+    zip \
     && mkdir /build/ \
     && cp scan.awk /build \
     && cp -r docs /build \
     && cp -r ui /build \
-    && go build -o /build/wazigate-system -i . 
+    && go build -o /build/wazigate-system -i . \
+    && zip /build/index.zip docker-compose.yml package.json
 
 #----------------------------#
 
@@ -28,6 +30,7 @@ RUN apk --no-cache add \
     tzdata \
     iw \
     gawk \
-    curl
+    curl \
+    && mv ./index.zip /
 
 ENTRYPOINT ["./wazigate-system"]
