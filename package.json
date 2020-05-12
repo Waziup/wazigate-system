@@ -13,16 +13,17 @@
 	"author": "Waziup",
 	"license": "ISC",
 	"waziapp": {
+	  "icon": "ui/icons/waziup.svg",
       "menu": {
         "settings": {
           "primary": "Settings",
-          "iconSrc": "ui/icons/settings.svg",
+          "icon": "ui/icons/settings.svg",
           "href": "#/apps/waziup.wazigate-system/ui/",
           "prio": 60
         },
         "settings.wifi": {
           "primary": "Wifi",
-          "iconSrc": "ui/icons/wifi.svg",
+          "icon": "ui/icons/wifi.svg",
           "href": "#/apps/waziup.wazigate-system/ui/#/internet"
         }
       }
