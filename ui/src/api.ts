@@ -125,6 +125,7 @@ export type WiFiInfo = {
   enabled: boolean;
   ap_mode: boolean;
   ssid: string;
+  state: string;
 };
 
 export async function getWiFiInfo(): Promise<WiFiInfo> {

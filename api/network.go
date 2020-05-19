@@ -6,7 +6,9 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"regexp"
 	"strings"
+	"sync"
 	"time"
 
 	routing "github.com/julienschmidt/httprouter"
@@ -14,8 +16,11 @@ import (
 	// wifi "github.com/mark2b/wpa-connect"
 )
 
+var wifiOperation = &sync.Mutex{}
+
 /*-------------------------*/
 
+// GetNetInfo implements GET /net
 func GetNetInfo(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	dev, _ := exeCmd("ip route show default | head -n 1 | awk '/default/ {print $5}'")
@@ -42,6 +47,7 @@ func GetNetInfo(resp http.ResponseWriter, req *http.Request, params routing.Para
 
 /*-------------------------*/
 
+// GetGWID implements GET /gwid
 func GetGWID(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	interfs, err := net.Interfaces()
@@ -83,6 +89,54 @@ func GetNetWiFi(resp http.ResponseWriter, req *http.Request, params routing.Para
 	}
 
 	resp.Write([]byte(outJSON))
+}
+
+/*-------------------------*/
+
+func getWiFiClientStatus() (map[string]interface{}, error) {
+
+	cmd := "wpa_cli status -i " + WIFI_DEVICE
+	stdout, err := execOnHost(cmd)
+	if err != nil {
+		return nil, err // The WiFi is not connected
+	}
+
+	/*--------*/
+
+	re := regexp.MustCompile(`([\w]+)=(.*)`)
+	var status map[string]string = make(map[string]string)
+
+	subMatchAll := re.FindAllStringSubmatch(string(stdout), -1)
+	for _, element := range subMatchAll {
+		status[element[1]] = element[2]
+	}
+
+	// All possible keys:
+	// bssid=9c:c8:fc:29:e5:e0
+	// freq=2412
+	// ssid=GoliNet
+	// id=0
+	// mode=station
+	// pairwise_cipher=CCMP
+	// group_cipher=CCMP
+	// key_mgmt=WPA2-PSK
+	// wpa_state=COMPLETED
+	// ip_address=192.168.200.1  /* Not very accurate*/
+	// p2p_device_address=f6:8d:01:5d:ae:28
+	// address=b8:27:eb:49:66:e2
+	// uuid=087d50a2-7a1c-589c-bcec-cd5acde1ff57
+
+	ssid, _ := status["ssid"]
+	freq, _ := status["freq"]
+	state, _ := status["wpa_state"]
+
+	/*--------*/
+
+	return map[string]interface{}{
+		"ssid":  ssid,
+		"freq":  freq,
+		"state": state,
+	}, nil
 }
 
 /*-------------------------*/
@@ -131,8 +185,19 @@ func getNetWiFi() (map[string]interface{}, error) {
 	/*-----*/
 
 	cmd = "systemctl is-active --quiet hostapd && echo 1"
-	outc, _ = execOnHost(cmd)
+	outc, err := execOnHost(cmd)
 	apMode := outc == "1"
+	if err != nil {
+		apMode = false // we may chnage this
+	}
+
+	/*-----*/
+
+	wifiClientStatus, err := getWiFiClientStatus()
+	state := ""
+	if err == nil {
+		state = wifiClientStatus["state"].(string)
+	}
 
 	/*---------------*/
 
@@ -141,6 +206,7 @@ func getNetWiFi() (map[string]interface{}, error) {
 		"enabled": enabled,
 		"ssid":    ssid,
 		"ap_mode": apMode,
+		"state":   state,
 	}, nil
 
 }
@@ -196,6 +262,10 @@ func SetNetWiFi(resp http.ResponseWriter, req *http.Request, params routing.Para
 			}
 		}
 
+		// if !DEBUG_MODE {
+		cmd += " | grep -o '^[^#]*' " // Remove the plain text password from the phrase
+		// }
+
 		cmd += " >> /etc/wpa_supplicant/wpa_supplicant.conf; "
 		// exeCmd( cmd)
 		stdout, err = execOnHost(cmd)
@@ -203,8 +273,12 @@ func SetNetWiFi(resp http.ResponseWriter, req *http.Request, params routing.Para
 			log.Printf("[HOST  ] %s \t %s", err.Error(), stdout)
 		}
 
-		// save the setting and switch to the WiFi Client
+		wifiOperation.Lock()
+
+		//Start the WiFi Client
 		startWiFiClient()
+
+		wifiOperation.Unlock()
 
 		CheckWlanConn() // Check if the WiFi connection was successfull otherwise revert to AP mode
 	}
@@ -224,8 +298,10 @@ func SetNetWiFi(resp http.ResponseWriter, req *http.Request, params routing.Para
 /*-------------------------*/
 
 func startWiFiClient() error {
+
 	oledWrite("\nConnecting to\n   WiFi...")
 	stdout, err := execOnHost("sudo bash start_wifi.sh")
+
 	if err != nil {
 		log.Printf("[HOST  ] %s \t %s", err.Error(), stdout)
 
@@ -234,6 +310,7 @@ func startWiFiClient() error {
 		log.Printf("[Info   ] %s", stdout)
 	}
 	oledWrite("") // Clean the OLED msg
+
 	return err
 }
 
@@ -251,20 +328,43 @@ func apMode(withLogs bool) bool {
 // Return: fasle = AP Mode , true = WiFi Client mode
 func CheckWlanConn() bool {
 
+	wifiOperation.Lock()
+
 	if apMode(true) {
 		ActivateAPMode()
+		wifiOperation.Unlock()
 		return false // AP mode is active
 	}
 
+	wifiOperation.Unlock()
+
+	// Give it some time to connect, then we check
 	time.Sleep(2 * time.Second)
-	for i := 0; i < 4; i++ {
+	for i := 0; i < 10; i++ {
 
 		oledWrite("\nChecking WiFi." + strings.Repeat(".", i))
 
-		wifiRes, err := execOnHost("iwgetid")
-		if err == nil && wifiRes != "" {
-			oledWrite("") // Clean the OLED
-			return true
+		// cmd = "iw " + WIFI_DEVICE + " info | grep ssid | awk '{print $2\" \"$3\" \"$4\" \"$5\" \"$6}'"
+		// wifiRes, err := execOnHost("iwgetid")
+		// if err == nil && wifiRes != "" {
+		// 	oledWrite("") // Clean the OLED
+		// 	return true
+		// }
+
+		wifiOperation.Lock()
+
+		wifiClientStatus, err := getWiFiClientStatus()
+
+		wifiOperation.Unlock()
+		state := ""
+		if err == nil {
+			state = wifiClientStatus["state"].(string)
+			if state == "COMPLETED" {
+				return true
+			}
+
+			// time.Sleep(1 * time.Second)
+			oledWrite("\nWiFi state:\n  " + state)
 		}
 
 		time.Sleep(5 * time.Second)
@@ -280,7 +380,11 @@ func CheckWlanConn() bool {
 	oledWrite("Cannot Connect\n\nReverting to \n  Access point...")
 	time.Sleep(2 * time.Second)
 
+	wifiOperation.Lock()
+
 	ActivateAPMode()
+
+	wifiOperation.Unlock()
 
 	return false
 }
@@ -309,7 +413,11 @@ func ActivateAPMode() {
 
 func SetNetAPMode(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
+	wifiOperation.Lock()
+
 	ActivateAPMode()
+
+	wifiOperation.Unlock()
 
 	out := "Access Point mode Activated."
 
@@ -548,8 +656,13 @@ func NetworkLoop() {
 
 		// In order to provide a stable connectivity,
 		// let's not rely on the OS and check the WiFi connection periodically
+		time.Sleep(60 * time.Second)
 		for {
+			// We need to avoid race condition
+			wifiOperation.Lock()
+
 			wifiStatus, err := getNetWiFi()
+
 			if err == nil {
 				if apMode, ok := wifiStatus["ap_mode"]; ok {
 
@@ -559,6 +672,7 @@ func NetworkLoop() {
 					if (okSSID && SSID == "") || (okIP && IP == "") {
 
 						// Reconnect
+						oledWrite("\n WiFi\n Reconnecting...")
 						if apMode == true {
 							ActivateAPMode()
 
@@ -570,7 +684,9 @@ func NetworkLoop() {
 				}
 			}
 
-			time.Sleep(20 * time.Second)
+			wifiOperation.Unlock()
+
+			time.Sleep(30 * time.Second)
 		}
 	}()
 }

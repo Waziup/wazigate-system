@@ -291,6 +291,21 @@ class PagesOverview extends React.Component<Props, State> {
               <b>
                 WiFi Client <MDBIcon icon="wifi" />
               </b>
+              {"  "}
+              <span title={this.state.WiFiInfo.state}>
+                {this.state.WiFiInfo.state ? (
+                  this.state.WiFiInfo.state == "COMPLETED" ? (
+                    <MDBIcon fas icon="check-circle" />
+                  ) : (
+                    <span>
+                      <MDBIcon icon="spinner" spin />{" "}
+                      {this.state.WiFiInfo.state}
+                    </span>
+                  )
+                ) : (
+                  "..."
+                )}
+              </span>
             </MDBAlert>
             <MDBAlert color="info">
               Connected to{" "}
@@ -365,7 +380,7 @@ class PagesOverview extends React.Component<Props, State> {
             </div>
           </MDBCol>
 
-          {/* -------------- */}
+          {}
 
           <MDBCol>
             <div className="card mb-3 mt-3 m-l3 mb-3">
@@ -382,7 +397,7 @@ class PagesOverview extends React.Component<Props, State> {
           </MDBCol>
         </MDBRow>
 
-        {/* ------------------- */}
+        {}
 
         <MDBRow>
           <MDBCol>
@@ -432,7 +447,7 @@ class PagesOverview extends React.Component<Props, State> {
             </div>
           </MDBCol>
 
-          {/* ------------------- */}
+          {}
 
           <MDBCol>
             <div className="card mb-3 mt-3 m-l3 mb-3">
@@ -457,7 +472,7 @@ class PagesOverview extends React.Component<Props, State> {
             </div>
           </MDBCol>
 
-          {/* ------------------- */}
+          {}
         </MDBRow>
 
         <MDBModal isOpen={this.state.modal.visible} toggle={this.toggleModal}>
