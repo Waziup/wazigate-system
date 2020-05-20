@@ -1,8 +1,10 @@
 FROM alpine:latest AS development
+#FROM golang:alpine AS development
 
 COPY . /go/src/github.com/Waziup/wazigate-system/
 WORKDIR /go/src/github.com/Waziup/wazigate-system/
 ENV GOPATH=/go/
+
 
 RUN apk add --no-cache \
     go \
