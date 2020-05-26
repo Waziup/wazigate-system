@@ -1,6 +1,6 @@
 import * as React from "react";
-import * as API from "../../api";
-import ErrorComp from "../Error";
+import * as API from "../../../api";
+import ErrorComp from "../../Error";
 
 import {
   MDBContainer,
@@ -13,7 +13,7 @@ import {
   MDBListGroup,
   MDBAlert,
 } from "mdbreact";
-import LoadingSpinner from "../LoadingSpinner";
+import LoadingSpinner from "../../LoadingSpinner";
 import WiFiScanItem from "./WiFiScanItem";
 
 declare function Notify(msg: string): any;

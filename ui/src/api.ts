@@ -35,6 +35,46 @@ export async function internet() {
   if (!resp.ok) await failResp(resp);
   return await resp.json();
 }
+/*--------------*/
+
+export async function getTime() {
+  var resp = await fetch(URL + "time");
+  if (!resp.ok) await failResp(resp);
+  return await resp.json();
+}
+
+/*-------------- */
+
+export async function getTimezones() {
+  var resp = await fetch(URL + "timezones");
+  if (!resp.ok) await failResp(resp);
+  return await resp.json();
+}
+
+export async function getTimezone() {
+  var resp = await fetch(URL + "timezone");
+  if (!resp.ok) await failResp(resp);
+  return await resp.json();
+}
+
+export async function getTimezoneAuto() {
+  var resp = await fetch(URL + "timezone/auto");
+  if (!resp.ok) await failResp(resp);
+  return await resp.json();
+}
+
+export async function setTimezone(data: string) {
+  var resp = await fetch(URL + "timezone", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!resp.ok) await failResp(resp);
+  return await resp.text();
+  // return await resp.json();
+}
 
 /*-------------- */
 

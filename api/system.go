@@ -25,13 +25,12 @@ import (
 
 /*-------------------------*/
 
+// Configuration keeps the general config of the settings app
 type Configuration struct {
-	Setup_wizard        bool    `json:"setup_wizard"`
-	WiFi_AP_auto        bool    `json:"wifi_ap_auto"`        // Check if WiFi is not connected, wait for n seconds then switch to AP mode and keep searching
-	WiFi_AP_no_Internet bool    `json:"wifi_ap_no_internet"` // Check if there is no internet, switch to AP mode or try to find another WiFi
-	WiFi_timeout        int     `json:"wifi_timeout"`        // How many seconds wait before doing an action on the WiFi
-	Fan_trigger_temp    float64 `json:"fan_trigger_temp"`    // At which temperature the Fan should start
-	OLED_halt_timeout   int     `json:"oled_halt_timeout"`   // After what time the OLED goes off
+	SetupWizard     bool    `json:"setup_wizard"`
+	FanTriggerTemp  float64 `json:"fan_trigger_temp"`  // At which temperature the Fan should start
+	OLEDHaltTimeout int     `json:"oled_halt_timeout"` // After what time the OLED goes off
+	LocalTimezone   string  `json:"local_timezone"`    // Local time zone
 }
 
 /*----------------*/
@@ -44,11 +43,9 @@ func loadConfigs() Configuration {
 		log.Printf("[Err   ] %s", err.Error())
 		return Configuration{
 			false,
-			true,
-			true,
-			60,
 			62.1,   // in CC
-			1 * 60, // 5 minutes
+			1 * 60, // 1 minutes
+			"auto", // Auto means set the local timezone based on the connected IP
 		}
 	}
 

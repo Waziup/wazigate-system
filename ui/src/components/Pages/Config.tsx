@@ -2,6 +2,9 @@ import * as React from "react";
 import * as API from "../../api";
 import ErrorComp from "../Error";
 
+import Clock from "./Clock/Clock";
+import TimezoneConfig from "./Clock/TimezoneConfig";
+
 // import { Form } from "react-bootstrap";
 // import { Button } from "react-bootstrap";
 // import { Accordion, Card } from "react-bootstrap";
@@ -338,6 +341,26 @@ class PagesConfig extends React.Component<Props, State> {
                 </div>
               </div>
             </div>
+
+            {/* The next card */}
+
+            <div className="col-lg-6 mt-3 mb-6 grid-margin">
+              <div className="card h-100">
+                <h4 className="card-header">Timezone</h4>
+                <div className="card-body">
+                  <MDBContainer>
+                    <MDBRow>
+                      <MDBCol md="10">
+                        <Clock interval={3} />
+                        <TimezoneConfig />
+                      </MDBCol>
+                    </MDBRow>
+                  </MDBContainer>
+                </div>
+              </div>
+            </div>
+
+            {/*----------------*/}
           </div>
         </div>
       </React.Fragment>

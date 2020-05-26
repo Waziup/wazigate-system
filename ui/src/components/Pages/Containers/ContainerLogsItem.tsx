@@ -1,8 +1,8 @@
 import * as React from "react";
-import * as API from "../../api";
+import * as API from "../../../api";
 
 import { MDBInput, MDBIcon, MDBBtn } from "mdbreact";
-import LoadingSpinner from "../LoadingSpinner";
+import LoadingSpinner from "../../LoadingSpinner";
 // import LoadingSpinner from "../LoadingSpinner";
 
 declare function Notify(msg: string): any;

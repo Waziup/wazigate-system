@@ -60,6 +60,7 @@ func init() {
 
 	/*-----------*/
 
+	TimezoneInit()
 	BlackoutLoop()
 	NetworkLoop()
 	ButtonsLoop()

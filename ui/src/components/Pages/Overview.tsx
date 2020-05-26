@@ -2,9 +2,10 @@ import * as React from "react";
 import { Component } from "react";
 import * as API from "../../api";
 import ErrorComp from "../Error";
-import LoadingSpinner from "../LoadingSpinner";
+// import LoadingSpinner from "../LoadingSpinner";
+import Clock from "./Clock/Clock";
 
-import { Accordion, Card } from "react-bootstrap";
+// import { Accordion, Card } from "react-bootstrap";
 declare function Notify(msg: string): any;
 
 import {
@@ -390,7 +391,9 @@ class PagesOverview extends React.Component<Props, State> {
                   spin={this.state.WiFiLoading}
                   icon={this.state.WiFiLoading ? "cog" : "wifi"}
                 />{" "}
-                WiFi Network
+                <a href="./#internet" title="Conenct to a WiFi network">
+                  WiFi Network
+                </a>
               </h4>
               <div className="card-body">{wifiStatus}</div>
             </div>
@@ -401,6 +404,45 @@ class PagesOverview extends React.Component<Props, State> {
 
         <MDBRow>
           <MDBCol>
+            <div className="card mb-3 mt-3 m-l3 mb-3">
+              <h4 className="card-header">
+                <MDBIcon far icon="clock" />{" "}
+                <a href="./#config" title="Click to change the Timezone">
+                  Gateway Clock
+                </a>
+              </h4>
+              <div className="card-body h-100">
+                <Clock />
+              </div>
+            </div>
+          </MDBCol>
+
+          {}
+
+          <MDBCol>
+            <div className="card mb-3 mt-3 m-l3 mb-3">
+              <h4 className="card-header">
+                <MDBIcon icon="bolt" /> Blackout Protection
+              </h4>
+              <div className="card-body h-100">
+                {this.state.blackout === null ? (
+                  <MDBIcon icon="cog" spin />
+                ) : this.state.blackout ? (
+                  <span>
+                    <MDBIcon className="green-text" icon="check-circle" />{" "}
+                    Activated
+                  </span>
+                ) : (
+                  <span>
+                    <MDBIcon color="orange-text" icon="exclamation-circle" />{" "}
+                    Not available
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* -------------------------- */}
+
             <div className="card mb-3 mt-3 m-l3 mb-3">
               <h4 className="card-header">
                 <MDBIcon icon="power-off" /> Gateway Shutdown
@@ -448,31 +490,11 @@ class PagesOverview extends React.Component<Props, State> {
           </MDBCol>
 
           {}
+        </MDBRow>
 
-          <MDBCol>
-            <div className="card mb-3 mt-3 m-l3 mb-3">
-              <h4 className="card-header">
-                <MDBIcon icon="bolt" /> Blackout Protection
-              </h4>
-              <div className="card-body h-100">
-                {this.state.blackout === null ? (
-                  <MDBIcon icon="cog" spin />
-                ) : this.state.blackout ? (
-                  <span>
-                    <MDBIcon className="green-text" icon="check-circle" />{" "}
-                    Activated
-                  </span>
-                ) : (
-                  <span>
-                    <MDBIcon color="orange-text" icon="exclamation-circle" />{" "}
-                    Not available
-                  </span>
-                )}
-              </div>
-            </div>
-          </MDBCol>
-
-          {}
+        <MDBRow>
+          <MDBCol></MDBCol>
+          <MDBCol></MDBCol>
         </MDBRow>
 
         <MDBModal isOpen={this.state.modal.visible} toggle={this.toggleModal}>

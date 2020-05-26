@@ -194,7 +194,7 @@ func OledLoop(){
 				continue
 			}
 
-			if( oledHaltCounter > Config.OLED_halt_timeout){
+			if( oledHaltCounter > Config.OLEDHaltTimeout){
 				oledHalt();
 				oledHaltCounter = 0;
 				continue;
