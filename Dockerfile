@@ -17,7 +17,7 @@ RUN apk add --no-cache \
     && cp -r docs /build \
     && cp -r ui /build \
     && go build -o /build/wazigate-system -i . \
-    && zip /build/index.zip docker-compose.yml package.json
+    && zip /build/index.zip docker-compose.yml package.json resolv.conf
 
 #----------------------------#
 

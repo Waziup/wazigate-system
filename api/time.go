@@ -196,6 +196,16 @@ func TimezoneInit(){
 	go func() {
 		log.Println("[Info  ] Initiating timezone settings...")
 
+		// Wait for the host to come up before sending any command
+		for {
+			if hostReady() {
+				log.Println("[Info  ] HOST is ready.")
+				break
+			}
+			log.Println("[Info  ] Waiting for the HOST...")
+			time.Sleep(2 * time.Second)
+		}
+
 		systemTimezone, _ := getSystemTimezone()
 		newTimezone := Config.LocalTimezone
 

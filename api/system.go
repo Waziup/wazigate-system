@@ -315,8 +315,13 @@ func SystemUpdateStatus(resp http.ResponseWriter, req *http.Request, params rout
 
 func GetGWBootstatus(withLogs bool) (bool, string) {
 
+	//TODO: Old code. we need to use docker APIs directly
+	
 	cmd := "curl -s --unix-socket /var/run/docker.sock http://localhost/containers/json?all=true"
-	outJsonStr, _ := execOnHostWithLogs(cmd, withLogs)
+	outJsonStr, err := execOnHostWithLogs(cmd, withLogs)
+	if err != nil{
+		return false, ".."
+	}
 
 	var resJson []map[string]interface{}
 
