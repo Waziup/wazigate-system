@@ -25,6 +25,16 @@
 				"primary": "WiFi",
 				"icon": "ui/icons/wifi.svg",
 				"href": "#/apps/waziup.wazigate-system/ui/#/internet"
+			},
+			"help": {
+				"primary": "Help",
+				"icon": "ui/icons/help.svg",
+				"prio": 200
+			},
+			"help.sysAPI": {
+				"primary": "System API docs",
+				"icon": "ui/icons/api.svg",
+				"href": "#/apps/waziup.wazigate-system/docs/"
 			}
 		}
 	}
