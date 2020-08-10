@@ -210,7 +210,7 @@ func OledLoop(){
 				heartTxt = "* "
 			}
 
-			netTxt := "[ Internet XX ]"
+			netTxt := "[ Internet NO ]"
 			if( CloudAccessible( false /*Without Logs*/)){
 				netTxt = "[ Internet OK ]"
 			}

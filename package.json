@@ -1,6 +1,6 @@
 {
 	"name": "System",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Wazigate System",
 	"types": "dashboard.d.ts",
 	"private": true,
@@ -35,6 +35,11 @@
 				"primary": "System API docs",
 				"icon": "ui/icons/api.svg",
 				"href": "#/apps/waziup.wazigate-system/docs/"
+			},
+			"help.edgeAPI": {
+				"primary": "Edge API docs",
+				"icon": "ui/icons/api.svg",
+				"href": "#/docs/"
 			}
 		}
 	}

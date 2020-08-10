@@ -615,7 +615,7 @@ func GetAllIPs() (string, string, string, string) {
 	wip, _ := exeCmdWithLogs(cmd, false)
 	aip := wip
 
-	cmd = "status=$(ip addr show " + ETH_DEVICE + " | grep \"state UP\"); if [ \"$status\" == \"\" ]; then echo \"NO Ethernet\"; else echo $(ip -4 addr show " + ETH_DEVICE + " | awk '$1 == \"inet\" {gsub(/\\/.*$/, \"\", $2); print $2}');  fi;"
+	cmd = "status=$(ip addr show " + ETH_DEVICE + " | grep \"state UP\"); if [ \"$status\" == \"\" ]; then echo \"NOT Connected\"; else echo $(ip -4 addr show " + ETH_DEVICE + " | awk '$1 == \"inet\" {gsub(/\\/.*$/, \"\", $2); print $2}');  fi;"
 	eip, _ := exeCmdWithLogs(cmd, false)
 
 	if apMode(false) {
