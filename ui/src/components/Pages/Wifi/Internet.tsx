@@ -161,7 +161,8 @@ class PagesInternet extends React.Component<Props, State> {
         wifiStatus = (
           <span>
             {" "}
-            <MDBIcon icon="broadcast-tower" /> Access Point Mode (SSID:{" "}
+            Mode: <b>Access Point</b> <MDBIcon icon="broadcast-tower" /> 
+            <div className="float-right"> SSID:{" "}
             <b>
               {this.state.WiFiInfo.ssid ? (
                 this.state.WiFiInfo.ssid
@@ -169,14 +170,16 @@ class PagesInternet extends React.Component<Props, State> {
                 <MDBIcon icon="spinner" spin />
               )}
             </b>
-            )
+            </div>
           </span>
         );
       } else {
         wifiStatus = (
           <span>
             {" "}
-            <MDBIcon icon="wifi" /> Connected to{" "}
+            Mode: <b>WiFi client</b> <MDBIcon icon="wifi" />
+            
+            <div className="float-right"> Network: {" "}
             <b>
               {this.state.WiFiInfo.ssid ? (
                 this.state.WiFiInfo.ssid
@@ -204,6 +207,7 @@ class PagesInternet extends React.Component<Props, State> {
                 "..."
               )}
             </span>
+            </div>
           </span>
         );
       }
@@ -259,23 +263,24 @@ class PagesInternet extends React.Component<Props, State> {
               )}
             </MDBAlert>
 
+            <MDBAlert color="light">
+              Please select a network:
+            </MDBAlert>
+
             <MDBListGroup>
               {scanResult}
               <WiFiScanItem name="Connect to a hidden WiFi" empty signal="0" />
             </MDBListGroup>
-            <div
-              className="content-center mt-2"
-              style={{ margin: "auto 30%", height: "18px" }}
-            >
+            <MDBAlert color="light">
               {this.state.scanLoading ? (
-                <LoadingSpinner
-                  type="progress"
+                <div style={{textAlign: "center"}} >Checking for avilable networks <LoadingSpinner
+                  type="grow-sm"
                   class="color-light-text-primary"
-                />
+                /></div> 
               ) : (
                 ""
               )}
-            </div>
+            </MDBAlert>
           </MDBTabPane>
 
           {/* <MDBTabPane tabId="2" role="tabpanel">

@@ -4,9 +4,12 @@ import * as API from "../../api";
 import ErrorComp from "../Error";
 // import LoadingSpinner from "../LoadingSpinner";
 import Clock from "./Clock/Clock";
+import Modal from 'react-bootstrap/Modal'
 
 // import { Accordion, Card } from "react-bootstrap";
 declare function Notify(msg: string): any;
+
+
 
 import {
   MDBContainer,
@@ -172,7 +175,7 @@ class PagesOverview extends React.Component<Props, State> {
         Notify(res);
       },
       (error) => {
-        Notify(error);
+        console.log(error);
         this.setState({
           shutdownLoading: false,
         });
@@ -194,7 +197,7 @@ class PagesOverview extends React.Component<Props, State> {
         Notify(res);
       },
       (error) => {
-        Notify(error);
+        console.log(error);
         this.setState({
           rebootLoading: false,
         });
@@ -246,6 +249,14 @@ class PagesOverview extends React.Component<Props, State> {
   /**------------- */
 
   render() {
+
+    if( this.state.shutdownLoading || this.state.rebootLoading)
+    {
+      return <div style={{marginTop: "20%", textAlign: "center", border: "1px solid #BBB", borderRadius: "5px",padding: "5%",marginLeft: "10%", marginRight: "10%", backgroundColor: "#EEE"}}>
+        <h1>Wazigate is not accessible...</h1>
+      </div>
+    }
+
     if (this.state.error) {
       return <ErrorComp error={this.state.error} />;
     }
@@ -497,7 +508,9 @@ class PagesOverview extends React.Component<Props, State> {
           <MDBCol></MDBCol>
         </MDBRow>
 
-        <MDBModal isOpen={this.state.modal.visible} toggle={this.toggleModal}>
+        {/*
+        After some package update, thos modal just does not work!
+         <MDBModal autoFocus isOpen={this.state.modal.visible} toggle={this.toggleModal}>
           <MDBModalHeader toggle={this.toggleModal}>
             {this.state.modal.title}
           </MDBModalHeader>
@@ -510,7 +523,23 @@ class PagesOverview extends React.Component<Props, State> {
               Yes
             </MDBBtn>
           </MDBModalFooter>
-        </MDBModal>
+        </MDBModal> */}
+
+      <Modal show={this.state.modal.visible} onHide={this.toggleModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>{this.state.modal.title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{this.state.modal.msg}</Modal.Body>
+        <Modal.Footer>
+          <MDBBtn color="secondary" onClick={this.toggleModal}>
+              No
+            </MDBBtn>
+            <MDBBtn color="danger" onClick={this.modalClick}>
+              Yes
+            </MDBBtn>
+        </Modal.Footer>
+      </Modal>
+
       </MDBContainer>
     );
   }

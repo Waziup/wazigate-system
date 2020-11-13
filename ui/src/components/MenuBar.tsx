@@ -40,7 +40,7 @@ class MenuBar extends React.Component<MenuProps, MenuState> {
             </Nav.Link>
             <NavDropdown
               title="Configurations"
-              href="#configs"
+              // href="#configs"
               id="basic-nav-dropdown"
             >
               <NavDropdown.Item href="#config">

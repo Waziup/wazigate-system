@@ -58,7 +58,7 @@ class Clock extends React.Component<Props, State> {
     if (!this._isMounted) return;
 
     const incTime = () => {
-      if (this.state.data.time == null || !this._isMounted) return;
+      if (!this.state.data || this.state.data?.time == null || !this._isMounted) return;
       this.setState({
         data: {
           time: new Date(this.state.data.time.getTime() + 1000),
