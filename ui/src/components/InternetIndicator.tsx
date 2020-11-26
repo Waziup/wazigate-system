@@ -6,7 +6,7 @@ import ErrorComp from "./Error";
 
 import { MDBIcon } from "mdbreact";
 
-declare function Notify(msg: string): any;
+// declare function Notify(msg: string): any;
 
 export interface Props {
 	// variant?: string;
@@ -57,7 +57,7 @@ class InternetIndicator extends React.Component<Props, State> {
 				}, 15000); // Check every 15 seconds
 			},
 			error => {
-				Notify(error);
+				console.log(error);
 				this.setState({
 					status: null,
 					error: error

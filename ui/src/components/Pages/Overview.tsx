@@ -19,10 +19,10 @@ import {
   MDBBtn,
   MDBAlert,
   MDBIcon,
-  MDBModal,
-  MDBModalBody,
-  MDBModalHeader,
-  MDBModalFooter,
+  // MDBModal,
+  // MDBModalBody,
+  // MDBModalHeader,
+  // MDBModalFooter,
 
   // MDBCard,
   // MDBCardBody,
@@ -181,6 +181,8 @@ class PagesOverview extends React.Component<Props, State> {
         });
       }
     );
+
+    this.componentWillUnmount();
   }
 
   /**------------- */
@@ -203,6 +205,7 @@ class PagesOverview extends React.Component<Props, State> {
         });
       }
     );
+    this.componentWillUnmount();
   }
   /**------------- */
 
@@ -531,7 +534,7 @@ class PagesOverview extends React.Component<Props, State> {
         </Modal.Header>
         <Modal.Body>{this.state.modal.msg}</Modal.Body>
         <Modal.Footer>
-          <MDBBtn color="secondary" onClick={this.toggleModal}>
+          <MDBBtn onClick={this.toggleModal}>
               No
             </MDBBtn>
             <MDBBtn color="danger" onClick={this.modalClick}>

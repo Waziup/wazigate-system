@@ -9,9 +9,9 @@ import {
   MDBNav,
   MDBNavItem,
   MDBNavLink,
-  MDBIcon,
-  MDBListGroup,
-  MDBAlert,
+  // MDBIcon,
+  // MDBListGroup,
+  // MDBAlert,
 } from "mdbreact";
 import ContainerLogsItem from "./Containers/ContainerLogsItem";
 import LoadingSpinner from "../LoadingSpinner";
@@ -86,10 +86,11 @@ class Logs extends React.Component<Props, State> {
           <MDBNavItem key={index}>
             <MDBNavLink
               to="#"
+              link
               active={this.state.activeItem == index}
               activeClassName="active-link"
               onClick={this.toggle(index)}
-              role="tab"
+              // role="tab"
               // className="bg-info"
             >
               {/* <MDBIcon fab icon="sketch" />  */}
@@ -119,7 +120,7 @@ class Logs extends React.Component<Props, State> {
 
     return (
       <MDBContainer className="mt-3">
-        <MDBNav tabs className="nav md-pills nav-pills nav-justified">
+        <MDBNav pills className="nav md-pills nav-pills flex-column">
           {tabHeads}
         </MDBNav>
         <MDBTabContent className="card p-2" activeItem={this.state.activeItem}>

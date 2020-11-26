@@ -4,7 +4,7 @@ services:
 #-------------------------#
 
   wazigate-system:
-    image: waziup/wazigate-system:dev
+    image: waziup/wazigate-system:latest
     container_name: waziup.wazigate-system
     build:
       context: ./

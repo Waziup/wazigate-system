@@ -129,21 +129,13 @@ class ContainerLogsItem extends React.Component<Props, State> {
           value={this.state.data}
         ></textarea>
 
-        {/* <pre>
-					<code>{this.state.data}</code>
-				</pre> */}
+        <br />
+        <hr />
 
-        {/* <MDBBtn
-					onClick={() => this.downloadLogs()}
-					disabled={this.state.dlLoading}
-				>
-					<MDBIcon
-						icon={this.state.dlLoading ? "cog" : "download"}
-						spin={this.state.dlLoading}
-					/>
-					{"  "}Download all logs
-				</MDBBtn> */}
-        {this.state.loading ? <MDBIcon icon="cog" spin /> : ""}
+        <a href={"../docker/" + this.props.cId + "/logs"} target="_blank">
+				  <MDBIcon icon="download" />{"  "}Download all logs
+				</a>
+        <br />
       </div>
     );
   }
