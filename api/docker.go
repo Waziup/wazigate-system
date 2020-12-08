@@ -66,9 +66,9 @@ func DockerLogs( resp http.ResponseWriter, req *http.Request, params routing.Par
 	cId		:=	params.ByName( "cId")
 	tail	:=	params.ByName( "tail")
 
-	cmd := "sudo docker logs -t "+ cId;
+	cmd := "sudo docker logs -t "+ cId +" 2>&1";
 	if tail != ""{
-		cmd = "sudo docker logs -t --tail="+ tail +" "+ cId;
+		cmd = "sudo docker logs -t --tail="+ tail +" "+ cId +" 2>&1";
 	}
 	out, _ := execOnHostWithLogs( cmd, false);
 
