@@ -1,4 +1,4 @@
-version: '3'
+version: "3.4"
 services:
 
 #-------------------------#
@@ -8,7 +8,7 @@ services:
     container_name: waziup.wazigate-system
     build:
       context: ./
-      # dockerfile: Dockerfile-dev
+      target: development  # Uncomment for development
     logging:
       driver: "json-file"
       options:
@@ -21,7 +21,7 @@ services:
       # - /var/run/dbus:/var/run/dbus
       - /sys/class/gpio:/sys/class/gpio
       - /dev/mem:/dev/mem
-      - ./:/go/src/wazigate-system
+      - ./:/go/src/github.com/Waziup/wazigate-system
     privileged: true
     network_mode: host
     environment:
@@ -32,6 +32,8 @@ services:
       interval: 30s
       retries: 10 # Will try for 5 minutes      
     restart: always
+    security_opt:
+      - "seccomp:unconfined"
 #    entrypoint: "/root/app/wazigate-system"
 
 #-------------------------#

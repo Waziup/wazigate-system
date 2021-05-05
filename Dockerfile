@@ -16,8 +16,21 @@ RUN apk add --no-cache \
     && cp scan.awk /build \
     && cp -r docs /build \
     && cp -r ui /build \
-    && go build -o /build/wazigate-system -i . \
     && zip /build/index.zip docker-compose.yml package.json resolv.conf
+
+
+# WORKDIR /go/src/wazigate-system/
+
+# Let's keep it in a separate layer
+RUN go build -o /build/wazigate-system -i .
+
+# Debugging stuff
+# && go get github.com/go-delve/delve/cmd/dlv \  # Not supported for RPI
+# COPY ./dlv.sh .
+# RUN chmod +x dlv.sh 
+# ENTRYPOINT [ "dlv.sh"]
+
+ENTRYPOINT ["tail", "-f", "/dev/null"]
 
 #----------------------------#
 
