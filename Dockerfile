@@ -34,6 +34,16 @@ ENTRYPOINT ["tail", "-f", "/dev/null"]
 
 #----------------------------#
 
+FROM golang:alpine AS test
+
+WORKDIR /go/src/github.com/Waziup/wazigate-system/
+
+ENV EXEC_PATH=/go/src/github.com/Waziup/wazigate-system/
+
+ENTRYPOINT ["go", "test", "-v", "./..."]
+
+#----------------------------#
+
 FROM alpine:latest AS production
 
 WORKDIR /app/

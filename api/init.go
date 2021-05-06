@@ -83,17 +83,31 @@ func HomeLink(resp http.ResponseWriter, req *http.Request, params routing.Params
 // APIDocs API documents
 func APIDocs(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	// log.Println( req.URL.Path)
-	http.FileServer(http.Dir("./")).ServeHTTP(resp, req)
+
+	rootPath := os.Getenv("EXEC_PATH")
+	if rootPath == "" {
+		rootPath = "./"
+	}
+
+	http.FileServer(http.Dir(rootPath)).ServeHTTP(resp, req)
 }
 
 /*-------------------------*/
 
 // UI implements HTTP /ui
 func UI(resp http.ResponseWriter, req *http.Request, params routing.Params) {
-	// log.Println( req.URL.Path)
-	// log.Println( params.ByName( "file_path"))
+	// log.Println(req.URL.Path)
+	// log.Println(params.ByName("file_path"))
 
-	http.FileServer(http.Dir("./")).ServeHTTP(resp, req)
+	// path, _ := filepath.Abs("./")
+
+	rootPath := os.Getenv("EXEC_PATH")
+	if rootPath == "" {
+		rootPath = "./"
+	}
+
+	http.FileServer(http.Dir(rootPath)).ServeHTTP(resp, req)
+	// http.FileServer(http.Dir("./")).ServeHTTP(resp, req)
 }
 
 /*-------------------------*/

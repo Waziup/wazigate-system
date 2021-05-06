@@ -1,20 +1,18 @@
-/* 
+/*
 	@author: mojtaba.eskandari@waziup.org Nov 14th 2019
 	@Wazigate System Management
 */
 package main
 
 import (
-	// "log"
-	// "wazigate-system/api"
+	"github.com/Waziup/wazigate-system/api"
 )
 
 /*-------------------------*/
 
 func main() {
 
-	ListenAndServeHTTP()
+	api.ListenAndServeHTTP()
 }
 
-
-// go mod 
+// go mod
