@@ -25,7 +25,7 @@ RUN apk add --no-cache \
 RUN go build -o /build/wazigate-system -i .
 
 # Debugging stuff
-# && go get github.com/go-delve/delve/cmd/dlv \  # Not supported for RPI
+# && go get github.com/go-delve/delve/cmd/dlv \  # Currently NOT supported for RPI
 # COPY ./dlv.sh .
 # RUN chmod +x dlv.sh 
 # ENTRYPOINT [ "dlv.sh"]
@@ -34,7 +34,7 @@ ENTRYPOINT ["tail", "-f", "/dev/null"]
 
 #----------------------------#
 
-FROM golang:alpine AS test
+FROM development AS test
 
 WORKDIR /go/src/github.com/Waziup/wazigate-system/
 
