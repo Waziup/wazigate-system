@@ -9,6 +9,9 @@ A useful link: https://github.com/Waziup/WaziGate/blob/master/docs/System.md
 
 The recent version of WaziGate has two status LEDs on board and `wazigate-system` indicates the connectivity status via those LEDs.
 
+
+![LED indicators](assets/LEDs.gif "LED indicators")
+
 ## LED 1
 `LED 1` indicates the status of Internet connectivity and has two states:
 
