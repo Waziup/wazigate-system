@@ -22,7 +22,7 @@ RUN apk add --no-cache \
 # WORKDIR /go/src/wazigate-system/
 
 # Let's keep it in a separate layer
-RUN go build -o /build/wazigate-system -i .
+RUN go build -o /build/wazigate-system .
 
 # Debugging stuff
 # && go get github.com/go-delve/delve/cmd/dlv \  # Currently NOT supported for RPI
