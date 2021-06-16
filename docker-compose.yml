@@ -8,7 +8,7 @@ services:
     container_name: waziup.wazigate-system
     build:
       context: ./
-      # target: test  # development | test | production (default)
+      # target: development # development | test | production (default)
       # docker-compose up --build
     logging:
       driver: "json-file"
