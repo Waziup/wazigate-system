@@ -22,6 +22,6 @@ The recent version of WaziGate has two status LEDs on board and `wazigate-system
 `LED 2` indicates the WiFi status and it has 3 states:
 
 - **Access Point Mode**: this LED blinks slowly once a second: `__  __  __  __  __`
-- **WiFi Client Mode Connected to a router**: it blinks shortly and then stays off for two seconds like this: `.     .     .    .    .`
+- **WiFi Client Mode Connected to a router**: it stays on: `_______________________________`
 - **Not Connected**: it blinks fast like this: `.............`
 
