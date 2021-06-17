@@ -2,6 +2,7 @@ package api
 
 import (
 	"log"
+	"sync"
 	"time"
 
 	"periph.io/x/periph/conn/gpio"
@@ -49,12 +50,17 @@ func LEDsLoop() {
 			} else {
 
 				if netInfo["ap_mode"].(bool) {
+
 					blinkStart(LED2_PIN, 1000, 1000)
 
-				} else if netInfo["ip"].(string) != "" {
-					blinkStart(LED2_PIN, 100, 2000)
-
+				} else if netInfo["ssid"].(string) != "" && netInfo["state"].(string) == "COMPLETED" {
+					turnOnLED(LED2_PIN)
+					// blinkStart(LED2_PIN, 100, 2000)
+				} else if netInfo["state"].(string) != "" {
+					// Connecting...
+					blinkStart(LED2_PIN, 100, 500)
 				} else {
+					// Something went wrong, Not connected
 					blinkStart(LED2_PIN, 100, 100)
 				}
 
@@ -63,7 +69,7 @@ func LEDsLoop() {
 			/*----------*/
 
 			if CloudAccessible(false /*Without Logs*/) {
-				blinkStart(LED1_PIN, 100, 2000)
+				turnOnLED(LED1_PIN)
 			} else {
 				blinkStart(LED1_PIN, 100, 100)
 			}
@@ -81,33 +87,38 @@ func LEDsLoop() {
 /*-------------------------*/
 
 var ledLock1, ledLock2 chan struct{}
+var wg1, wg2 sync.WaitGroup
 
 func blinkStart(ledGpio string, onTime time.Duration, offTime time.Duration) {
 
 	blinkStop(ledGpio) // Clear blinking if it is already blinking...
+
 	go func(ledGpio string) {
 
-		var quit chan struct{}
+		pin := gpioreg.ByName(ledGpio) // LED pin
+
+		var quitLock *chan struct{}
 		switch ledGpio {
 		case LED1_PIN:
 			{
-				ledLock1 = make(chan struct{})
-				quit = ledLock1
+				ledLock1 = make(chan struct{}, 1)
+				quitLock = &ledLock1
+				wg1.Add(1)
+				defer wg1.Done()
 			}
 		case LED2_PIN:
 			{
-				ledLock2 = make(chan struct{})
-				quit = ledLock2
+				ledLock2 = make(chan struct{}, 1)
+				quitLock = &ledLock2
+				wg2.Add(1)
+				defer wg2.Done()
 			}
 		}
 
-		pin := gpioreg.ByName(ledGpio) // LED pin
-		pin.Out(gpio.Low)
-
 		for {
+
 			select {
-			case <-quit:
-				// done.Done()
+			case <-*quitLock:
 				return
 			default:
 				{
@@ -133,17 +144,64 @@ func blinkStart(ledGpio string, onTime time.Duration, offTime time.Duration) {
 /*-------------------------*/
 func blinkStop(ledGpio string) {
 
-	if ledGpio == LED1_PIN && ledLock1 != nil {
-		ledLock1 <- struct{}{}
-		close(ledLock1)
+	if ledGpio == LED1_PIN {
+
+		select {
+		case ledLock1 <- struct{}{}:
+			{
+				wg1.Wait()
+				close(ledLock1)
+				ledLock1 = nil
+			}
+		default:
+		}
+
 		return
 	}
 
-	if ledGpio == LED2_PIN && ledLock2 != nil {
-		ledLock2 <- struct{}{}
-		close(ledLock2)
+	if ledGpio == LED2_PIN {
+
+		select {
+		case ledLock2 <- struct{}{}:
+			{
+				wg2.Wait()
+				close(ledLock2)
+				ledLock2 = nil
+			}
+		default:
+		}
+
 		return
 	}
+
+}
+
+/*-------------------------*/
+
+func turnOnLED(ledGpio string) {
+
+	blinkStop(ledGpio)
+
+	pin := gpioreg.ByName(ledGpio) // LED pin
+
+	if err := pin.Out(gpio.High); err != nil {
+		log.Printf("[Err   ]: LED %s ", err.Error())
+	}
+
+}
+
+/*-------------------------*/
+
+func turnOFFLED(ledGpio string) {
+
+	blinkStop(ledGpio) // Clear blinking if it is already blinking...
+
+	pin := gpioreg.ByName(ledGpio) // LED pin
+
+	if err := pin.Out(gpio.Low); err != nil {
+		log.Printf("[Err   ]: LED %s ", err.Error())
+	}
+
 }
 
 /*-------------------------*/

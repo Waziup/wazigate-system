@@ -1,8 +1,10 @@
-FROM golang:alpine AS development
+FROM golang:alpine3.12 AS development
 
 COPY . /go/src/github.com/Waziup/wazigate-system/
 WORKDIR /go/src/github.com/Waziup/wazigate-system/
 ENV GOPATH=/go/
+
+RUN sed -i 's/https/http/' /etc/apk/repositories
 
 RUN apk add --no-cache \
     git \
@@ -44,10 +46,14 @@ ENTRYPOINT ["go", "test", "-v", "./..."]
 
 #----------------------------#
 
-FROM alpine:latest AS production
+# FROM alpine:latest AS production
+FROM alpine:3.14 AS production
 
 WORKDIR /app/
 COPY --from=development /build .
+
+RUN sed -i 's/https/http/' /etc/apk/repositories
+
 RUN apk --no-cache add \
     ca-certificates \
     tzdata \
