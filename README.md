@@ -15,13 +15,14 @@ The recent version of WaziGate has two status LEDs on board and `wazigate-system
 ## LED 1
 `LED 1` indicates the status of Internet connectivity and has two states:
 
-- **Internet connectivity is ok**: it blinks shortly and then stays off for two seconds like this: `.     .     .    .    .`
+- **Internet connectivity is ok**: it stays on: `_______________________________`
 - **No Internet**: it blinks fast like this: `.............`
 
 ## LED 2
 `LED 2` indicates the WiFi status and it has 3 states:
 
 - **Access Point Mode**: this LED blinks slowly once a second: `__  __  __  __  __`
-- **WiFi Client Mode Connected to a router**: it blinks shortly and then stays off for two seconds like this: `.     .     .    .    .`
+- **WiFi Client Mode Connected to a router**: it stays on: `_______________________________`
+- **Trying to Connect**: it blinks fast like this with large off: `. . . . . . . . . . . . .`
 - **Not Connected**: it blinks fast like this: `.............`
 
