@@ -1,3 +1,4 @@
+// This package handles all the APIs provided by `wazigate-system`
 package api
 
 import (
