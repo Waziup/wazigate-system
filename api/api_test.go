@@ -10,8 +10,7 @@ import (
 	"testing"
 )
 
-/*----------------*/
-
+// This function performs a unit test on the exposed APIs
 func TestRouting(t *testing.T) {
 
 	// Test table

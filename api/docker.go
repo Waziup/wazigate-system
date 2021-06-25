@@ -16,6 +16,7 @@ import (
 
 /*-------------------------*/
 
+// This function implements GET /docker
 func DockerStatus(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	cmd := "curl --unix-socket /var/run/docker.sock http://localhost/containers/json?all=true"
 	outJson, _ := execOnHost(cmd)
@@ -26,6 +27,7 @@ func DockerStatus(resp http.ResponseWriter, req *http.Request, params routing.Pa
 
 /*-------------------------*/
 
+// This function implements GET /docker/:cId
 func DockerStatusById(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	//TODO: it returns only the running containers ! Need to be fixed.
@@ -42,6 +44,8 @@ func DockerStatusById(resp http.ResponseWriter, req *http.Request, params routin
 
 /*-------------------------*/
 
+// This function implements POST /docker/:cId/:action
+// It receives typical actions that can be done to a container such as: start, stop, restart
 func DockerAction(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	cId := params.ByName("cId")
@@ -62,6 +66,9 @@ func DockerAction(resp http.ResponseWriter, req *http.Request, params routing.Pa
 
 /*-------------------------*/
 
+// This function implements GET /docker/:cId/logs
+// It retrieves the logs for a given container Id
+// It can be called this way to receive only the `N` recent logs: `/docker/:cId/logs/:tail`
 func DockerLogs(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	cId := params.ByName("cId")

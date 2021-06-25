@@ -17,6 +17,8 @@ const FAN_PIN = "GPIO5" // PIN #29
 
 /*-------------------------*/
 
+// This function is constantly (every 5 seconds) checking the CPU temperature
+// and if it goes beyond the threshold defined in the dahsboard, it triggers the fan
 func FanLoop() {
 
 	go func() {
@@ -44,9 +46,9 @@ func FanLoop() {
 				log.Printf("[Err   ]: %s ", err.Error())
 			}
 
-			if DEBUG_MODE {
-				// log.Printf( "[Info  ] CPU Temperature: [ %f ]", temp)
-			}
+			// if DEBUG_MODE {
+			// 	// log.Printf( "[Info  ] CPU Temperature: [ %f ]", temp)
+			// }
 
 			if !fanIsOn && temp > Config.FanTriggerTemp {
 				log.Printf("[Info  ] CPU Temperature: [ %f ]", temp)
@@ -61,7 +63,7 @@ func FanLoop() {
 
 			}
 
-			if fanIsOn && temp <= Config.FanTriggerTemp - 3 {
+			if fanIsOn && temp <= Config.FanTriggerTemp-3 {
 				log.Printf("[Info  ] CPU Temperature: [ %f ]", temp)
 				if err := pin.Out(gpio.Low); err != nil {
 

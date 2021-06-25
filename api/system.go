@@ -35,6 +35,7 @@ type Configuration struct {
 
 /*----------------*/
 
+// This function loads the configuration file into the Configuration object
 func loadConfigs() Configuration {
 
 	filename := GetRootPath() + "/conf.json"
@@ -60,6 +61,8 @@ func loadConfigs() Configuration {
 
 /*-------------------------*/
 
+// This function executes a shell command in the `wazigate-system` container
+// `withLogs` indicates that if the function should print logs of the command or not
 func exeCmdWithLogs(cmd string, withLogs bool) (string, error) {
 
 	if withLogs && DEBUG_MODE {
@@ -80,12 +83,15 @@ func exeCmdWithLogs(cmd string, withLogs bool) (string, error) {
 
 /*-------------------------*/
 
+// Execute a shell command with Logs in the `wazigate-system` container
 func exeCmd(cmd string) (string, error) {
 	return exeCmdWithLogs(cmd, true)
 }
 
 /*-------------------------*/
 
+// This function returns `true` if the host deamon is responsing
+// and so available to execute shell command on the host
 func hostReady() bool {
 
 	socketAddr := os.Getenv("WAZIGATE_HOST_ADDR")
@@ -100,6 +106,9 @@ func hostReady() bool {
 
 /*-------------------------*/
 
+// This function executes a shell command on the host
+// Use this function with care as all the commands are executed on the host machine
+// `withLogs` indicates that if the function should print logs of the command or not
 func execOnHostWithLogs(cmd string, withLogs bool) (string, error) {
 
 	if withLogs && DEBUG_MODE {
@@ -143,12 +152,14 @@ func execOnHostWithLogs(cmd string, withLogs bool) (string, error) {
 
 /*-------------------------*/
 
+// This function executes a shell command on the host and shows the logs
 func execOnHost(cmd string) (string, error) {
 	return execOnHostWithLogs(cmd, true)
 }
 
 /*-------------------------*/
 
+// This function retrieves the root path of where the binary is being executed
 func GetRootPath() string {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
@@ -159,6 +170,7 @@ func GetRootPath() string {
 
 /*-------------------------*/
 
+// Implements GET /conf
 func GetSystemConf(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	// bytes, err := json.MarshalIndent( Config, "", "  ")
@@ -180,6 +192,7 @@ func GetSystemConf(resp http.ResponseWriter, req *http.Request, params routing.P
 
 /*-------------------------*/
 
+// Implements POST|PUT /conf
 func SetSystemConf(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	decoder := json.NewDecoder(req.Body)
@@ -199,18 +212,21 @@ func SetSystemConf(resp http.ResponseWriter, req *http.Request, params routing.P
 
 /*-------------------------*/
 
+// Implements POST|PUT /shutdown
 func SystemShutdown(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	systemShutdown("shutdown")
 }
 
 /*-------------------------*/
 
+// Implements POST|PUT /reboot
 func SystemReboot(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	systemShutdown("reboot")
 }
 
 /*-------------------------*/
 
+// This function shutdown/reboot the gateway gracefully
 func systemShutdown(status string) {
 
 	cmd := "sudo docker stop $(sudo docker ps -a -q); "
@@ -240,6 +256,7 @@ func systemShutdown(status string) {
 
 /*-------------------------*/
 
+// This function shutdown the gateway gracefully, but quick without showing messages etc.
 func systemQuickShutdown() {
 
 	cmd := "sudo docker stop $(sudo docker ps -a -q); sudo shutdown -h now"
@@ -250,6 +267,7 @@ func systemQuickShutdown() {
 
 /*-------------------------*/
 
+// This function writes down the Configuration object into the config file
 func saveConfig(c Configuration) {
 
 	filename := GetRootPath() + "/conf.json"
@@ -268,58 +286,60 @@ func saveConfig(c Configuration) {
 
 /*-------------------------*/
 
-func SystemUpdate(resp http.ResponseWriter, req *http.Request, params routing.Params) {
+// // Deprecated function
+// func SystemUpdate(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
-	oledWrite("\nUpdating...")
+// 	oledWrite("\nUpdating...")
 
-	cmd := "sudo bash update.sh | sudo tee update.logs &" // Run it and unlock the thing
+// 	cmd := "sudo bash update.sh | sudo tee update.logs &" // Run it and unlock the thing
 
-	stdout, _ := execOnHost(cmd)
-	log.Printf("[Info   ] %s", stdout)
+// 	stdout, _ := execOnHost(cmd)
+// 	log.Printf("[Info   ] %s", stdout)
 
-	oledWrite("\nDONE.")
+// 	oledWrite("\nDONE.")
 
-	time.Sleep(1 * time.Second)
+// 	time.Sleep(1 * time.Second)
 
-	oledWrite("") // Clean the OLED
+// 	oledWrite("") // Clean the OLED
 
-	out := "Update Done."
+// 	out := "Update Done."
 
-	outJson, err := json.Marshal(out)
-	if err != nil {
-		log.Printf("[Err   ] %s", err.Error())
-	} /**/
+// 	outJson, err := json.Marshal(out)
+// 	if err != nil {
+// 		log.Printf("[Err   ] %s", err.Error())
+// 	} /**/
 
-	resp.Write([]byte(outJson))
-}
+// 	resp.Write([]byte(outJson))
+// }
 
-/*-------------------------*/
+// /*-------------------------*/
 
-func SystemUpdateStatus(resp http.ResponseWriter, req *http.Request, params routing.Params) {
+// func SystemUpdateStatus(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
-	cmd := "[ -f update.logs ] && cat update.logs"
-	stdout, err := execOnHost(cmd)
-	if err != nil {
-		stdout = ""
-		log.Printf("[Err   ] %s", err.Error())
-	}
+// 	cmd := "[ -f update.logs ] && cat update.logs"
+// 	stdout, err := execOnHost(cmd)
+// 	if err != nil {
+// 		stdout = ""
+// 		log.Printf("[Err   ] %s", err.Error())
+// 	}
 
-	outJson, err := json.Marshal(stdout)
-	if err != nil {
-		log.Printf("[Err   ] %s", err.Error())
-	}
-	resp.Write([]byte(outJson))
-}
+// 	outJson, err := json.Marshal(stdout)
+// 	if err != nil {
+// 		log.Printf("[Err   ] %s", err.Error())
+// 	}
+// 	resp.Write([]byte(outJson))
+// }
 
-/*-------------------------*/
+// /*-------------------------*/
 
+// This function provides the booting up information to be shown on the OLED
 func GetGWBootstatus(withLogs bool) (bool, string) {
 
 	//TODO: Old code. we need to use docker APIs directly
-	
+
 	cmd := "curl -s --unix-socket /var/run/docker.sock http://localhost/containers/json?all=true"
 	outJsonStr, err := execOnHostWithLogs(cmd, withLogs)
-	if err != nil{
+	if err != nil {
 		return false, ".."
 	}
 
@@ -357,18 +377,19 @@ func GetGWBootstatus(withLogs bool) (bool, string) {
 
 /*-------------------------*/
 
-func FirmwareVersion(resp http.ResponseWriter, req *http.Request, params routing.Params) {
+// // Deprecated function
+// func FirmwareVersion(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
-	out := os.Getenv("WAZIUP_VERSION")
+// 	out := os.Getenv("WAZIUP_VERSION")
 
-	outJson, err := json.Marshal(out)
-	if err != nil {
-		log.Printf("[Err   ] %s", err.Error())
-	}
+// 	outJson, err := json.Marshal(out)
+// 	if err != nil {
+// 		log.Printf("[Err   ] %s", err.Error())
+// 	}
 
-	resp.Write([]byte(outJson))
+// 	resp.Write([]byte(outJson))
 
-}
+// }
 
 /*-------------------------*/
 

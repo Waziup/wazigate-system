@@ -316,6 +316,7 @@ func startWiFiClient() error {
 
 /*-------------------------*/
 
+// This function determines if the gateway is in the Access Point Mode
 func apMode(withLogs bool) bool {
 
 	apAtive, _ := execOnHostWithLogs("systemctl is-active --quiet hostapd && echo 1", withLogs)
@@ -391,7 +392,7 @@ func CheckWlanConn() bool {
 
 /*-------------------------*/
 
-// ActivateAPMode needless to comment
+// Activate Access Point Mode
 func ActivateAPMode() {
 
 	oledWrite("\nActivating\n Access point mode...")
@@ -411,6 +412,7 @@ func ActivateAPMode() {
 
 /*-------------------------*/
 
+// implements POST /net/wifi/ap
 func SetNetAPMode(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	wifiOperation.Lock()
@@ -432,6 +434,7 @@ func SetNetAPMode(resp http.ResponseWriter, req *http.Request, params routing.Pa
 
 /*-------------------------*/
 
+// Implements GET /net/wifi/scanning
 func NetWiFiScan(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	cmd := "iw " + WIFI_DEVICE + " scan | awk -f scan.awk"
@@ -476,6 +479,7 @@ func NetWiFiScan(resp http.ResponseWriter, req *http.Request, params routing.Par
 
 /*-------------------------*/
 
+// Implements GET /net/wifi/ap
 func GetNetAP(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	var cmd string
@@ -519,6 +523,7 @@ func GetNetAP(resp http.ResponseWriter, req *http.Request, params routing.Params
 
 /*-------------------------*/
 
+// Implements POST|PUT /net/wifi/ap
 func SetNetAP(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	if err := req.ParseForm(); err != nil {
@@ -580,6 +585,7 @@ func SetNetAP(resp http.ResponseWriter, req *http.Request, params routing.Params
 
 /*-------------------------*/
 
+// Checks if Wziup cloud is accessible
 func CloudAccessible(withLogs bool) bool {
 
 	cmd := "timeout 3 curl -Is https://waziup.io | head -n 1 | awk '{print $2}'"
@@ -606,6 +612,8 @@ func InternetAccessible(resp http.ResponseWriter, req *http.Request, params rout
 
 /*-------------------------*/
 
+// This function retrieves the IP addesses of all connected network interfaces (e.g. Wlan, Ethernet)
+// It is usually used by the OLED controller
 func GetAllIPs() (string, string, string, string) {
 
 	cmd := "iw " + WIFI_DEVICE + " info | grep ssid | awk '{print $2\" \"$3\" \"$4\" \"$5\" \"$6}'"
