@@ -17,6 +17,7 @@ const LED2_PIN = "GPIO22" // PIN #15
 
 /*-------------------------*/
 
+// This function controlls the LED indicators
 func LEDsLoop() {
 
 	go func() {
@@ -89,6 +90,8 @@ func LEDsLoop() {
 var ledLock1, ledLock2 chan struct{}
 var wg1, wg2 sync.WaitGroup
 
+// This function receives a GPIO attached to a LED, an ON time duration and an OFF time duration
+// and blinks the LED accordingly
 func blinkStart(ledGpio string, onTime time.Duration, offTime time.Duration) {
 
 	blinkStop(ledGpio) // Clear blinking if it is already blinking...
@@ -142,6 +145,8 @@ func blinkStart(ledGpio string, onTime time.Duration, offTime time.Duration) {
 }
 
 /*-------------------------*/
+
+// This function receives a GPIO attached to a LED and stops the blinking if it is blinking
 func blinkStop(ledGpio string) {
 
 	if ledGpio == LED1_PIN {
@@ -178,6 +183,7 @@ func blinkStop(ledGpio string) {
 
 /*-------------------------*/
 
+// This function receives a GPIO attached to a LED and turns on the LED
 func turnOnLED(ledGpio string) {
 
 	blinkStop(ledGpio)
@@ -192,6 +198,7 @@ func turnOnLED(ledGpio string) {
 
 /*-------------------------*/
 
+// This function receives a GPIO attached to a LED and turns off the LED
 func turnOFFLED(ledGpio string) {
 
 	blinkStop(ledGpio) // Clear blinking if it is already blinking...
@@ -201,7 +208,6 @@ func turnOFFLED(ledGpio string) {
 	if err := pin.Out(gpio.Low); err != nil {
 		log.Printf("[Err   ]: LED %s ", err.Error())
 	}
-
 }
 
 /*-------------------------*/

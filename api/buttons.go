@@ -20,6 +20,7 @@ const SHUTDOWN_COUNTDOWN = 3 // for n seconds the button needs to be held down t
 
 /*-------------------------*/
 
+// This function handles the push buttons on WaziHAT
 func ButtonsLoop() {
 
 	if _, err := host.Init(); err != nil {

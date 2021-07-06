@@ -2,11 +2,11 @@ package api
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
 	"time"
-	"io/ioutil"
 
 	routing "github.com/julienschmidt/httprouter"
 )
@@ -73,7 +73,7 @@ func GetTimeZone(resp http.ResponseWriter, req *http.Request, params routing.Par
 		log.Printf("[Err   ] %s", err.Error())
 	}
 
-	resp.Write([]byte(outJSON))	
+	resp.Write([]byte(outJSON))
 }
 
 /*-------------------------*/
@@ -104,9 +104,10 @@ func GetTimeZones(resp http.ResponseWriter, req *http.Request, params routing.Pa
 
 /*-------------------------*/
 
+// Implements POST|PUT /timezone
 func SetTimeZone(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
-	var newTimezone string;
+	var newTimezone string
 	decoder := json.NewDecoder(req.Body)
 	err := decoder.Decode(&newTimezone)
 	if err != nil {
@@ -117,27 +118,27 @@ func SetTimeZone(resp http.ResponseWriter, req *http.Request, params routing.Par
 
 	Config.LocalTimezone = newTimezone
 
-	if( newTimezone == "auto") {
-		newTimezone, _ = getIPBasedTimezone();
+	if newTimezone == "auto" {
+		newTimezone, _ = getIPBasedTimezone()
 	}
 
-	err = setSystemTimezone( newTimezone)
+	err = setSystemTimezone(newTimezone)
 	if err != nil {
 		log.Printf("[Err   ] %s", err.Error())
 		http.Error(resp, "[ Error ]: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-	
+
 	saveConfig(Config)
-	
+
 	// resp.Write([]byte(`"OK"`))
 }
 
 /*-------------------------*/
 
-func setSystemTimezone( newTimezone string) error{
-	
-	cmd := "sudo timedatectl set-timezone \""+ newTimezone +"\"";
+func setSystemTimezone(newTimezone string) error {
+
+	cmd := "sudo timedatectl set-timezone \"" + newTimezone + "\""
 	_, err := execOnHost(cmd)
 
 	return err
@@ -154,15 +155,18 @@ func GetTimeZoneAuto(resp http.ResponseWriter, req *http.Request, params routing
 		log.Printf("[Err   ] %s", err.Error())
 	}
 
-	resp.Write([]byte(outJSON))	
+	resp.Write([]byte(outJSON))
 }
 
 /*-------------------------*/
 
+// This function attempts to retrieve the timezone of the gateway
+// based on its IP address.
+// It uses an online service: `http://ip-api.com/json/`
 func getIPBasedTimezone() (string, error) {
 
 	url := "http://ip-api.com/json/"
-	
+
 	resp, err := http.Get(url)
 	if err != nil {
 		return "", err
@@ -177,7 +181,7 @@ func getIPBasedTimezone() (string, error) {
 	/*---------*/
 
 	var GeoData struct {
-		Timezone     string    `json:"timezone"`
+		Timezone string `json:"timezone"`
 	}
 
 	err = json.Unmarshal(body, &GeoData)
@@ -192,7 +196,9 @@ func getIPBasedTimezone() (string, error) {
 
 /*-------------------------*/
 
-func TimezoneInit(){
+// This function initializes the timezone configuration
+// and it is called on startup to set the timezone according to the configs
+func TimezoneInit() {
 	go func() {
 		log.Println("[Info  ] Initiating timezone settings...")
 
@@ -209,14 +215,14 @@ func TimezoneInit(){
 		systemTimezone, _ := getSystemTimezone()
 		newTimezone := Config.LocalTimezone
 
-		if( newTimezone == "auto"){
+		if newTimezone == "auto" {
 			newTimezone, _ = getIPBasedTimezone()
 		}
 
 		// Let's set it if different
-		if( systemTimezone != newTimezone){ 
-			log.Println("[Info  ] Setting new timezone to [ "+ newTimezone + " ]")
-			err := setSystemTimezone( newTimezone);
+		if systemTimezone != newTimezone {
+			log.Println("[Info  ] Setting new timezone to [ " + newTimezone + " ]")
+			err := setSystemTimezone(newTimezone)
 			if err != nil {
 				log.Printf("[Err   ] %s", err.Error())
 			}

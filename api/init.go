@@ -1,3 +1,4 @@
+// This package handles all the APIs provided by `wazigate-system`
 package api
 
 import (
@@ -23,6 +24,9 @@ var Config Configuration // the main configuration object
 
 /*-------------------------*/
 
+// This function initializes all the monitoring and controlling units
+// including: LEDs controller, Timezone controller, Blackout controller,
+//  Network controller, Buttons controller, Oled controller, and Fan controller
 func init() {
 
 	// Remove date and time from logs
@@ -81,7 +85,7 @@ func HomeLink(resp http.ResponseWriter, req *http.Request, params routing.Params
 
 /*-------------------------*/
 
-// APIDocs API documents
+// APIDocs API documents (Swager)
 func APIDocs(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	// log.Println( req.URL.Path)
 
