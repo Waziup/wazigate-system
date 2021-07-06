@@ -14,11 +14,21 @@ RUN apk add --no-cache \
     gcc \
     musl-dev \
     zip \
-    && mkdir /build/ \
+    && mkdir -p /build/ \
     && cp scan.awk /build \
     && cp -r docs /build \
-    && cp -r ui /build \
+    # && cp -r ui /build \
     && zip /build/index.zip docker-compose.yml package.json resolv.conf
+
+
+# Copy the UI Files
+COPY ui/node_modules/react/umd /build/ui/node_modules/react/umd
+COPY ui/node_modules/react-dom/umd /build/ui/node_modules/react-dom/umd
+COPY ui/index.html \
+    ui/favicon.ico \
+    /build/ui/
+COPY ui/dist /build/ui/dist
+COPY ui/icons /build/ui/icons
 
 
 # WORKDIR /go/src/wazigate-system/
