@@ -1,22 +1,22 @@
-# wazigate-system
+# Wazigate-System
 
 The list of APIs can be found here: https://waziup.github.io/wazigate-system/
 
 A useful link: https://github.com/Waziup/WaziGate/blob/master/docs/System.md
 Source code documentation: https://pkg.go.dev/github.com/Waziup/wazigate-system
 
-# System Architecture
+## System Architecture
 
 ![System Architecture](assets/arch.png "System Architecture")
 
 Wazigate system composed of two main modules: _APIs_ and _Controllers_.
 
-## APIs
+### APIs
 
 `/api/routers.go` defines the API routes and the functions to be called for each of them.
 For a better organization we group the related functions in relevant files which are listed below:
 
-### docker
+#### docker
 
 This component takes care of all docker related APIs. Listed below:
 
@@ -30,11 +30,11 @@ This component takes care of all docker related APIs. Listed below:
 To serve these APIs we are required to communicate the docker service running on the host.
 Therefore, we have to either call docker APIs on its socket mapped to a file on the guest (wazigate-system) container or run docker shell commands on the host directly. In the current version of the code we call `execOnHost(cmd)` function which executes a given command on the host and returns the result.
 
-### time
+#### time
 
 ---
 
-# Status LED Indicator
+## Status LED Indicator
 
 The recent version of WaziGate has two status LEDs on board and `wazigate-system` indicates the connectivity status via those LEDs.
 
