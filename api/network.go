@@ -48,6 +48,7 @@ func GetNetInfo(resp http.ResponseWriter, req *http.Request, params routing.Para
 /*-------------------------*/
 
 // GetGWID implements GET /gwid
+// This is Deprecated, now we call an API on the `wazigate-edge` to get the gateway Id
 func GetGWID(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	interfs, err := net.Interfaces()

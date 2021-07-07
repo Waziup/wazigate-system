@@ -57,7 +57,7 @@ func setupRouter() *routing.Router {
 	router.PUT("/conf", SetSystemConf)
 
 	router.GET("/net", GetNetInfo)
-	router.GET("/gwid", GetGWID)
+	router.GET("/gwid", GetGWID) // Deprecated!
 
 	router.GET("/net/wifi", GetNetWiFi)
 	router.POST("/net/wifi", SetNetWiFi)
