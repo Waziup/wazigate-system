@@ -1,6 +1,6 @@
 module github.com/Waziup/wazigate-system
 
-go 1.15
+go 1.16
 
 require (
 	github.com/julienschmidt/httprouter v1.3.0

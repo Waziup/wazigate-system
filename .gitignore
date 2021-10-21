@@ -1,9 +1,12 @@
+# UI Dist
+ui/dist
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
 
-# C extensions
+# C extensionsy
 *.so
 
 # Distribution / packaging
