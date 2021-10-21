@@ -1,35 +1,25 @@
 package api
 
 import (
-	// "fmt"
 	"log"
 	"net"
 	"net/http"
 	"os"
 
-	// "encoding/json"
-	// "strings"
-	// "strconv"
-
-	// "os"
-	// "os/exec"
-	// "path/filepath"
-	// "io/ioutil"
-
-	// "github.com/Waziup/wazigate-system/api"
 	routing "github.com/julienschmidt/httprouter"
 )
 
-// Please do not change this line
-const sockAddr = "/root/app/proxy.sock"
+// This is the unix socket file that Waziapps serve on (UIs and APIs).
+// The waziapp directory is a mapped volume created by the Wazigate when running this app in a Docker container.
+const waziappProxy = "/var/lib/waziapp/proxy.sock"
 
 func setupRouter() *routing.Router {
 
 	var router = routing.New()
 
 	router.GET("/", HomeLink)
+	router.GET("/package.json", packageJSON)
 
-	// router.GET( "/ui/", UI)
 	router.GET("/ui/*file_path", UI)
 
 	router.GET("/docs/", APIDocs)
@@ -75,12 +65,6 @@ func setupRouter() *routing.Router {
 	router.POST("/net/wifi/mode/ap", SetNetAPMode)
 	router.PUT("/net/wifi/mode/ap", SetNetAPMode)
 
-	// router.GET("/update", SystemUpdate)
-	// router.POST("/update", SystemUpdate)
-	// router.PUT("/update", SystemUpdate)
-	// router.GET("/update/status", SystemUpdateStatus)
-	// router.GET("/version", FirmwareVersion)
-
 	router.POST("/shutdown", SystemShutdown)
 	router.PUT("/shutdown", SystemShutdown)
 	router.POST("/reboot", SystemReboot)
@@ -92,41 +76,32 @@ func setupRouter() *routing.Router {
 	return router
 }
 
-/*-------------------------*/
-
-// ListenAndServeHTTP serves the APIs and the ui
+// ListenAndServeHTTP serves the APIs and the UI.
 func ListenAndServeHTTP() {
 
-	log.Printf("Initializing...")
+	log.Printf("Initializing ...")
 
 	router := setupRouter()
-
-	if err := os.RemoveAll(sockAddr); err != nil {
-		log.Fatal(err)
-	}
 
 	server := http.Server{
 		Handler: router,
 	}
-	defer server.Close()
 
-	l, e := net.Listen("unix", sockAddr)
-	if e != nil {
-		log.Fatal("listen error:", e)
+	cleanupSocket()
+	l, err := net.Listen("unix", waziappProxy)
+	if err != nil {
+		log.Fatal("Listen error:", err)
 	}
-	log.Printf("Serving... on socket: [%v]", sockAddr)
-	server.Serve(l)
+	defer cleanupSocket()
 
-	// addr := os.Getenv( "WAZIGATE_SYSTEM_ADDR")
-	// if addr == "" {
-	// 	addr = ":5000"
-	// }
-
-	// if( DEBUG_MODE){
-	// 	log.Printf( "[Info  ] Serving on %s", addr)
-	// }
-
-	// log.Fatal( http.ListenAndServe( addr, router))
+	log.Printf("Listening on %v ...", waziappProxy)
+	if err := server.Serve(l); err != http.ErrServerClosed {
+		log.Fatal("Server error:", err)
+	}
 }
 
-/*-------------------------*/
+func cleanupSocket() {
+	if err := os.Remove(waziappProxy); err != nil && !os.IsNotExist(err) {
+		log.Fatalln("Can not remove Waziapp proxy.sock:", err)
+	}
+}

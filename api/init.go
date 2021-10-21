@@ -2,14 +2,10 @@
 package api
 
 import (
-	// "fmt"
 	"net/http"
 	"os"
 
-	// "io/ioutil"
-	// "path/filepath"
 	"log"
-	// "encoding/json"
 
 	routing "github.com/julienschmidt/httprouter"
 )
@@ -79,8 +75,14 @@ func init() {
 
 // HomeLink implements GET / Just a test msg to see if it works
 func HomeLink(resp http.ResponseWriter, req *http.Request, params routing.Params) {
-
 	resp.Write([]byte("Salam Goloooo, It works!"))
+}
+
+var PackageJSON []byte // set by main.go
+
+func packageJSON(resp http.ResponseWriter, req *http.Request, params routing.Params) {
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Write(PackageJSON)
 }
 
 /*-------------------------*/
@@ -101,10 +103,6 @@ func APIDocs(resp http.ResponseWriter, req *http.Request, params routing.Params)
 
 // UI implements HTTP /ui
 func UI(resp http.ResponseWriter, req *http.Request, params routing.Params) {
-	// log.Println(req.URL.Path)
-	// log.Println(params.ByName("file_path"))
-
-	// path, _ := filepath.Abs("./")
 
 	rootPath := os.Getenv("EXEC_PATH")
 	if rootPath == "" {
@@ -112,7 +110,6 @@ func UI(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	}
 
 	http.FileServer(http.Dir(rootPath)).ServeHTTP(resp, req)
-	// http.FileServer(http.Dir("./")).ServeHTTP(resp, req)
 }
 
 /*-------------------------*/
