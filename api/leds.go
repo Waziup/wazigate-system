@@ -7,24 +7,19 @@ import (
 
 	"periph.io/x/periph/conn/gpio"
 	"periph.io/x/periph/conn/gpio/gpioreg"
-	"periph.io/x/periph/host"
 )
 
-/*-------------------------*/
+//
 
 const LED1_PIN = "GPIO27" // PIN #13
 const LED2_PIN = "GPIO22" // PIN #15
 
-/*-------------------------*/
+//
 
 // This function controlls the LED indicators
-func LEDsLoop() {
+func RunLEDManager() error {
 
 	go func() {
-		if _, err := host.Init(); err != nil {
-			log.Printf("[Err   ]: %s ", err.Error())
-		}
-
 		blinkStart(LED1_PIN, 500, 500)
 		time.Sleep(500 * time.Millisecond)
 		blinkStart(LED2_PIN, 500, 500)
@@ -37,37 +32,36 @@ func LEDsLoop() {
 			time.Sleep(5 * time.Second)
 		}
 
-		/*----------*/
+		//
 
 		for {
 
-			/*----------*/
+			//
 
-			netInfo, err := getNetWiFi()
-			if err != nil {
-				log.Printf("[ERR  ] Get wifi info: %v", err)
-				blinkStart(LED2_PIN, 50, 100)
+			// netInfo, err := getNetWiFi()
+			// if err != nil {
+			// 	log.Printf("[ERR  ] Get wifi info: %v", err)
+			// 	blinkStart(LED2_PIN, 50, 100)
 
-			} else {
+			// } else {
 
-				if netInfo["ap_mode"].(bool) {
+			// 	if netInfo["ap_mode"].(bool) {
 
-					blinkStart(LED2_PIN, 1000, 1000)
+			// 		blinkStart(LED2_PIN, 1000, 1000)
 
-				} else if netInfo["ssid"].(string) != "" && netInfo["state"].(string) == "COMPLETED" {
-					turnOnLED(LED2_PIN)
-					// blinkStart(LED2_PIN, 100, 2000)
-				} else if netInfo["state"].(string) != "" {
-					// Connecting...
-					blinkStart(LED2_PIN, 100, 500)
-				} else {
-					// Something went wrong, Not connected
-					blinkStart(LED2_PIN, 100, 100)
-				}
+			// 	} else if netInfo["ssid"].(string) != "" && netInfo["state"].(string) == "COMPLETED" {
+			// 		turnOnLED(LED2_PIN)
+			// 		// blinkStart(LED2_PIN, 100, 2000)
+			// 	} else if netInfo["state"].(string) != "" {
+			// 		// Connecting...
+			// 		blinkStart(LED2_PIN, 100, 500)
+			// 	} else {
+			// 		// Something went wrong, Not connected
+			// 		blinkStart(LED2_PIN, 100, 100)
+			// 	}
+			// }
 
-			}
-
-			/*----------*/
+			//
 
 			if CloudAccessible(false /*Without Logs*/) {
 				turnOnLED(LED1_PIN)
@@ -75,33 +69,34 @@ func LEDsLoop() {
 				blinkStart(LED1_PIN, 100, 100)
 			}
 
-			/*----------*/
+			//
 
 			time.Sleep(3 * time.Second)
 		}
 
 	}()
 
-	log.Printf("[Info  ] LED manager initialized.")
+	log.Printf("[     ] LED manager initialized.")
+	return nil
 }
 
-/*-------------------------*/
+//
 
 var ledLock1, ledLock2 chan struct{}
 var wg1, wg2 sync.WaitGroup
 
 // This function receives a GPIO attached to a LED, an ON time duration and an OFF time duration
 // and blinks the LED accordingly
-func blinkStart(ledGpio string, onTime time.Duration, offTime time.Duration) {
+func blinkStart(ledPin string, onTime time.Duration, offTime time.Duration) {
 
-	blinkStop(ledGpio) // Clear blinking if it is already blinking...
+	blinkStop(ledPin) // Clear blinking if it is already blinking...
 
-	go func(ledGpio string) {
+	go func() {
 
-		pin := gpioreg.ByName(ledGpio) // LED pin
+		pin := gpioreg.ByName(ledPin) // LED pin
 
 		var quitLock *chan struct{}
-		switch ledGpio {
+		switch ledPin {
 		case LED1_PIN:
 			{
 				ledLock1 = make(chan struct{}, 1)
@@ -127,13 +122,13 @@ func blinkStart(ledGpio string, onTime time.Duration, offTime time.Duration) {
 				{
 
 					if err := pin.Out(gpio.High); err != nil {
-						log.Printf("[Err   ]: LED %s ", err.Error())
+						log.Printf("[ERR  ]: LED %s ", err.Error())
 					}
 
 					time.Sleep(onTime * time.Millisecond)
 
 					if err := pin.Out(gpio.Low); err != nil {
-						log.Printf("[Err   ]: LED %s ", err.Error())
+						log.Printf("[ERR  ]: LED %s ", err.Error())
 					}
 
 					time.Sleep(offTime * time.Millisecond)
@@ -141,10 +136,10 @@ func blinkStart(ledGpio string, onTime time.Duration, offTime time.Duration) {
 			}
 
 		}
-	}(ledGpio)
+	}()
 }
 
-/*-------------------------*/
+//
 
 // This function receives a GPIO attached to a LED and stops the blinking if it is blinking
 func blinkStop(ledGpio string) {
@@ -181,7 +176,7 @@ func blinkStop(ledGpio string) {
 
 }
 
-/*-------------------------*/
+//
 
 // This function receives a GPIO attached to a LED and turns on the LED
 func turnOnLED(ledGpio string) {
@@ -191,23 +186,23 @@ func turnOnLED(ledGpio string) {
 	pin := gpioreg.ByName(ledGpio) // LED pin
 
 	if err := pin.Out(gpio.High); err != nil {
-		log.Printf("[Err   ]: LED %s ", err.Error())
+		log.Printf("[ERR  ]: LED %s ", err.Error())
 	}
 
 }
 
-/*-------------------------*/
+//
 
-// This function receives a GPIO attached to a LED and turns off the LED
-func turnOFFLED(ledGpio string) {
+// // This function receives a GPIO attached to a LED and turns off the LED
+// func turnOFFLED(ledGpio string) {
 
-	blinkStop(ledGpio) // Clear blinking if it is already blinking...
+// 	blinkStop(ledGpio) // Clear blinking if it is already blinking...
 
-	pin := gpioreg.ByName(ledGpio) // LED pin
+// 	pin := gpioreg.ByName(ledGpio) // LED pin
 
-	if err := pin.Out(gpio.Low); err != nil {
-		log.Printf("[Err   ]: LED %s ", err.Error())
-	}
-}
+// 	if err := pin.Out(gpio.Low); err != nil {
+// 		log.Printf("[ERR  ]: LED %s ", err.Error())
+// 	}
+// }
 
-/*-------------------------*/
+//

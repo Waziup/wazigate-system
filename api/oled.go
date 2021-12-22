@@ -1,18 +1,12 @@
 package api
 
 import (
-	// "fmt"
-	// "encoding/json"
 	"log"
 	"strings"
 	"time"
 
-	// "strconv"
 	"net/http"
 
-	// "os"
-	// "os/exec"
-	// "path/filepath"
 	"io/ioutil"
 
 	routing "github.com/julienschmidt/httprouter"
@@ -22,14 +16,13 @@ import (
 	"periph.io/x/periph/conn/i2c/i2creg"
 	"periph.io/x/periph/devices/ssd1306"
 	"periph.io/x/periph/devices/ssd1306/image1bit"
-	"periph.io/x/periph/host"
 
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/basicfont"
 	"golang.org/x/image/math/fixed"
 )
 
-/*-------------------------*/
+//
 
 var OledBuffer string     // A Shared buffer for showing message on the OLED
 var OledCurrentMsg string // The message which is showing on the OLED at the moment
@@ -40,52 +33,36 @@ var oledDoesNotExist bool // We check if the OLED does not exist, we just ignore
 // var oledHaltTimeout		int			// Off timeout value in seconds
 var oledHalted bool // If OLED is off (we turn it off after some time of not use and come back after a push button)
 
-/*-------------------------*/
+//
 
 // This function initializes the OLED
-func oledInit() {
+func oledInit() error {
 
 	oledDoesNotExist = false
 	oledHalted = false
 
-	//Handle halt timeout
-	// oledHaltTimeout = 5 * 60 //default value seconds
-	// oledHaltTimeoutTxt := os.Getenv( "OLED_TIMEOUT")
-	// if oledHaltTimeoutTxt == "" {
-	// 	oledHaltTimeoutInt, err := strconv.Atoi( oledHaltTimeoutTxt)
-	// 	if( err == nil && oledHaltTimeoutInt > 0){
-	// 		oledHaltTimeout = oledHaltTimeoutInt
-	// // 	}
-	// }
-
-	// Make sure periph is initialized.
-	if _, err := host.Init(); err != nil {
-		log.Printf("[Err   ]: %s ", err.Error())
-		oledDoesNotExist = true
-	}
-
 	// Use i2creg I²C bus registry to find the first available I²C bus.
 	b, err := i2creg.Open("")
 	if err != nil {
-		log.Printf("[Err   ]: %s ", err.Error())
 		oledDoesNotExist = true
+		return err
 	}
-	// defer b.Close()
 
 	oledDev, err = ssd1306.NewI2C(b, &ssd1306.DefaultOpts)
 	if err != nil {
-		log.Printf("[Err   ] initialize ssd1306: %s ", err.Error())
 		oledDoesNotExist = true
+		return err
 	}
+	return nil
 }
 
-/*-------------------------*/
+//
 
 // This function make the OLED black
 func oledHalt() {
 
 	if oledDev == nil {
-		log.Printf("[Err   ] OLED halt: No OLED Found!")
+		log.Printf("[ERR  ] OLED halt: No OLED Found!")
 		return
 	}
 	oledShow("\n\n   Screen OFF", false)
@@ -93,11 +70,11 @@ func oledHalt() {
 	oledHalted = true
 	err := oledDev.Halt()
 	if err != nil {
-		log.Printf("[Err   ] OLED halt: %s ", err.Error())
+		log.Printf("[ERR  ] OLED halt: %s ", err.Error())
 	}
 }
 
-/*-------------------------*/
+//
 
 // This function shows a given message on the OLED
 func oledShow(msg string, withLogs bool) {
@@ -144,7 +121,7 @@ func oledShow(msg string, withLogs bool) {
 	}
 
 	if err := oledDev.Draw(oledDev.Bounds(), img, image.Point{}); err != nil {
-		log.Printf("[Err   ] OLED [ %s ] command. \n\tError: [ %s ]", msg, err.Error())
+		log.Printf("[ERR  ] OLED [ %s ] command. \n\tError: [ %s ]", msg, err.Error())
 
 		//Wait for a while and try again after failure
 		time.Sleep(2 * time.Second)
@@ -153,18 +130,22 @@ func oledShow(msg string, withLogs bool) {
 
 }
 
-/*-------------------------*/
+//
 
 // OLED Controller
 // This function gets the gateway status periodically and updates the OLED
-func OledLoop() {
+func RunOLEDManager() error {
+
+	if err := oledInit(); err != nil {
+		log.Printf("[WARN ] OLED init failed: %v", err)
+	}
+
+	if oledDoesNotExist {
+		log.Println("[     ] The OLED could not be initialized, so the OLED functions will not be available.")
+		return nil
+	}
 
 	go func() {
-		oledInit()
-
-		if oledDoesNotExist {
-			return
-		}
 
 		OledBuffer = ""     // Clear the buffer
 		autoClearTimer := 0 // Automatically clear a message if it is not removed after let's say 13 seconds
@@ -178,7 +159,7 @@ func OledLoop() {
 
 		for {
 
-			/*---------*/
+			//
 
 			if autoClearTimer > 12 {
 				OledBuffer = ""
@@ -206,7 +187,7 @@ func OledLoop() {
 
 			oledHaltCounter++
 
-			/*---------*/
+			//
 
 			heartTxt := "  "
 			heartbeat = !heartbeat
@@ -221,24 +202,24 @@ func OledLoop() {
 
 			OledMsg := heartTxt + netTxt
 
-			/*---------*/
+			//
 
-			eip, wip, aip, ssid := GetAllIPs()
+			// eip, wip, aip, ssid := GetAllIPs()
 
-			if len(eip) > 0 {
-				// msg.append( "Ethernet: "+ eip);
-				OledMsg += "\nEth: " + eip
-			}
+			// if len(eip) > 0 {
+			// 	// msg.append( "Ethernet: "+ eip);
+			// 	OledMsg += "\nEth: " + eip
+			// }
 
-			if len(wip) > 0 {
-				OledMsg += "\n\nWiFi: (" + ssid + ")\n " + wip
-			}
+			// if len(wip) > 0 {
+			// 	OledMsg += "\n\nWiFi: (" + ssid + ")\n " + wip
+			// }
 
-			if len(aip) > 0 {
-				OledMsg += "\n\nAP: (" + ssid + ")\n " + aip
-			}
+			// if len(aip) > 0 {
+			// 	OledMsg += "\n\nAP: (" + ssid + ")\n " + aip
+			// }
 
-			/*---------*/
+			//
 
 			oledShow(OledMsg, false)
 			time.Sleep(1 * time.Second)
@@ -259,25 +240,26 @@ func OledLoop() {
 
 	}()
 
-	log.Printf("[Info  ] OLED manager initialized.")
+	log.Printf("[     ] OLED manager initialized.")
+	return nil
 
 }
 
-/*-------------------------*/
+//
 
 // Simply write the incoming message into the OLED buffer to be shown
 func oledWrite(msg string) {
 	OledBuffer = msg
 }
 
-/*-------------------------*/
+//
 
 // This function implements POST|PUT /oled API
 func OledWriteMessage(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	msg, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		log.Printf("[Err   ] OLED [ %s ] command. \n\tError: [ %s ]", msg, err.Error())
+		log.Printf("[ERR  ] OLED [ %s ] command. \n\tError: [ %s ]", msg, err.Error())
 		http.Error(resp, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -285,4 +267,4 @@ func OledWriteMessage(resp http.ResponseWriter, req *http.Request, params routin
 	oledWrite(string(msg))
 }
 
-/*-------------------------*/
+//

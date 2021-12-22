@@ -14,7 +14,7 @@ import (
 	routing "github.com/julienschmidt/httprouter"
 )
 
-/*-------------------------*/
+//
 
 // This function implements GET /docker
 func DockerStatus(resp http.ResponseWriter, req *http.Request, params routing.Params) {
@@ -25,7 +25,7 @@ func DockerStatus(resp http.ResponseWriter, req *http.Request, params routing.Pa
 	//Ref: https://docs.docker.com/engine/api/v1.26/
 }
 
-/*-------------------------*/
+//
 
 // This function implements GET /docker/:cId
 func DockerStatusById(resp http.ResponseWriter, req *http.Request, params routing.Params) {
@@ -42,7 +42,7 @@ func DockerStatusById(resp http.ResponseWriter, req *http.Request, params routin
 	//Ref: https://docs.docker.com/engine/api/v1.26/
 }
 
-/*-------------------------*/
+//
 
 // This function implements POST /docker/:cId/:action
 // It receives typical actions that can be done to a container such as: start, stop, restart
@@ -58,13 +58,13 @@ func DockerAction(resp http.ResponseWriter, req *http.Request, params routing.Pa
 
 	outJson, err := json.Marshal(out)
 	if err != nil {
-		log.Printf("[Err   ] %s", err.Error())
+		log.Printf("[ERR  ] %s", err.Error())
 	}
 
 	resp.Write([]byte(outJson))
 }
 
-/*-------------------------*/
+//
 
 // This function implements GET /docker/:cId/logs
 // It retrieves the logs for a given container Id
@@ -82,10 +82,10 @@ func DockerLogs(resp http.ResponseWriter, req *http.Request, params routing.Para
 
 	/*outJson, err := json.Marshal( out)
 	if( err != nil) {
-		log.Printf( "[Err   ] %s", err.Error())
+		log.Printf( "[ERR  ] %s", err.Error())
 	}/**/
 
 	resp.Write([]byte(out))
 }
 
-/*-------------------------*/
+//

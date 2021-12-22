@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"time"
 
 	routing "github.com/julienschmidt/httprouter"
 )
@@ -47,7 +48,6 @@ func setupRouter() *routing.Router {
 	router.PUT("/conf", SetSystemConf)
 
 	router.GET("/net", GetNetInfo)
-	router.GET("/gwid", GetGWID) // Deprecated!
 
 	router.GET("/net/wifi", GetNetWiFi)
 	router.POST("/net/wifi", SetNetWiFi)
@@ -55,10 +55,12 @@ func setupRouter() *routing.Router {
 
 	router.GET("/internet", InternetAccessible)
 
-	router.GET("/net/wifi/scanning", NetWiFiScan)
+	// router.GET("/net/wifi/scanning", NetWiFiScan)
 	router.GET("/net/wifi/scan", NetWiFiScan)
 
-	router.GET("/net/wifi/ap", GetNetAP)
+	router.GET("/net/conns", NetConns)
+
+	// router.GET("/net/wifi/ap", GetNetAP)
 	router.POST("/net/wifi/ap", SetNetAP)
 	router.PUT("/net/wifi/ap", SetNetAP)
 
@@ -79,7 +81,14 @@ func setupRouter() *routing.Router {
 // ListenAndServeHTTP serves the APIs and the UI.
 func ListenAndServeHTTP() {
 
-	log.Printf("Initializing ...")
+	// Wait for the host to come up before sending any command
+	for {
+		if hostReady() {
+			break
+		}
+		log.Println("[     ] Waiting for host to become ready ...")
+		time.Sleep(5 * time.Second)
+	}
 
 	router := setupRouter()
 
@@ -94,7 +103,7 @@ func ListenAndServeHTTP() {
 	}
 	defer cleanupSocket()
 
-	log.Printf("Listening on %v ...", waziappProxy)
+	log.Printf("[     ] Listening on 'unix:%s' ...", waziappProxy)
 	if err := server.Serve(l); err != http.ErrServerClosed {
 		log.Fatal("Server error:", err)
 	}
