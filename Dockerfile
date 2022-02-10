@@ -1,10 +1,14 @@
 FROM waziup/node-sass:14 AS ui
 
-COPY ui/. /app
+ARG MODE=prod
 
 WORKDIR /app/
 
-RUN npm i && npm run build
+COPY ui/package.json /app/
+RUN npm i
+
+COPY ui/. /app
+RUN npm run build --env $MODE
 
 ################################################################################
 
@@ -16,10 +20,12 @@ ENV GO111MODULE=on
 
 RUN apk add --no-cache ca-certificates tzdata git
 
-COPY . /app
-
 WORKDIR /app/
 
+COPY go.mod go.sum /app/
+RUN go mod download
+
+COPY . /app
 RUN go build -ldflags "-s -w" -o wazigate-system .
 
 ################################################################################
@@ -33,7 +39,7 @@ WORKDIR /app/
 
 COPY --from=ui /app/node_modules/react/umd ui/node_modules/react/umd
 COPY --from=ui /app/node_modules/react-dom/umd ui/node_modules/react-dom/umd
-COPY --from=ui /app/index.html /app/favicon.ico ui/
+COPY --from=ui /app/index.html /app/dev.html /app/favicon.ico ui/
 COPY --from=ui /app/dist ui/dist
 COPY --from=ui /app/icons ui/icons
 
