@@ -22,9 +22,9 @@ class Notifications extends React.Component<Props, State> {
 		(window as any)["Notify"] = this.add;
 	}
 
-	/*---------------*/
+	//
 
-	add(msg: string) {
+	add(msg: unknown) {
 		const { notifications, count } = this.state;
 
 		const id = notifications.size + 1;
@@ -34,7 +34,7 @@ class Notifications extends React.Component<Props, State> {
 			count: newCount,
 			notifications: [
 				{
-					message: msg,
+					message: `${msg}`,
 					key: newCount,
 					action: "Dismiss",
 					dismissAfter: 4000

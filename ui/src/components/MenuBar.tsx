@@ -7,7 +7,7 @@ import InternetIndicator from "./InternetIndicator";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { MDBIcon } from "mdbreact";
 
-/*-----------*/
+//
 
 export interface MenuProps {}
 export interface MenuState {}
@@ -35,7 +35,7 @@ class MenuBar extends React.Component<MenuProps, MenuState> {
             variant="pills"
             // onSelect={(href: any) => this.handleClick(href)}
           >
-            <Nav.Link href="#overview">
+            <Nav.Link href="#/overview">
               <MDBIcon icon="heartbeat" /> Overview
             </Nav.Link>
             <NavDropdown
@@ -43,13 +43,13 @@ class MenuBar extends React.Component<MenuProps, MenuState> {
               // href="#configs"
               id="basic-nav-dropdown"
             >
-              <NavDropdown.Item href="#config">
+              <NavDropdown.Item href="#/config">
                 <MDBIcon icon="cog" /> Configuration
               </NavDropdown.Item>
               {/* <NavDropdown.Item href="#advance_config">
 											advance_config
 										</NavDropdown.Item> */}
-              <NavDropdown.Item href="#internet">
+              <NavDropdown.Item href="#/internet">
                 <MDBIcon icon="wifi" /> Internet
               </NavDropdown.Item>
               {/* <NavDropdown.Divider />
@@ -58,13 +58,13 @@ class MenuBar extends React.Component<MenuProps, MenuState> {
 							</NavDropdown.Item> */}
             </NavDropdown>
             <NavDropdown title="Maintenance" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#resources">
+              <NavDropdown.Item href="#/resources">
                 <MDBIcon fab icon="whmcs" /> Resources
               </NavDropdown.Item>
-              <NavDropdown.Item href="#containers">
+              <NavDropdown.Item href="#/containers">
                 <MDBIcon icon="docker" brand /> Containers
               </NavDropdown.Item>
-              <NavDropdown.Item href="#logs">
+              <NavDropdown.Item href="#/logs">
                 <MDBIcon icon="file-alt" /> Logs
               </NavDropdown.Item>
               {/* <NavDropdown.Divider />

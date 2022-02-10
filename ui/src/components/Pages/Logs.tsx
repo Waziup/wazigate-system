@@ -84,7 +84,7 @@ class Logs extends React.Component<Props, State> {
     var tabHeads = this.state.cInfo
       ? this.state.cInfo.map((res, index) => (
           <MDBNavItem key={index}>
-            <MDBNavLink
+            {/* <MDBNavLink
               to="#"
               link
               active={this.state.activeItem == index}
@@ -93,9 +93,8 @@ class Logs extends React.Component<Props, State> {
               // role="tab"
               // className="bg-info"
             >
-              {/* <MDBIcon fab icon="sketch" />  */}
               {res.Names.slice(0)[0].substr(1)}
-            </MDBNavLink>
+            </MDBNavLink> */}
           </MDBNavItem>
         ))
       : "";

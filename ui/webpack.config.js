@@ -4,6 +4,7 @@ const fs = require("fs");
 const childProcess = require("child_process");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { merge } = require("webpack-merge");
+const webpack = require("webpack");
 
 var branch = "unknown";
 try {
@@ -29,7 +30,15 @@ export const branch = "${branch}";
 const common = {
 
 	resolve: {
-		extensions: [".ts", ".tsx", ".scss", ".css", ".js"]
+		extensions: [".ts", ".tsx", ".scss", ".css", ".js"],
+		fallback: {
+			buffer: require.resolve('buffer/'),
+			url: require.resolve('url'),
+			util: require.resolve("util")
+		},
+		alias: {
+			process: "process/browser"
+		},
 	},
 
 	entry: [`./src/index.tsx`],
@@ -37,6 +46,10 @@ const common = {
 	plugins: [
 		new MiniCssExtractPlugin({
 			filename: `index.css`,
+		}),
+		new webpack.ProvidePlugin({
+			Buffer: ['buffer', 'Buffer'],
+			process: 'process/browser',
 		}),
 	],
 
@@ -47,27 +60,14 @@ const common = {
 				exclude: /node_modules/,
 				use: "ts-loader"
 			},
-			// {
-			// 	test: /\.s[ac]ss$/i,
-			// 	use: ["style-loader", "css-loader", "sass-loader"],
-			// 	exclude: /node_modules/
-			// },
 			{
 				test: /\.(s?)css$/,
 				use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
 				// exclude: /node_modules/
 			},
 			{
-				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-				loader: "url-loader",
-				options: {
-					limit:10000,
-					mimetype: "application/font-woff"
-				}
-			},
-			{
-				test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-				loader: "file-loader"
+				test: /\.(otf|ttf|woff|woff2|eot)$/,
+				type: 'asset/resource',
 			},
 			{
 				test: /\.(png|svg|jpg|gif)$/,
@@ -113,11 +113,11 @@ const common = {
 };
 
 module.exports = (env) => {
-
-	if (env === "dev") {
+	console.log(env);
+	if (env.dev) {
 		return merge(common, {
 			mode: "development",
-			devtool: "source-map",
+			devtool: "eval-source-map",
 		});
 	}
 

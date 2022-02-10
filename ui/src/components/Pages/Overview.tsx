@@ -1,44 +1,26 @@
+import { MDBAlert, MDBBtn, MDBCol, MDBContainer, MDBIcon, MDBRow } from "mdbreact";
 import * as React from "react";
-import { Component } from "react";
-import * as API from "../../api";
+import Modal from 'react-bootstrap/Modal';
+import { Device, Devices, getBlackout, getNetworkDevices, getWlanDevice, reboot, shutdown} from "../../api";
+// import * as API from "../../api";
 import ErrorComp from "../Error";
-// import LoadingSpinner from "../LoadingSpinner";
 import Clock from "./Clock/Clock";
-import Modal from 'react-bootstrap/Modal'
+import * as API from "../../api";
+import SensorItem from "./SensorItem";
 
-// import { Accordion, Card } from "react-bootstrap";
 declare function Notify(msg: string): any;
 
 
 
-import {
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  // MDBInput,
-  MDBBtn,
-  MDBAlert,
-  MDBIcon,
-  // MDBModal,
-  // MDBModalBody,
-  // MDBModalHeader,
-  // MDBModalFooter,
 
-  // MDBCard,
-  // MDBCardBody,
-  // MDBCardTitle,
-  // MDBCardText,
-} from "mdbreact";
 
-import SensorItem from "./SensorItem";
-
-export interface Props {}
+export interface Props {
+  devices: API.Devices
+}
 export interface State {
-  netInfo: API.NetInfo;
   allSensors: any;
   blackout: boolean;
   error: any;
-  WiFiInfo: API.WiFiInfo;
   WiFiLoading: boolean;
   modal: {
     visible: boolean;
@@ -54,10 +36,8 @@ class PagesOverview extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      netInfo: null,
       allSensors: null,
       blackout: null,
-      WiFiInfo: null,
       WiFiLoading: true,
       error: null,
       modal: {
@@ -75,20 +55,6 @@ class PagesOverview extends React.Component<Props, State> {
   _isMounted = false;
   componentDidMount() {
     this._isMounted = true;
-    API.getNetInfo().then(
-      (res) => {
-        this.setState({
-          netInfo: res,
-          error: null,
-        });
-      },
-      (error) => {
-        this.setState({
-          netInfo: null,
-          error: error,
-        });
-      }
-    );
 
     /*-------*/
 
@@ -107,7 +73,7 @@ class PagesOverview extends React.Component<Props, State> {
     // 	}
     // );
 
-    API.getBlackout().then(
+    getBlackout().then(
       (res) => {
         this.setState({
           blackout: res,
@@ -120,45 +86,10 @@ class PagesOverview extends React.Component<Props, State> {
       }
     );
 
-    this.updateWiFiInfo();
-
     // if( !this._isMounted) return;
   }
   componentWillUnmount() {
     this._isMounted = false;
-  }
-  /**------------- */
-
-  updateWiFiInfo() {
-    if (!this._isMounted) return;
-
-    this.setState({
-      WiFiLoading: true,
-    });
-
-    API.getWiFiInfo().then(
-      (WiFiInfo) => {
-        // console.log(WiFiInfo);
-        this.setState({
-          WiFiInfo: WiFiInfo,
-          error: null,
-          WiFiLoading: false,
-        });
-        setTimeout(() => {
-          this.updateWiFiInfo();
-        }, 5000); // Check every 5 seconds
-      },
-      (error) => {
-        this.setState({
-          WiFiInfo: null,
-          error: error,
-          WiFiLoading: false,
-        });
-        setTimeout(() => {
-          this.updateWiFiInfo();
-        }, 5000);
-      }
-    );
   }
 
   /**------------- */
@@ -170,7 +101,7 @@ class PagesOverview extends React.Component<Props, State> {
       shutdownLoading: true,
     });
 
-    API.shutdown().then(
+    shutdown().then(
       (res) => {
         Notify(res);
       },
@@ -194,7 +125,7 @@ class PagesOverview extends React.Component<Props, State> {
       rebootLoading: true,
     });
 
-    API.reboot().then(
+    reboot().then(
       (res) => {
         Notify(res);
       },
@@ -253,9 +184,8 @@ class PagesOverview extends React.Component<Props, State> {
 
   render() {
 
-    if( this.state.shutdownLoading || this.state.rebootLoading)
-    {
-      return <div style={{marginTop: "20%", textAlign: "center", border: "1px solid #BBB", borderRadius: "5px",padding: "5%",marginLeft: "10%", marginRight: "10%", backgroundColor: "#EEE"}}>
+    if (this.state.shutdownLoading || this.state.rebootLoading) {
+      return <div style={{ marginTop: "20%", textAlign: "center", border: "1px solid #BBB", borderRadius: "5px", padding: "5%", marginLeft: "10%", marginRight: "10%", backgroundColor: "#EEE" }}>
         <h1>Wazigate is not accessible...</h1>
       </div>
     }
@@ -264,20 +194,16 @@ class PagesOverview extends React.Component<Props, State> {
       return <ErrorComp error={this.state.error} />;
     }
 
-    var sensors = this.state.allSensors
-      ? this.state.allSensors.map((res: any, index: React.ReactText) => (
-          <SensorItem
-            key={index}
-            name={res.name}
-            desc={res.description}
-            icon={res.name == "si7021" ? "temperature-low" : ""}
-          />
-        ))
-      : "";
-
     var wifiStatus = null;
-    if (this.state.WiFiInfo) {
-      if (this.state.WiFiInfo.ap_mode) {
+    const wlan0 = this.props.devices.wlan0;
+    const eth0 = this.props.devices.eth0;
+
+    
+    if (wlan0) {
+
+      const apConn = wlan0.AvailableConnections.find(conn => conn.connection.id === "WAZIGATE-AP");
+
+      if (wlan0.ActiveConnectionId === "WAZIGATE-AP") {
         wifiStatus = (
           <span>
             <MDBAlert color="info">
@@ -288,13 +214,7 @@ class PagesOverview extends React.Component<Props, State> {
             </MDBAlert>
             <MDBAlert color="info">
               SSID:{" "}
-              <b>
-                {this.state.WiFiInfo.ssid ? (
-                  this.state.WiFiInfo.ssid
-                ) : (
-                  <MDBIcon icon="spinner" spin />
-                )}
-              </b>
+              <b>{atob(apConn["802-11-wireless"].ssid)}</b>
             </MDBAlert>
           </span>
         );
@@ -306,27 +226,27 @@ class PagesOverview extends React.Component<Props, State> {
               <b>
                 WiFi Client <MDBIcon icon="wifi" />
               </b>
-              {"  "}
-              <span title={this.state.WiFiInfo.state}>
-                {this.state.WiFiInfo.state ? (
-                  this.state.WiFiInfo.state == "COMPLETED" ? (
+              {/* {"  "}
+              <span title={wlan0.State}>
+                {wlan0.State ? (
+                  wlan0.State == "COMPLETED" ? (
                     <MDBIcon fas icon="check-circle" />
                   ) : (
                     <span>
                       <MDBIcon icon="spinner" spin />{" "}
-                      {this.state.WiFiInfo.state}
+                      {wlan0.State}
                     </span>
                   )
                 ) : (
                   "..."
                 )}
-              </span>
+              </span> */}
             </MDBAlert>
             <MDBAlert color="info">
               Connected to{" "}
               <b>
-                {this.state.WiFiInfo.ssid ? (
-                  this.state.WiFiInfo.ssid
+                {wlan0.ActiveConnectionId ? (
+                  wlan0.ActiveConnectionId
                 ) : (
                   <MDBIcon icon="spinner" spin />
                 )}
@@ -335,8 +255,8 @@ class PagesOverview extends React.Component<Props, State> {
             <MDBAlert color="info">
               IP address:{" "}
               <b>
-                {this.state.WiFiInfo.ip ? (
-                  this.state.WiFiInfo.ip
+                {wlan0?.IP4Config ? (
+                  wlan0.IP4Config.Addresses[0].Address
                 ) : (
                   <MDBIcon icon="spinner" spin />
                 )}
@@ -355,8 +275,8 @@ class PagesOverview extends React.Component<Props, State> {
               <h4 className="card-header">
                 {" "}
                 <MDBIcon
-                  spin={this.state.netInfo == null}
-                  icon={this.state.netInfo ? "network-wired" : "cog"}
+                  spin={!eth0}
+                  icon={eth0 ? "network-wired" : "cog"}
                 />{" "}
                 Ethernet Network
               </h4>
@@ -364,48 +284,48 @@ class PagesOverview extends React.Component<Props, State> {
                 <MDBAlert color="info">
                   IP address :{" "}
                   <b>
-                    {this.state.netInfo ? (
-                      this.state.netInfo.ip
+                    {eth0?.IP4Config ? (
+                      eth0.IP4Config.Addresses[0].Address
                     ) : (
                       <MDBIcon icon="spinner" spin />
                     )}
                   </b>
                 </MDBAlert>
-                <MDBAlert color="info">
+                {/* <MDBAlert color="info">
                   MAC address :{" "}
                   <b>
-                    {this.state.netInfo ? (
-                      this.state.netInfo.mac
+                    {eth0.IP4Config ? (
+                      eth0.
                     ) : (
                       <MDBIcon icon="spinner" spin />
                     )}
                   </b>
-                </MDBAlert>
-                <MDBAlert color="info">
+                </MDBAlert> */}
+                {/* <MDBAlert color="info">
                   Device :{" "}
                   <b>
-                    {this.state.netInfo ? (
-                      this.state.netInfo.dev
+                    {this.state.networkDevices ? (
+                      this.state.networkDevices.dev
                     ) : (
                       <MDBIcon icon="spinner" spin />
                     )}
                   </b>
-                </MDBAlert>
+                </MDBAlert> */}
               </div>
             </div>
           </MDBCol>
 
-          {}
+          { }
 
           <MDBCol>
             <div className="card mb-3 mt-3 m-l3 mb-3">
               <h4 className="card-header">
                 {" "}
                 <MDBIcon
-                  spin={this.state.WiFiLoading}
+                  spin={false}
                   icon={this.state.WiFiLoading ? "cog" : "wifi"}
                 />{" "}
-                <a href="./#internet" title="Conenct to a WiFi network">
+                <a href="#internet" title="Connect to a WiFi network">
                   WiFi Network
                 </a>
               </h4>
@@ -414,14 +334,14 @@ class PagesOverview extends React.Component<Props, State> {
           </MDBCol>
         </MDBRow>
 
-        {}
+        { }
 
         <MDBRow>
           <MDBCol>
             <div className="card mb-3 mt-3 m-l3 mb-3">
               <h4 className="card-header">
                 <MDBIcon far icon="clock" />{" "}
-                <a href="./#config" title="Click to change the Timezone">
+                <a href="#config" title="Click to change the Timezone">
                   Gateway Clock
                 </a>
               </h4>
@@ -431,7 +351,7 @@ class PagesOverview extends React.Component<Props, State> {
             </div>
           </MDBCol>
 
-          {}
+          { }
 
           <MDBCol>
             <div className="card mb-3 mt-3 m-l3 mb-3">
@@ -503,7 +423,7 @@ class PagesOverview extends React.Component<Props, State> {
             </div>
           </MDBCol>
 
-          {}
+          { }
         </MDBRow>
 
         <MDBRow>
@@ -511,37 +431,20 @@ class PagesOverview extends React.Component<Props, State> {
           <MDBCol></MDBCol>
         </MDBRow>
 
-        {/*
-        After some package update, thos modal just does not work!
-         <MDBModal autoFocus isOpen={this.state.modal.visible} toggle={this.toggleModal}>
-          <MDBModalHeader toggle={this.toggleModal}>
-            {this.state.modal.title}
-          </MDBModalHeader>
-          <MDBModalBody>{this.state.modal.msg}</MDBModalBody>
-          <MDBModalFooter>
-            <MDBBtn color="secondary" onClick={this.toggleModal}>
+        <Modal show={this.state.modal.visible} onHide={this.toggleModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>{this.state.modal.title}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{this.state.modal.msg}</Modal.Body>
+          <Modal.Footer>
+            <MDBBtn onClick={this.toggleModal}>
               No
             </MDBBtn>
             <MDBBtn color="danger" onClick={this.modalClick}>
               Yes
             </MDBBtn>
-          </MDBModalFooter>
-        </MDBModal> */}
-
-      <Modal show={this.state.modal.visible} onHide={this.toggleModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>{this.state.modal.title}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{this.state.modal.msg}</Modal.Body>
-        <Modal.Footer>
-          <MDBBtn onClick={this.toggleModal}>
-              No
-            </MDBBtn>
-            <MDBBtn color="danger" onClick={this.modalClick}>
-              Yes
-            </MDBBtn>
-        </Modal.Footer>
-      </Modal>
+          </Modal.Footer>
+        </Modal>
 
       </MDBContainer>
     );

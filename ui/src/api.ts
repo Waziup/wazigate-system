@@ -78,19 +78,17 @@ export async function setTimezone(data: string) {
 
 /*-------------- */
 
-export type NetInfo = {
-  ip: string;
-  dev: string;
-  mac: string;
-};
+// export type knownDevices = "wlan0" | "eth0" | string;
 
-export async function getNetInfo(): Promise<NetInfo> {
+export type Devices = Record<string, Device>;
+
+export async function getNetworkDevices(): Promise<Devices> {
   var resp = await fetch(URL + "net");
   if (!resp.ok) await failResp(resp);
   return await resp.json();
 }
 
-/*---------------*/
+//
 
 export type APInfo = {
   SSID: string;
@@ -100,25 +98,30 @@ export type APInfo = {
   password: string;
 };
 
-export async function getAPInfo(): Promise<APInfo> {
-  var resp = await fetch(URL + "net/wifi/ap");
-  if (!resp.ok) await failResp(resp);
-  return await resp.json();
+// export async function getAPInfo(): Promise<APInfo> {
+//   var resp = await fetch(URL + "net/wifi/ap");
+//   if (!resp.ok) await failResp(resp);
+//   return await resp.json();
+// }
+
+export type AccessPointRequest = {
+  ssid?: string,
+  password?: string
 }
 
-export async function setAPInfo(data: any) {
+export async function setAPInfo(r: AccessPointRequest) {
   var resp = await fetch(URL + "net/wifi/ap", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(r),
   });
   if (!resp.ok) await failResp(resp);
   return await resp.json();
 }
 
-/*---------------*/
+//
 
 export async function setAPMode() {
   var resp = await fetch(URL + "net/wifi/mode/ap", {
@@ -132,49 +135,107 @@ export async function setAPMode() {
   return await resp.json();
 }
 
-/*---------------*/
+//
 
-export type WiFiScan = {
-  name: string;
-  security: boolean;
-  signal: string;
+export type AccessPoint = {
+  ssid: string;
+  freq: number,
+  strength: number,
+  flags: number,
+  hwAddress: string,
+  maxBitrate: number,
+  mode: number,
+  rsnFlags: number,
+  wpaFlags: number,
 };
 
-export async function getWiFiScan(): Promise<WiFiScan[]> {
+export async function getWiFiScan(): Promise<AccessPoint[]> {
   var resp = await fetch(URL + "net/wifi/scan");
   if (!resp.ok) await failResp(resp);
   return await resp.json();
 }
 
-export async function setWiFiConnect(data: any) {
+export type WifiReq = {
+  ssid: string,
+  autoConnect: boolean,
+  password?: string,
+}
+
+export async function setWiFiConnect(r: WifiReq) {
   var resp = await fetch(URL + "net/wifi", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(r),
   });
   if (!resp.ok) await failResp(resp);
-  return await resp.json();
 }
 
-/*---------------*/
+export async function removeWifi(ssid: string) {
+  var resp = await fetch(URL + "net/wifi", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ssid}),
+  });
+  if (!resp.ok) await failResp(resp);
+}
 
-export type WiFiInfo = {
-  ip: string;
-  enabled: boolean;
-  ap_mode: boolean;
-  ssid: string;
-  state: string;
-};
+//
 
-export async function getWiFiInfo(): Promise<WiFiInfo> {
+type IP4AddressData = {
+  Address: string,
+  Prefix: number
+}
+
+type IP4RouteData = {
+  Destination: string,
+  Prefix: number,
+  NextHop: string,
+  Metric: number,
+  AdditionalAttributes: Record<string, string>
+}
+
+type IP4NameserverData = {
+  Address: string
+}
+
+type Connection = {
+  "802-11-wireless"?: {
+    ssid: string,
+  },
+  connection: {
+    id: string,
+    uuid: string,
+    type: string,
+  }
+}
+
+export type Device = {
+  Interface: string,
+  "IP interface": string,
+  State: string,
+  IP4Config: {
+    Addresses: IP4AddressData[], 
+    Routes: IP4RouteData[]
+    Nameservers: IP4NameserverData[]
+    Domains: string[],
+  },
+  AvailableConnections: Connection[],
+  stateReason?: string ,
+  ActiveConnectionId?: string,
+  ActiveConnectionUUID?: string,
+}
+
+export async function getWlanDevice(): Promise<Device> {
   var resp = await fetch(URL + "net/wifi");
   if (!resp.ok) await failResp(resp);
   return await resp.json();
 }
 
-/*---------------*/
+//
 
 export type UsageInfo = {
   cpu_usage: string;
@@ -199,7 +260,7 @@ export async function getUsageInfo(): Promise<UsageInfo> {
   return await resp.json();
 }
 
-/*---------------*/
+//
 
 export type cInfo = {
   Id: string;
@@ -254,7 +315,7 @@ export async function dlContainerLogs(id: string) {
   return resp;
 }
 
-/*---------------*/
+//
 
 export async function doUpdate() {
   var resp = await fetch(URL + "update", {
@@ -281,7 +342,7 @@ export async function getVersion() {
   return await resp.json();
 }
 
-/*---------------*/
+//
 
 export async function getAllSensors() {
   var resp = await fetch(URL + "sensors");
@@ -297,7 +358,7 @@ export async function getSensorValue(name: string) {
   return await resp.json();
 }
 
-/*---------------*/
+//
 
 export async function getBlackout() {
   var resp = await fetch(URL + "blackout");
@@ -306,7 +367,7 @@ export async function getBlackout() {
   return await resp.json();
 }
 
-/*---------------*/
+//
 
 export async function getConf() {
   var resp = await fetch(URL + "conf");
@@ -328,7 +389,7 @@ export async function setConf(data: any) {
   // return await resp.json();
 }
 
-/*---------------*/
+//
 
 export async function shutdown() {
   var resp = await fetch(URL + "shutdown", {
@@ -354,4 +415,4 @@ export async function reboot() {
   // return await resp.json();
 }
 
-/*---------------*/
+//

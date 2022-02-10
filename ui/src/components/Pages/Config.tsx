@@ -18,16 +18,19 @@ import {
   MDBIcon,
 } from "mdbreact";
 import LoadingSpinner from "../LoadingSpinner";
+import { Device } from "../../api";
 
 declare function Notify(msg: string): any;
 
-export interface Props {}
+export interface Props {
+  devices: API.Devices
+}
 export interface State {
-  APInfo: API.APInfo;
+  // wlanDevice: API.APInfo;
   setAPInfoLoading: boolean;
   switchToAPModeLoading: boolean;
 
-  WiFiInfo: API.WiFiInfo;
+  wlanDevice: Device;
 
   error: any;
   info: any;
@@ -40,8 +43,8 @@ class PagesConfig extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      APInfo: null,
-      WiFiInfo: null,
+      wlanDevice: null,
+      // wlanDevice: null,
       error: null,
       info: null,
       switchToAPModeLoading: false,
@@ -51,32 +54,32 @@ class PagesConfig extends React.Component<Props, State> {
       setConfLoading: false,
     };
 
-    API.getAPInfo().then(
-      (APInfo) => {
-        this.setState({
-          APInfo: APInfo,
-          error: null,
-        });
-      },
-      (error) => {
-        this.setState({
-          APInfo: null,
-          error: error,
-        });
-      }
-    );
+    // API.getWlanDevice().then(
+    //   (device) => {
+    //     this.setState({
+    //       wlanDevice: device,
+    //       error: null,
+    //     });
+    //   },
+    //   (error) => {
+    //     this.setState({
+    //       wlanDevice: null,
+    //       error: error,
+    //     });
+    //   }
+    // );
 
-    API.getWiFiInfo().then(
-      (WiFiInfo) => {
+    API.getWlanDevice().then(
+      (dev) => {
         // console.log(WiFiInfo);
         this.setState({
-          WiFiInfo: WiFiInfo,
+          wlanDevice: dev,
           error: null,
         });
       },
       (error) => {
         this.setState({
-          WiFiInfo: null,
+          wlanDevice: null,
           error: error,
         });
       }
@@ -139,7 +142,7 @@ class PagesConfig extends React.Component<Props, State> {
     event.target.disabled = true;
     API.setAPMode().then(
       (msg) => {
-        Notify(msg);
+        Notify("Switched to Access-Point mode.");
         this.setState({ switchToAPModeLoading: false });
       },
       (error) => {
@@ -179,8 +182,17 @@ class PagesConfig extends React.Component<Props, State> {
       return <ErrorComp error={this.state.error} />;
     }
 
-    if (!this.state.APInfo) {
+    if (!this.state.wlanDevice) {
       return <LoadingSpinner />;
+    }
+
+    let apSSID = "";
+    const wlan0 = this.props.devices.wlan0;
+    if(wlan0) {
+      const apConn = wlan0.AvailableConnections.find(conn => conn.connection.id === "WAZIGATE-AP");
+      if(apConn) {
+        apSSID = atob(apConn["802-11-wireless"].ssid);
+      }
     }
 
     return (
@@ -197,19 +209,19 @@ class PagesConfig extends React.Component<Props, State> {
                         <form onSubmit={this.submitSSID}>
                           <div className="grey-text">
                             <MDBInput
-                              label="Type your SSID"
+                              label="Access Point SSID"
                               icon="wifi"
                               required
                               outline
-                              valueDefault={this.state.APInfo.SSID}
+                              valueDefault={apSSID}
                               name="SSID"
                             />
                             <MDBInput
-                              label="Type your password"
+                              label="Access Point password"
                               icon="lock"
                               required
                               outline
-                              valueDefault={this.state.APInfo.password}
+                              // valueDefault={this.state.wlanDevice.password}
                               name="password"
                             />
                           </div>
@@ -255,8 +267,9 @@ class PagesConfig extends React.Component<Props, State> {
                             </MDBAlert>
                             <MDBBtn
                               disabled={
-                                this.state.WiFiInfo &&
-                                this.state.WiFiInfo.ap_mode
+                                false
+                                // this.state.wlanDevice &&
+                                // this.state.wlanDevice.ap_mode
                               }
                               onClick={this.switchToAPMode}
                             >

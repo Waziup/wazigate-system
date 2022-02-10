@@ -129,7 +129,7 @@ class PagesInternet extends React.Component<Props, State> {
 			<MDBContainer className="mt-3">
 				<MDBNav tabs className="nav md-pills nav-pills nav-justified">
 					<MDBNavItem>
-						<MDBNavLink
+						{/* <MDBNavLink
 							to="#"
 							active={this.state.activeItem === "full"}
 							onClick={this.toggle("full")}
@@ -138,7 +138,7 @@ class PagesInternet extends React.Component<Props, State> {
 							activeClassName="active-link"
 						>
 							<MDBIcon icon="sync-alt" /> Full Update
-						</MDBNavLink>
+						</MDBNavLink> */}
 					</MDBNavItem>
 				</MDBNav>
 				<MDBTabContent className="card p-2" activeItem={this.state.activeItem}>

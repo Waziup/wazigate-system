@@ -18,10 +18,12 @@ import WiFiScanItem from "./WiFiScanItem";
 
 declare function Notify(msg: string): any;
 
-export interface Props {}
+export interface Props {
+  devices: API.Devices
+}
 export interface State {
-  WiFiScanResults: API.WiFiScan[];
-  WiFiInfo: API.WiFiInfo;
+  WiFiScanResults: API.AccessPoint[];
+  WiFiInfo: API.Device;
   error: any;
   scanLoading: boolean;
   activeItem: any;
@@ -37,6 +39,7 @@ class PagesInternet extends React.Component<Props, State> {
       scanLoading: true,
       activeItem: "wifi",
     };
+    console.log("PagesInternet", props);
   }
 
   /**------------- */
@@ -68,9 +71,9 @@ class PagesInternet extends React.Component<Props, State> {
           let tmpArr = Array();
 
           for (var i = 0; i < WiFiScanResults.length; i++) {
-            if (tmpArr.indexOf(WiFiScanResults[i].name) == -1) {
+            if (tmpArr.indexOf(WiFiScanResults[i].ssid) == -1) {
               uniqueList.push(WiFiScanResults[i]);
-              tmpArr.push(WiFiScanResults[i].name);
+              tmpArr.push(WiFiScanResults[i].ssid);
             }
           }
 
@@ -86,7 +89,7 @@ class PagesInternet extends React.Component<Props, State> {
 
         setTimeout(() => {
           this.scan();
-        }, 5000); // 5 seconds
+        }, 10000); // 10 seconds
       },
       (error) => {
         this.setState({
@@ -96,7 +99,7 @@ class PagesInternet extends React.Component<Props, State> {
 
         setTimeout(() => {
           this.scan();
-        }, 5000); // 5 seconds
+        }, 10000); // 10 seconds
       }
     );
   }
@@ -118,7 +121,7 @@ class PagesInternet extends React.Component<Props, State> {
   /**------------- */
 
   updateWiFiInfo() {
-    API.getWiFiInfo().then(
+    API.getWlanDevice().then(
       (WiFiInfo) => {
         // console.log(WiFiInfo);
         this.setState({
@@ -142,75 +145,79 @@ class PagesInternet extends React.Component<Props, State> {
       return <ErrorComp error={this.state.error} />;
     }
 
-    var scanResult = this.state.WiFiScanResults
-      ? this.state.WiFiScanResults.map((res) => (
-          <WiFiScanItem
-            name={res.name}
-            key={res.name}
-            signal={res.signal}
-            active={this.state.WiFiInfo && res.name == this.state.WiFiInfo.ssid}
-          />
-        ))
-      : "";
+    const wlan0 = this.props.devices.wlan0;
 
-    // console.log(scanResult);
+    var scanResults: JSX.Element[] = this.state.WiFiScanResults
+      ? this.state.WiFiScanResults.map((res) => {
+          const active = wlan0.ActiveConnectionId === res.ssid;
+          return <WiFiScanItem
+            key={res.ssid}
+            name={res.ssid}
+            signal={`${res.strength}`}
+            wlan0State={active ? wlan0.State : undefined}
+            wlan0StateReason={active ? wlan0.State : undefined}
+            active={active}
+            available={!! wlan0.AvailableConnections.find(c => c.connection.id === res.ssid)}
+          />
+      })
+      : [];
 
     var wifiStatus = null;
     if (this.state.WiFiInfo) {
-      if (this.state.WiFiInfo.ap_mode) {
-        wifiStatus = (
-          <span>
-            {" "}
-            Mode: <b>Access Point</b> <MDBIcon icon="broadcast-tower" /> 
-            <div className="float-right"> SSID:{" "}
-            <b>
-              {this.state.WiFiInfo.ssid ? (
-                this.state.WiFiInfo.ssid
-              ) : (
-                <MDBIcon icon="spinner" spin />
-              )}
-            </b>
-            </div>
-          </span>
-        );
-      } else {
-        wifiStatus = (
-          <span>
-            {" "}
-            Mode: <b>WiFi client</b> <MDBIcon icon="wifi" />
+      // if (this.state.WiFiInfo.ap_mode) {
+      //   wifiStatus = (
+      //     <span>
+      //       {" "}
+      //       Mode: <b>Access Point</b> <MDBIcon icon="broadcast-tower" /> 
+      //       <div className="float-right"> SSID:{" "}
+      //       <b>
+      //         {this.state.WiFiInfo.ssid ? (
+      //           this.state.WiFiInfo.ssid
+      //         ) : (
+      //           <MDBIcon icon="spinner" spin />
+      //         )}
+      //       </b>
+      //       </div>
+      //     </span>
+      //   );
+      // } else {
+        // wifiStatus = (
+        //   <span>
+        //     {" "}
+        //     Mode: <b>WiFi client</b> <MDBIcon icon="wifi" />
             
-            <div className="float-right"> Network: {" "}
-            <b>
-              {this.state.WiFiInfo.ssid ? (
-                this.state.WiFiInfo.ssid
-              ) : (
-                <MDBIcon icon="spinner" spin />
-              )}
-            </b>{" "}
-            (
-            {this.state.WiFiInfo.ip ? (
-              this.state.WiFiInfo.ip
-            ) : (
-              <MDBIcon icon="spinner" spin />
-            )}
-            ){"  "}
-            <span title={this.state.WiFiInfo.state}>
-              {this.state.WiFiInfo.state ? (
-                this.state.WiFiInfo.state == "COMPLETED" ? (
-                  <MDBIcon fas icon="check-circle" />
-                ) : (
-                  <span>
-                    <MDBIcon icon="spinner" spin /> {this.state.WiFiInfo.state}
-                  </span>
-                )
-              ) : (
-                "..."
-              )}
-            </span>
-            </div>
-          </span>
-        );
-      }
+        //     <div className="float-right"> Network: {" "}
+        //     <b>
+        //       {this.state.WiFiInfo.ssid ? (
+        //         this.state.WiFiInfo.ssid
+        //       ) : (
+        //         <MDBIcon icon="spinner" spin />
+        //       )}
+        //     </b>{" "}
+        //     (
+        //     {this.state.WiFiInfo.ip ? (
+        //       this.state.WiFiInfo.ip
+        //     ) : (
+        //       <MDBIcon icon="spinner" spin />
+        //     )}
+        //     ){"  "}
+        //     <span title={this.state.WiFiInfo.state}>
+        //       {this.state.WiFiInfo.state ? (
+        //         this.state.WiFiInfo.state == "COMPLETED" ? (
+        //           <MDBIcon fas icon="check-circle" />
+        //         ) : (
+        //           <span>
+        //             <MDBIcon icon="spinner" spin /> {this.state.WiFiInfo.state}
+        //           </span>
+        //         )
+        //       ) : (
+        //         "..."
+        //       )}
+        //     </span>
+        //     </div>
+        //   </span>
+        // );
+      // }
     }
 
     //nav-justified
@@ -219,7 +226,7 @@ class PagesInternet extends React.Component<Props, State> {
       <MDBContainer className="mt-3">
         <MDBNav tabs className="nav md-pills nav-pills ">
           <MDBNavItem>
-            <MDBNavLink
+            {/* <MDBNavLink
               to="#"
               active={this.state.activeItem === "wifi"}
               onClick={this.toggle("wifi")}
@@ -228,7 +235,7 @@ class PagesInternet extends React.Component<Props, State> {
               activeClassName="active-link"
             >
               <MDBIcon icon="wifi" /> WiFi
-            </MDBNavLink>
+            </MDBNavLink> */}
           </MDBNavItem>
           {/* <MDBNavItem>
 						<MDBNavLink
@@ -254,13 +261,15 @@ class PagesInternet extends React.Component<Props, State> {
         <MDBTabContent className="card p-2" activeItem={this.state.activeItem}>
           <MDBTabPane tabId="wifi" role="tabpanel">
             <MDBAlert color="info" className="text-justify">
-              {wifiStatus ? (
+              {/* {wifiStatus ? (
                 wifiStatus
               ) : (
                 <span>
                   Loading <MDBIcon icon="spinner" spin />{" "}
                 </span>
-              )}
+              )} */}
+              { nameForState(this.props.devices.wlan0?.State) }
+              { this.props.devices.wlan0?.ActiveConnectionId === "WAZIGATE-AP" && " - Access Point Mode"}
             </MDBAlert>
 
             <MDBAlert color="light">
@@ -268,12 +277,12 @@ class PagesInternet extends React.Component<Props, State> {
             </MDBAlert>
 
             <MDBListGroup>
-              {scanResult}
-              <WiFiScanItem name="Connect to a hidden WiFi" empty signal="0" />
+              {scanResults}
+              <WiFiScanItem name="Connect to a hidden WiFi" empty signal="0" available={false}/>
             </MDBListGroup>
             <MDBAlert color="light">
               {this.state.scanLoading ? (
-                <div style={{textAlign: "center"}} >Checking for avilable networks <LoadingSpinner
+                <div style={{textAlign: "center"}} >Checking for available networks <LoadingSpinner
                   type="grow-sm"
                   class="color-light-text-primary"
                 /></div> 
@@ -293,6 +302,26 @@ class PagesInternet extends React.Component<Props, State> {
       </MDBContainer>
     );
   }
+}
+
+var stateNames: Record<string, string> = {
+  "NmDeviceStateDisconnected": "Disconnecting old connection ...",
+  "NmDeviceStatePrepare": "Preparing connection ...",
+  "NmDeviceStateConfig": "Preparing connection configuration ...",
+  "NmDeviceStateIpConfig": "Preparing connection IP configuration ...",
+  "NmDeviceStateIpCheck": "Checking connection IP configuration ...",
+  "NmDeviceStateActivated": "Connection activated.",
+  "NmDeviceStateDeactivating": "Deactivating connection ...",
+  "NmDeviceStateUnavailable": "Device unavailable.",
+  "NmDeviceStateUnmanaged": "Device not managed.",
+  "NmDeviceStateUnknown": "Device state unknown.",
+  "NmDeviceStateSecondaries": "Waiting for connection ...",
+  "NmDeviceStateNeedAuth": "Connection requires authorization.",
+}
+
+function nameForState(state: string) {
+  if(!state) return "";
+  return stateNames[state] || ("State: "+state);
 }
 
 export default PagesInternet;

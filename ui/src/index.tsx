@@ -1,5 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import * as waziup from "waziup";
+
 
 import { version, branch } from "./version";
 import AppComp from "./components/App";
@@ -20,7 +22,32 @@ const loader = document.querySelector(".loader");
 const showLoader = () => loader.classList.remove("loader--hide");
 const hideLoader = () => loader.classList.add("loader--hide");
 
-ReactDOM.render(
-	<AppComp hideLoader={hideLoader} showLoader={showLoader} />,
-	document.getElementById("app")
-);
+if (window.parent && "waziup" in window.parent) {
+	(window as any)["wazigate"] = (window.parent as any)["wazigate"];
+	console.log("Using wazigate instance from parent window.");
+	render();
+} else {
+	console.log("Connecting to wazigate ...");
+	waziup.connect({host: "."}).then(wazigate => {
+		(window as any)["wazigate"] = wazigate;
+		wazigate.connectMQTT(() => {
+			console.log("MQTT Connected.");
+		}, (err: Error) => {
+			console.error("MQTT Err", err);
+		}, {
+			reconnectPeriod: 0,
+		});
+		render();
+	});
+}
+
+function render() {
+	ReactDOM.render(
+		<AppComp hideLoader={hideLoader} showLoader={showLoader} />,
+		document.getElementById("app")
+	);
+}
+
+
+
+

@@ -9,6 +9,9 @@ export interface Props {
   signal: string;
   empty?: boolean;
   active?: boolean;
+  available: boolean,
+  wlan0State?: string;
+  wlan0StateReason?: string;
 }
 export interface State {
   hideForm: boolean;
@@ -47,18 +50,20 @@ class WiFiScanItem extends React.Component<Props, State> {
 
   /**------------- */
 
-  submitHandler = (event: any) => {
+  submitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    var data = {
-      ssid: event.target.SSID.value,
-      password: event.target.password.value,
+    const target = event.target as HTMLFormElement;
+
+    var data: API.WifiReq = {
+      ssid: target.SSID.value,
+      password: target.password.value,
+      autoConnect: true
     };
 
     this.setState({ setAPLoading: true });
 
     API.setWiFiConnect(data).then(
       (msg) => {
-        Notify(msg);
         this.setState({ setAPLoading: false, hideForm: true });
       },
       (error) => {
@@ -67,6 +72,33 @@ class WiFiScanItem extends React.Component<Props, State> {
       }
     );
   };
+
+  reconnect = (ev: React.SyntheticEvent) => {
+    this.setState({ setAPLoading: true });
+    API.setWiFiConnect({ssid: this.props.name, autoConnect: true}).then(
+      (msg) => {
+        this.setState({ setAPLoading: false, hideForm: true });
+      },
+      (error) => {
+        Notify(error);
+        this.setState({ setAPLoading: false });
+      }
+    );
+  }
+
+  forget = (ev: React.SyntheticEvent) => {
+    this.setState({ setAPLoading: true });
+    API.removeWifi(this.props.name).then(
+      (msg) => {
+        this.setState({ setAPLoading: false, hideForm: true});
+        location.reload();
+      },
+      (error) => {
+        Notify(error);
+        this.setState({ setAPLoading: false });
+      }
+    );
+  }
 
   /**------------- */
 
@@ -78,7 +110,9 @@ class WiFiScanItem extends React.Component<Props, State> {
         hover
         active={this.props.active}
       >
-        <span hidden={!this.state.hideForm}>{this.props.name}</span>
+        <span hidden={!this.state.hideForm}>
+          {this.props.name}
+        </span>
         <form onSubmit={this.submitHandler} hidden={this.state.hideForm}>
           <MDBInput
             label="SSID"
@@ -108,14 +142,18 @@ class WiFiScanItem extends React.Component<Props, State> {
             </MDBBtn>
           </div>
         </form>
-        <span className="" title={this.props.signal + " %"}>
-          <MDBIcon
-            icon="wifi"
-            size="2x"
-            fixed
-            style={{ opacity: `${this.props.signal + "%"}` }}
-          />
-        </span>
+        <div>
+          <MDBBtn hidden={!this.props.available} onClick={this.forget}>Forget</MDBBtn>
+          <MDBBtn hidden={this.props.active || !this.props.available} onClick={this.reconnect}>Reconnect</MDBBtn>
+          <span className="" title={this.props.signal + " %"}>
+            <MDBIcon
+              icon="wifi"
+              size="2x"
+              fixed
+              style={{ opacity: `${this.props.signal + "%"}` }}
+            />
+          </span>
+        </div>
       </MDBListGroupItem>
     );
   }

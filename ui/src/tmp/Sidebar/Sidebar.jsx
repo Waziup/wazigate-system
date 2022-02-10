@@ -85,14 +85,14 @@ class Sidebar extends Component {
                     }
                     key={key}
                   >
-                    <NavLink
+                    {/* <NavLink
                       to={prop.layout + prop.path}
                       className="nav-link"
                       activeClassName="active"
                     >
                       <i className={prop.icon} />
                       <p>{prop.name}</p>
-                    </NavLink>
+                    </NavLink> */}
                   </li>
                 );
               return null;
