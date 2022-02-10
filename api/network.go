@@ -239,6 +239,28 @@ func SetNetWiFi(resp http.ResponseWriter, req *http.Request, params routing.Para
 	}
 }
 
+type DeleteWifiReq struct {
+	SSID string `json:"ssid"`
+}
+
+// DeleteNetWiFi implements DELETE /net/wifi
+func DeleteNetWiFi(resp http.ResponseWriter, req *http.Request, params routing.Params) {
+
+	var r DeleteWifiReq
+	decoder := json.NewDecoder(req.Body)
+	err := decoder.Decode(&r)
+	if err != nil {
+		resp.WriteHeader(http.StatusBadRequest)
+		resp.Write([]byte(err.Error()))
+		return
+	}
+	if err := nm.DeleteWifi(r.SSID); err != nil {
+		resp.WriteHeader(http.StatusInternalServerError)
+		resp.Write([]byte(err.Error()))
+		return
+	}
+}
+
 //
 
 // func startWiFiClient() error {
@@ -343,19 +365,27 @@ func ActivateAPMode() error {
 
 //
 
-// implements POST /net/wifi/ap
+// implements POST /net/wifi/mode/ap
 func SetNetAPMode(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	if err := ActivateAPMode(); err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
 		resp.Write([]byte(err.Error()))
 		return
 	}
+
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Write([]byte("true"))
 }
 
 //
 
 // Implements GET /net/wifi/scanning
 func NetWiFiScan(resp http.ResponseWriter, req *http.Request, params routing.Params) {
+
+	_, err := execOnHost("iwlist wlan0 scan")
+	if err != nil {
+		log.Printf("[ERR  ] Can not scan wifi: %v", err)
+	}
 
 	points, err := nm.ScanWifi()
 	if err != nil {
@@ -569,7 +599,6 @@ func Monitor(messages chan interface{}) {
 			if err != nil {
 				log.Fatalf("[ERR  ] Can not marshal *EventDeviceStateChanged: %v", err)
 			}
-			log.Println("waziup.wazigate-system/network-manager/device/"+m.Device, data)
 			if err := wazigate.Publish("waziup.wazigate-system/network-manager/device/"+m.Device, data); err != nil {
 				log.Fatalf("[ERR  ] Can not publish MQTT message: %v", err)
 			}

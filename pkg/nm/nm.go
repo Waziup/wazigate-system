@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/Wifx/gonetworkmanager"
@@ -21,8 +22,9 @@ var ap gonetworkmanager.Connection
 
 var Version string
 
-const accessPointName = "WAZIGATE-AP"
-const wifiNamePrefix = "wifi-"
+const accessPointId = "WAZIGATE-AP"
+
+// const wifiIdPrefix = "wifi-"
 
 func Connect() (err error) {
 
@@ -36,6 +38,8 @@ func Connect() (err error) {
 		return err
 	}
 
+	log.Println("[     ] Network Manager Version:", Version)
+
 	settings, err = gonetworkmanager.NewSettings()
 	if err != nil {
 		return err
@@ -43,30 +47,14 @@ func Connect() (err error) {
 
 	//
 
-	devices, err := nm.GetPropertyAllDevices()
+	wlan0, err = nm.GetDeviceByIpIface("wlan0")
 	if err != nil {
-		return err
+		return fmt.Errorf("no wlan0 interface: %w", err)
 	}
 
-	for _, device := range devices {
-		prop, err := device.GetPropertyInterface()
-		if err != nil {
-			return err
-		}
-		switch prop {
-		case "wlan0":
-			wlan0 = device
-		case "eth0":
-			eth0 = device
-		}
-	}
-
-	if eth0 == nil {
-		return fmt.Errorf("no et0 interface found")
-	}
-
-	if wlan0 == nil {
-		return fmt.Errorf("no wlan0 interface found")
+	eth0, err = nm.GetDeviceByIpIface("eth0")
+	if err != nil {
+		return fmt.Errorf("no et0 interface: %w", err)
 	}
 
 	//
@@ -81,20 +69,30 @@ func Connect() (err error) {
 		if err != nil {
 			return err
 		}
-		nameInterf := settings["connection"]["name"]
-		if nameInterf != nil {
-			if name, ok := nameInterf.(string); ok {
-				if name == accessPointName {
+		idInterf := settings["connection"]["id"]
+		log.Printf("- %s", idInterf)
+		if idInterf != nil {
+			if id, ok := idInterf.(string); ok {
+				if id == accessPointId {
 					ap = conn
+					break
 				}
 			}
 		}
 	}
 
+	if ap == nil {
+		log.Println("[WARN ] The Network Manager Access Point connection has not been found.")
+	}
 	return nil
 }
 
+var errNoHotspot = errors.New("the access point connection is not available")
+
 func Hotspot(ssid string, psk string) (err error) {
+	if ap == nil {
+		return errNoHotspot
+	}
 	if ssid != "" {
 		err = ap.Update(gonetworkmanager.ConnectionSettings{
 			"802-11-wireless": map[string]interface{}{
@@ -108,6 +106,8 @@ func Hotspot(ssid string, psk string) (err error) {
 			return err
 		}
 	}
+
+	log.Printf("[     ] Wifi activating Access Point ...")
 	_, err = nm.ActivateConnection(ap, wlan0, nil)
 	return err
 }
@@ -123,15 +123,25 @@ func Wifi(ssid string, psk string, autoconnect bool) (err error) {
 		if err != nil {
 			return err
 		}
-		nameInterf := settings["connection"]["name"]
-		if nameInterf != nil {
-			if name, ok := nameInterf.(string); ok {
-				if name == wifiNamePrefix+ssid {
-					return wifiReuseConn(conn, ssid, psk, autoconnect)
-				}
+		if settings["connection"]["type"].(string) == "802-11-wireless" {
+			if string(settings["802-11-wireless"]["ssid"].([]byte)) == ssid {
+				id := settings["connection"]["id"].(string)
+				log.Printf("[     ] Wifi reactivating connection '%s' ...", ssid)
+				return wifiReuseConn(conn, id, ssid, psk, autoconnect)
 			}
 		}
+		// idInterf := settings["connection"]["id"]
+		// if idInterf != nil {
+		// 	if id, ok := idInterf.(string); ok {
+		// 		if id == wifiIdPrefix+ssid {
+		// 			log.Printf("[     ] Wifi reactivating connection '%s' ...", ssid)
+		// 			return wifiReuseConn(conn, ssid, psk, autoconnect)
+		// 		}
+		// 	}
+		// }
 	}
+
+	log.Printf("[     ] Wifi adding connection '%s' ...", ssid)
 	return wifiNewConn(ssid, psk, autoconnect)
 }
 
@@ -162,22 +172,25 @@ func DeleteWifi(ssid string) error {
 	return nil
 }
 
-func wifiReuseConn(conn gonetworkmanager.Connection, ssid string, psk string, autoconnect bool) (err error) {
+func wifiReuseConn(conn gonetworkmanager.Connection, id string, ssid string, psk string, autoconnect bool) (err error) {
 	err = conn.Update(gonetworkmanager.ConnectionSettings{
 		"connection": map[string]interface{}{
+			"id":          id,
 			"autoconnect": autoconnect,
 		},
 		"802-11-wireless": map[string]interface{}{
 			"ssid": []byte(ssid),
 		},
 		"802-11-wireless-security": map[string]interface{}{
-			"psk": psk,
+			"auth-alg": "open",
+			"key-mgmt": "wpa-psk",
+			"psk":      psk,
 		},
 	})
 	if err != nil {
 		return err
 	}
-	_, err = nm.ActivateConnection(ap, wlan0, nil)
+	_, err = nm.ActivateConnection(conn, wlan0, nil)
 	return err
 }
 
@@ -210,11 +223,12 @@ const (
 type DeviceState = gonetworkmanager.NmDeviceState
 
 type EventDeviceStateChanged struct {
-	Device   string            `json:"device"`
-	OldState DeviceState       `json:"oldState"`
-	NewState DeviceState       `json:"newState"`
-	Reason   DeviceStateReason `json:"reason"`
-	ConnId   string            `json:"connId"`
+	Device               string `json:"device"`
+	OldState             string `json:"oldState"`
+	NewState             string `json:"newState"`
+	Reason               string `json:"reason"`
+	ActiveConnectionId   string `json:"activeConnectionId,omitempty"`
+	ActiveConnectionUUID string `json:"activeConnectionUUID,omitempty"`
 }
 
 func Monitor(ctx context.Context, c chan<- interface{}) (err error) {
@@ -235,16 +249,23 @@ func Monitor(ctx context.Context, c chan<- interface{}) (err error) {
 					return err
 				}
 
-				ev.NewState = DeviceState(signal.Body[0].(uint32))
-				ev.OldState = DeviceState(signal.Body[1].(uint32))
-				ev.Reason = DeviceStateReason(signal.Body[2].(uint32))
+				newState := DeviceState(signal.Body[0].(uint32))
+				oldState := DeviceState(signal.Body[1].(uint32))
+				reason := DeviceStateReason(signal.Body[2].(uint32))
+				ev.NewState = newState.String()
+				ev.OldState = oldState.String()
+				ev.Reason = reason.String()
 
-				if ev.NewState == gonetworkmanager.NmDeviceStatePrepare {
+				if newState == gonetworkmanager.NmDeviceStatePrepare {
 					conn, err := device.GetPropertyActiveConnection()
 					if err != nil {
 						return err
 					}
-					ev.ConnId, err = conn.GetPropertyID()
+					ev.ActiveConnectionId, err = conn.GetPropertyID()
+					if err != nil {
+						return err
+					}
+					ev.ActiveConnectionUUID, err = conn.GetPropertyUUID()
 					if err != nil {
 						return err
 					}
@@ -277,6 +298,26 @@ func ScanWifi() ([]AccessPoint, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// lastScan, err := wifi.GetPropertyLastScan()
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// if err := wifi.RequestScan(); err != nil {
+	// 	return nil, err
+	// }
+
+	// for i := 0; i < 20; i++ {
+	// 	currentScan, err := wifi.GetPropertyLastScan()
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	if currentScan != lastScan {
+	// 		break
+	// 	}
+	// 	time.Sleep(100 * time.Millisecond)
+	// }
 
 	accessPoints, err := wifi.GetAccessPoints()
 	if err != nil {
@@ -337,7 +378,7 @@ func Device(name string) (json.RawMessage, error) {
 			}
 
 			activeConn, err := device.GetPropertyActiveConnection()
-			if err != nil && activeConn != nil {
+			if err == nil && activeConn != nil {
 				conn, err := activeConn.GetPropertyConnection()
 				if err != nil {
 					return nil, err
@@ -347,13 +388,13 @@ func Device(name string) (json.RawMessage, error) {
 					return nil, err
 				}
 				idInterf := settings["connection"]["id"]
-				if idInterf != nil {
-					if name, ok := idInterf.(string); ok {
-						var jsonMap map[string]interface{}
-						json.Unmarshal(jsonData, &jsonMap)
-						jsonMap["ActiveConnection"] = name
-						jsonData, _ = json.Marshal(jsonMap)
-					}
+				uuidInterf := settings["connection"]["uuid"]
+				if idInterf != nil && uuidInterf != nil {
+					var jsonMap map[string]interface{}
+					json.Unmarshal(jsonData, &jsonMap)
+					jsonMap["ActiveConnectionId"] = idInterf
+					jsonMap["ActiveConnectionUUID"] = uuidInterf
+					jsonData, _ = json.Marshal(jsonMap)
 				}
 			}
 			return jsonData, nil

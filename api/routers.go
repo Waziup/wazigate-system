@@ -52,6 +52,7 @@ func setupRouter() *routing.Router {
 	router.GET("/net/wifi", GetNetWiFi)
 	router.POST("/net/wifi", SetNetWiFi)
 	router.PUT("/net/wifi", SetNetWiFi)
+	router.DELETE("/net/wifi", DeleteNetWiFi)
 
 	router.GET("/internet", InternetAccessible)
 
