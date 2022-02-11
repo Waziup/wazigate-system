@@ -173,7 +173,7 @@ func DeleteWifi(ssid string) error {
 }
 
 func wifiReuseConn(conn gonetworkmanager.Connection, id string, ssid string, psk string, autoconnect bool) (err error) {
-	err = conn.Update(gonetworkmanager.ConnectionSettings{
+	settings := gonetworkmanager.ConnectionSettings{
 		"connection": map[string]interface{}{
 			"id":          id,
 			"autoconnect": autoconnect,
@@ -184,9 +184,12 @@ func wifiReuseConn(conn gonetworkmanager.Connection, id string, ssid string, psk
 		"802-11-wireless-security": map[string]interface{}{
 			"auth-alg": "open",
 			"key-mgmt": "wpa-psk",
-			"psk":      psk,
 		},
-	})
+	}
+	if psk != "" {
+		settings["802-11-wireless-security"]["psk"] = psk
+	}
+	err = conn.Update(settings)
 	if err != nil {
 		return err
 	}
