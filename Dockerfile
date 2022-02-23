@@ -43,6 +43,8 @@ COPY --from=ui /app/index.html /app/dev.html /app/favicon.ico ui/
 COPY --from=ui /app/dist ui/dist
 COPY --from=ui /app/icons ui/icons
 
+COPY docs /app/docs
+
 COPY --from=bin /app/wazigate-system .
 
 COPY scan.awk .
