@@ -1,7 +1,7 @@
 import { MDBAlert, MDBBtn, MDBCol, MDBContainer, MDBIcon, MDBRow } from "mdbreact";
 import * as React from "react";
 import Modal from 'react-bootstrap/Modal';
-import { Device, Devices, getBlackout, getNetworkDevices, getWlanDevice, reboot, shutdown} from "../../api";
+import { Device, Devices, getBlackout, getNetworkDevices, getVersion, getWlanDevice, reboot, shutdown } from "../../api";
 // import * as API from "../../api";
 import ErrorComp from "../Error";
 import Clock from "./Clock/Clock";
@@ -30,6 +30,7 @@ export interface State {
   };
   shutdownLoading: boolean;
   rebootLoading: boolean;
+  version: string;
 }
 
 class PagesOverview extends React.Component<Props, State> {
@@ -48,6 +49,7 @@ class PagesOverview extends React.Component<Props, State> {
       },
       shutdownLoading: false,
       rebootLoading: false,
+      version: "",
     };
   }
 
@@ -72,6 +74,10 @@ class PagesOverview extends React.Component<Props, State> {
     // 		});
     // 	}
     // );
+
+    getVersion().then((version) => {
+      this.setState({version});
+    });
 
     getBlackout().then(
       (res) => {
@@ -198,7 +204,6 @@ class PagesOverview extends React.Component<Props, State> {
     const wlan0 = this.props.devices.wlan0;
     const eth0 = this.props.devices.eth0;
 
-    
     if (wlan0) {
 
       const apConn = wlan0.AvailableConnections.find(conn => conn.connection.id === "WAZIGATE-AP");
@@ -313,6 +318,18 @@ class PagesOverview extends React.Component<Props, State> {
                 </MDBAlert> */}
               </div>
             </div>
+
+            <div className="card mb-3 mt-3 m-l3 mb-3">
+              <h4 className="card-header">
+                <MDBIcon far icon="clock" />{" "}
+                <a href="#config" title="Click to change the Timezone">
+                  Gateway Clock
+                </a>
+              </h4>
+              <div className="card-body h-100">
+                <Clock />
+              </div>
+            </div>
           </MDBCol>
 
           { }
@@ -340,14 +357,16 @@ class PagesOverview extends React.Component<Props, State> {
           <MDBCol>
             <div className="card mb-3 mt-3 m-l3 mb-3">
               <h4 className="card-header">
-                <MDBIcon far icon="clock" />{" "}
-                <a href="#config" title="Click to change the Timezone">
-                  Gateway Clock
+                {" "}
+                <MDBIcon
+                  spin={false}
+                  icon={"code-branch"}
+                />{" "}
+                <a href="#version" title="Shows the currently installed version of the WaziGate">
+                  WaziGate Version
                 </a>
               </h4>
-              <div className="card-body h-100">
-                <Clock />
-              </div>
+              <div className="card-body">{this.state.version}</div>
             </div>
           </MDBCol>
 

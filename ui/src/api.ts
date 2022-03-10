@@ -336,10 +336,10 @@ export async function getUpdateStatus() {
 }
 
 export async function getVersion() {
-  var resp = await fetch(URL + "version");
+  var resp = await fetch("/version");
 
   if (!resp.ok) await failResp(resp);
-  return await resp.json();
+  return await resp.text();
 }
 
 //
