@@ -322,9 +322,9 @@ class PagesOverview extends React.Component<Props, State> {
             <div className="card mb-3 mt-3 m-l3 mb-3">
               <h4 className="card-header">
                 <MDBIcon far icon="clock" />{" "}
-                <a href="#config" title="Click to change the Timezone">
+                <span title="Click to change the Timezone">
                   Gateway Clock
-                </a>
+                </span>
               </h4>
               <div className="card-body h-100">
                 <Clock />
@@ -342,7 +342,7 @@ class PagesOverview extends React.Component<Props, State> {
                   spin={false}
                   icon={this.state.WiFiLoading ? "cog" : "wifi"}
                 />{" "}
-                <a href="#internet" title="Connect to a WiFi network">
+                <a href="#/internet" title="Connect to a WiFi network">
                   WiFi Network
                 </a>
               </h4>
@@ -354,23 +354,7 @@ class PagesOverview extends React.Component<Props, State> {
         { }
 
         <MDBRow>
-          <MDBCol>
-            <div className="card mb-3 mt-3 m-l3 mb-3">
-              <h4 className="card-header">
-                {" "}
-                <MDBIcon
-                  spin={false}
-                  icon={"code-branch"}
-                />{" "}
-                <a href="#version" title="Shows the currently installed version of the WaziGate">
-                  WaziGate Version
-                </a>
-              </h4>
-              <div className="card-body">{this.state.version}</div>
-            </div>
-          </MDBCol>
 
-          { }
 
           <MDBCol>
             <div className="card mb-3 mt-3 m-l3 mb-3">
@@ -441,6 +425,23 @@ class PagesOverview extends React.Component<Props, State> {
               </div>
             </div>
           </MDBCol>
+          <MDBCol>
+            <div className="card mb-3 mt-3 m-l3 mb-3">
+              <h4 className="card-header">
+                {" "}
+                <MDBIcon
+                  spin={false}
+                  icon={"code-branch"}
+                />{" "}
+                <span title="Shows the currently installed version of the WaziGate">
+                  WaziGate Version
+                </span>
+              </h4>
+              <div className="card-body">{this.state.version}</div>
+            </div>
+          </MDBCol>
+
+          { }
 
           { }
         </MDBRow>
