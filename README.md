@@ -59,10 +59,12 @@ This component serves all network related APIs, they listed below and all stored
 - `/net/wifi/ap`
 - `/net/wifi/mode/ap`
 
-To serve these APIs we use shell commands and tools such as `ip` and `iw`.
-In order to switch to Access point mode, we run a shell script, stored in `/home/pi/waziup-gateway/wazigate-host/start_hotspot.sh`, on the host.
+To serve these APIs we use shell commands and tools such as `nmcli, `ip` and `iw`.
+In order to switch to Access point mode, we run a the text-ui, stored in `/var/lib/wazigate/tools/text-ui.sh`, on the host. This script uses cmds like: `nmcli c up $(nmcli -f NAME,UUID -p c | grep WAZIGATE-AP | sed 's/WAZIGATE-AP//' | xargs)`.
 
-In order to connect to a WiFi router, first we store WiFi credentials on the host in this file: `/etc/wpa_supplicant/wpa_supplicant.conf` then we execute a shell script on host stored in `/home/pi/waziup-gateway/wazigate-host/start_wifi.sh`.
+In order to connect to a WiFi router, just use the text-UI, displayed on startup, after boot.
+
+[//]: # (first we store WiFi credentials on the host in this file: `/etc/wpa_supplicant/wpa_supplicant.conf` then we execute a shell script on host stored in `/home/pi/waziup-gateway/wazigate-host/start_wifi.sh`.)
 
 #### System Operations
 
@@ -101,7 +103,7 @@ This controller is initiated by calling `LEDsLoop()` function and constantly che
 
 #### Timezone
 
-Timezone is not actually a controller, but we juts run it in a separate GoRoutine because it has to wait for the `wazigate-host` service to come up then it can run the timezone commands on it. It is initiated via calling `TimezoneInit()`.
+It is initiated via calling `TimezoneInit()`.
 The code is stored in `/api/time.go`.
 
 #### Blackout
@@ -123,7 +125,7 @@ The code is stored in `/api/buttons.go`.
 
 #### OLED Display
 
-OLED Display controller is initiated by calling `OledLoop()`. It checks the status of the gateway and shows it on the display. It collects docker container status, `wazigate-host` daemon availability, internet connectivity, WiFi and Ethernet status and shows messages on `reboot` and `shutdown`. It also receives custom messages from the API.
+OLED Display controller is initiated by calling `OledLoop()`. It checks the status of the gateway and shows it on the display. It collects docker container status, internet connectivity, WiFi and Ethernet status and shows messages on `reboot` and `shutdown`. It also receives custom messages from the API.
 The code is stored in `/api/oled.go`.
 
 #### Fan
