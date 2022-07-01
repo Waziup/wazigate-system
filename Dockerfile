@@ -47,8 +47,6 @@ COPY docs /app/docs
 
 COPY --from=bin /app/wazigate-system .
 
-COPY scan.awk .
-
 ENV WAZIUP_MONGO=wazigate-mongo:27017
 
 HEALTHCHECK CMD curl --fail http://localhost || exit 1 
