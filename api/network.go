@@ -4,6 +4,7 @@ import (
 	// "fmt"
 	"context"
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"sync"
@@ -360,6 +361,10 @@ func DeleteNetWiFi(resp http.ResponseWriter, req *http.Request, params routing.P
 
 // Activate Access Point Mode
 func ActivateAPMode() error {
+	err := ioutil.WriteFile("/etc/do_not_reconnect_wifi", nil, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
 	return nm.Hotspot("", "")
 }
 
