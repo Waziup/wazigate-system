@@ -34,6 +34,7 @@ func setupRouter() *routing.Router {
 	router.GET("/docker/:cId/logs/:tail", DockerLogs)
 
 	router.GET("/time", GetTime)
+	router.PUT("/time", SetTime)
 	router.GET("/timezones", GetTimeZones)
 	router.GET("/timezone/auto", GetTimeZoneAuto) // based on IP address
 	router.GET("/timezone", GetTimeZone)
@@ -98,7 +99,8 @@ func ListenAndServeHTTP() {
 	}
 
 	cleanupSocket()
-	l, err := net.Listen("unix", waziappProxy)
+	// l, err := net.Listen("unix", waziappProxy)
+	l, err := net.Listen("tcp", ":8082")
 	if err != nil {
 		log.Fatal("Listen error:", err)
 	}

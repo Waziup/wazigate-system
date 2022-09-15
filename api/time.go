@@ -225,4 +225,31 @@ func RunTimezoneManager() error {
 	return nil
 }
 
-//
+// Change time manually
+
+func SetSystemTime(newDate string) error {
+	cmd := "sudo date -s \"" + newDate + "\""
+	_, err := execOnHost(cmd)
+
+	return err
+}
+
+// Implements POST|PUT /time
+func SetTime(resp http.ResponseWriter, req *http.Request, params routing.Params) {
+
+	var newTime string
+	decoder := json.NewDecoder(req.Body)
+	err := decoder.Decode(&newTime)
+	if err != nil {
+		log.Printf("[ERR  ] %s", err.Error())
+		http.Error(resp, "[ Error ]: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	err = SetSystemTime(newTime)
+	if err != nil {
+		log.Printf("[ERR  ] %s", err.Error())
+		http.Error(resp, "[ Error ]: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+}

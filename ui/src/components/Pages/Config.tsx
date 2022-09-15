@@ -37,6 +37,7 @@ export interface State {
 
   ConfInfo: any;
   setConfLoading: boolean;
+  currentTime: Date;
 }
 
 class PagesConfig extends React.Component<Props, State> {
@@ -52,6 +53,7 @@ class PagesConfig extends React.Component<Props, State> {
 
       ConfInfo: null,
       setConfLoading: false,
+      currentTime: new Date(),
     };
 
     // API.getWlanDevice().then(
@@ -176,6 +178,24 @@ class PagesConfig extends React.Component<Props, State> {
   };
 
   /**------------- */
+
+  convTime = (date: Date) => {
+    return `${date.getFullYear()}-${padZero(date.getMonth()+1)}-${padZero(date.getDate())}T${padZero(date.getHours())}:${padZero(date.getMinutes())}`
+  }
+
+  submitTime = () => {
+    var date_and_time = this.convTime(this.state.currentTime);
+    API.setTime(date_and_time).then(
+      (msg) => {
+        Notify(msg);
+        this.setState({ setConfLoading: false });
+      },
+      (error) => {
+        Notify(error);
+        this.setState({ setConfLoading: false });
+      }
+    );
+  }
 
   render() {
     if (this.state.error) {
@@ -359,13 +379,40 @@ class PagesConfig extends React.Component<Props, State> {
 
             <div className="col-lg-6 mt-3 mb-6 grid-margin">
               <div className="card h-100">
-                <h4 className="card-header">Timezone</h4>
+                <h4 className="card-header">Time Settings</h4>
                 <div className="card-body">
                   <MDBContainer>
                     <MDBRow>
                       <MDBCol md="10">
                         <Clock interval={3} />
                         <TimezoneConfig />
+                        <MDBAlert color="info">
+                        <label htmlFor="change-time">Set time of the gateway manually:</label>
+                        <input type="datetime-local" id="change-time"
+                        name="change-time" defaultValue={this.convTime(new Date())}
+                        min="2022-06-07T00:00"
+                        onChange={(ev) => this.setState({currentTime: ev.currentTarget.valueAsDate})}>
+                        </input>
+                        <div className="text-center">
+                          <MDBBtn
+                                type="submit"
+                                disabled={this.state.ConfInfo == null}
+                                onClick={this.submitTime}
+                              >
+                                Save{" "}
+                                {this.state.setAPInfoLoading ? (
+                                  <MDBIcon
+                                    icon="cog"
+                                    className="ml-2"
+                                    size="1x"
+                                    spin
+                                  />
+                                ) : (
+                                  ""
+                                )}
+                          </MDBBtn>
+                        </div>
+                        </MDBAlert>
                       </MDBCol>
                     </MDBRow>
                   </MDBContainer>
@@ -379,6 +426,11 @@ class PagesConfig extends React.Component<Props, State> {
       </React.Fragment>
     );
   }
+}
+
+function padZero(t: number): string {
+  if (t < 10) return "0"+t;
+  return ""+t;
 }
 
 export default PagesConfig;

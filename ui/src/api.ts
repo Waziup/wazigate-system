@@ -389,6 +389,19 @@ export async function setConf(data: any) {
   // return await resp.json();
 }
 
+export async function setTime(data: string) {
+  var resp = await fetch(URL + "time", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!resp.ok) await failResp(resp);
+  return await resp.text();
+  // return await resp.json();
+}
+
 //
 
 export async function shutdown() {
@@ -414,5 +427,7 @@ export async function reboot() {
   return await resp.text();
   // return await resp.json();
 }
+
+
 
 //
