@@ -180,6 +180,7 @@ class PagesConfig extends React.Component<Props, State> {
   /**------------- */
 
   convTime = (date: Date) => {
+    //console.log("convTime_Date: " + date)
     return `${date.getFullYear()}-${padZero(date.getMonth()+1)}-${padZero(date.getDate())}T${padZero(date.getHours())}:${padZero(date.getMinutes())}`
   }
 
@@ -391,13 +392,17 @@ class PagesConfig extends React.Component<Props, State> {
                         <input type="datetime-local" id="change-time"
                         name="change-time" defaultValue={this.convTime(new Date())}
                         min="2022-06-07T00:00"
-                        onChange={(ev) => this.setState({currentTime: ev.currentTarget.valueAsDate})}>
+                        onChange={(ev) => {
+                          this.setState({
+                            currentTime: new Date(ev.currentTarget.value)
+                          })
+                        }}>
                         </input>
                         <div className="text-center">
                           <MDBBtn
                                 type="submit"
                                 disabled={this.state.ConfInfo == null}
-                                onClick={this.submitTime}
+                                onMouseUp={this.submitTime}
                               >
                                 Save{" "}
                                 {this.state.setAPInfoLoading ? (
