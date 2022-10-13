@@ -130,6 +130,16 @@ class Clock extends React.Component<Props, State> {
         </MDBAlert>
         <MDBAlert color="info">
           <span className="text-capitalize">
+            Date :{" "}
+            <b>
+              {this.state.data.time
+                ? this.state.data.time.getFullYear() + "-" + padZero(this.state.data.time.getMonth() + 1) + "-" +  padZero(this.state.data.time.getDate())
+                : "---"}
+            </b>
+          </span>
+        </MDBAlert>
+        <MDBAlert color="info">
+          <span className="text-capitalize">
             Time Zone : <b>{this.state.data.zone}</b>
           </span>
         </MDBAlert>
@@ -149,3 +159,7 @@ class Clock extends React.Component<Props, State> {
 }
 
 export default Clock;
+function padZero(t: number): string {
+  if (t < 10) return "0"+t;
+  return ""+t;
+}
