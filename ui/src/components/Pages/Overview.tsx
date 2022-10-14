@@ -31,6 +31,7 @@ export interface State {
   shutdownLoading: boolean;
   rebootLoading: boolean;
   version: string;
+  buildNr: string;
 }
 
 class PagesOverview extends React.Component<Props, State> {
@@ -50,6 +51,7 @@ class PagesOverview extends React.Component<Props, State> {
       shutdownLoading: false,
       rebootLoading: false,
       version: "",
+      buildNr: "",
     };
   }
 
@@ -77,6 +79,10 @@ class PagesOverview extends React.Component<Props, State> {
 
     getVersion().then((version) => {
       this.setState({version});
+    });
+
+    getBuildNr().then((buildNr) => {
+      this.setState({buildNr});
     });
 
     getBlackout().then(
@@ -437,7 +443,7 @@ class PagesOverview extends React.Component<Props, State> {
                   WaziGate Version
                 </span>
               </h4>
-              <div className="card-body">{this.state.version}</div>
+              <div className="card-body">{this.state.version + " Build Nr: " this.state.buildNr}</div>
             </div>
           </MDBCol>
 
