@@ -342,6 +342,13 @@ export async function getVersion() {
   return await resp.text();
 }
 
+export async function getBuildNr() {
+  var resp = await fetch("/buildnr");
+
+  if (!resp.ok) await failResp(resp);
+  return await resp.text();
+}
+
 //
 
 export async function getAllSensors() {

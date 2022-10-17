@@ -1,7 +1,7 @@
 import { MDBAlert, MDBBtn, MDBCol, MDBContainer, MDBIcon, MDBRow } from "mdbreact";
 import * as React from "react";
 import Modal from 'react-bootstrap/Modal';
-import { Device, Devices, getBlackout, getNetworkDevices, getVersion, getWlanDevice, reboot, shutdown } from "../../api";
+import { Device, Devices, getBlackout, getNetworkDevices, getVersion, getBuildNr, getWlanDevice, reboot, shutdown } from "../../api";
 // import * as API from "../../api";
 import ErrorComp from "../Error";
 import Clock from "./Clock/Clock";
@@ -443,7 +443,7 @@ class PagesOverview extends React.Component<Props, State> {
                   WaziGate Version
                 </span>
               </h4>
-              <div className="card-body">{this.state.version + " Build Nr: " this.state.buildNr}</div>
+              <div className="card-body">{this.state.version + " Buildnumber: " + this.state.buildNr}</div>
             </div>
           </MDBCol>
 
