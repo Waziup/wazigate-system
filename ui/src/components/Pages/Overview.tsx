@@ -443,7 +443,7 @@ class PagesOverview extends React.Component<Props, State> {
                   WaziGate Version
                 </span>
               </h4>
-              <div className="card-body">{this.state.version + " Buildnumber: " + this.state.buildNr}</div>
+              <div className="card-body">{this.state.version + "  (build number: " + this.state.buildNr + ")"}</div>
             </div>
           </MDBCol>
 
