@@ -8,6 +8,7 @@ package main
 import (
 	"log"
 	"os"
+	"path/filepath"
 
 	_ "embed"
 
@@ -51,7 +52,19 @@ var setup = []func() error{
 //go:embed package.json
 var packageJSON []byte
 
-const packageJSONFile = "/var/lib/waziapp/package.json"
+const defaultWaziappFolder = "/var/lib/waziapp"
+
+var waziappFolder = getWaziappFolder()
+
+func getWaziappFolder() string {
+	waziappFolder := os.Getenv("WAZIAPP_FOLDER")
+	if waziappFolder != "" {
+		return waziappFolder
+	}
+	return defaultWaziappFolder
+}
+
+var packageJSONFile = filepath.Join(waziappFolder, "package.json")
 
 func movePackageJSON() error {
 	if err := os.WriteFile(packageJSONFile, packageJSON, 0777); err != nil {
