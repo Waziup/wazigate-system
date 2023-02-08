@@ -99,8 +99,8 @@ func ListenAndServeHTTP() {
 	}
 
 	cleanupSocket()
-	//l, err := net.Listen("unix", waziappProxy) // unix-socket for deploy mode on RPI
-	l, err := net.Listen("tcp", ":8082") // tcp for debug mode on RPI
+	l, err := net.Listen("unix", waziappProxy) // unix-socket for deploy mode on RPI
+	//l, err := net.Listen("tcp", ":8082") // tcp for debug mode on RPI
 	if err != nil {
 		log.Fatal("Listen error:", err)
 	}
