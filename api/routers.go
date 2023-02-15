@@ -22,6 +22,9 @@ func setupRouter() *routing.Router {
 	router.GET("/package.json", packageJSON)
 
 	router.GET("/ui/*file_path", UI)
+	router.GET("/ssh/*file_path", SSH)
+	router.POST("/ssh/*file_path", SSH)
+	router.OPTIONS("/ssh/*file_path", SSH)
 
 	router.GET("/docs/", APIDocs)
 	router.GET("/docs/:file_path", APIDocs)
@@ -99,8 +102,8 @@ func ListenAndServeHTTP() {
 	}
 
 	cleanupSocket()
-	l, err := net.Listen("unix", waziappProxy) // unix-socket for deploy mode on RPI
-	//l, err := net.Listen("tcp", ":8082") // tcp for debug mode on RPI
+	//l, err := net.Listen("unix", waziappProxy) // unix-socket for deploy mode on RPI
+	l, err := net.Listen("tcp", ":8082") // tcp for debug mode on RPI
 	if err != nil {
 		log.Fatal("Listen error:", err)
 	}

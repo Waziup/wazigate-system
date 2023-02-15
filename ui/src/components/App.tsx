@@ -17,6 +17,7 @@ import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 import Notifications from "./Notifications";
 import { NetworkContext } from "./network-context";
+import PagesSsh from "./Pages/Ssh";
 
 export interface AppCompState {
   devices: API.Devices | null,
@@ -103,6 +104,7 @@ class AppComp extends React.Component<AppCompProps, AppCompState> {
               <Route path="containers" element={<PagesContainers />} />
               <Route path="logs" element={<PagesLogs />} />
               <Route path="update" element={<PagesUpdate />} />
+              <Route path="ssh" element={<PagesSsh />} />
               {/* <Route path="/test" element={<PagesTest />} /> */}
 
               {/* <Route component={Notfound} />   */}

@@ -64,6 +64,9 @@ class MenuBar extends React.Component<MenuProps, MenuState> {
               <NavDropdown.Item href="#/containers">
                 <MDBIcon icon="docker" brand /> Containers
               </NavDropdown.Item>
+              <NavDropdown.Item href="#/ssh">
+                <MDBIcon icon="terminal" /> SSH
+              </NavDropdown.Item>
               <NavDropdown.Item href="#/logs">
                 <MDBIcon icon="file-alt" /> Logs
               </NavDropdown.Item>
