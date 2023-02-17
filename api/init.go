@@ -109,7 +109,7 @@ func SSH(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
 	// Proxy from client to host:
 	// /ssh/index.html -> http://localhost:4200/index.html
-	reqURL := "http://127.0.0.1:4200" + req.RequestURI[4:]
+	reqURL := "http://wazigate:4200" + req.RequestURI[4:]
 
 	var body io.Reader = req.Body
 	if req.Method == "POST" {
