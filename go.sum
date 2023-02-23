@@ -2,6 +2,8 @@ github.com/Waziup/wazigate-edge/mqtt v0.0.0-20200401205703-a020867b3ff2 h1:CPKr8
 github.com/Waziup/wazigate-edge/mqtt v0.0.0-20200401205703-a020867b3ff2/go.mod h1:zRAx8fmQTBvpMFE97Y9pBkm8QUlfYAepST9Qu1fbmvE=
 github.com/Wifx/gonetworkmanager v0.3.0 h1:Gn5uD11cBG6qg9w0NENjTjMNZ5Asz0zxRo7t2twPQ84=
 github.com/Wifx/gonetworkmanager v0.3.0/go.mod h1:EdhHf2O00IZXfMv9LC6CS6SgTwcMTg/ZSDhGvch0cs8=
+github.com/go-chi/chi/v5 v5.0.8 h1:lD+NLqFcAi1ovnVZpsnObHGW4xb4J8lNmoYVfECH1Y0=
+github.com/go-chi/chi/v5 v5.0.8/go.mod h1:DslCQbL2OYiznFReuXYUmQ2hGd1aDpCnlMNITLSKoi8=
 github.com/godbus/dbus/v5 v5.0.2 h1:QtWdZQyXTEn7S0LXv9nVxPUiT37d1i7UntpRTiKM86E=
 github.com/godbus/dbus/v5 v5.0.2/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
