@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/go-chi/chi/v5/middleware"
 	routing "github.com/julienschmidt/httprouter"
 	"periph.io/x/periph/host"
 )
@@ -19,6 +20,8 @@ var WIFI_DEVICE string //Wifi Interface which can be set via env
 var ETH_DEVICE string  //Ethernet Interface
 
 var Config Configuration // the main configuration object
+
+var static http.Handler
 
 var hopHeaders = []string{
 	"Connection",
@@ -86,8 +89,8 @@ func APIDocs(resp http.ResponseWriter, req *http.Request, params routing.Params)
 	if rootPath == "" {
 		rootPath = "./"
 	}
-
-	http.FileServer(http.Dir(rootPath)).ServeHTTP(resp, req)
+	compressMiddleware := middleware.Compress(5)
+	static = compressMiddleware(http.FileServer(http.Dir(rootPath)).ServeHTTP(resp, req))
 }
 
 //
@@ -99,8 +102,8 @@ func UI(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	if rootPath == "" {
 		rootPath = "./"
 	}
-
-	http.FileServer(http.Dir(rootPath)).ServeHTTP(resp, req)
+	compressMiddleware := middleware.Compress(5)
+	static = compressMiddleware(http.FileServer(http.Dir(rootPath)).ServeHTTP(resp, req))
 }
 
 var client = &http.Client{}
