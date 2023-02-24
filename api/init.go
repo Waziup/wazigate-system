@@ -21,8 +21,6 @@ var ETH_DEVICE string  //Ethernet Interface
 
 var Config Configuration // the main configuration object
 
-var static http.Handler
-
 var hopHeaders = []string{
 	"Connection",
 	"Keep-Alive",
@@ -90,7 +88,7 @@ func APIDocs(resp http.ResponseWriter, req *http.Request, params routing.Params)
 		rootPath = "./"
 	}
 	compressMiddleware := middleware.Compress(5)
-	static = compressMiddleware(http.FileServer(http.Dir(rootPath)).ServeHTTP(resp, req))
+	compressMiddleware(http.FileServer(http.Dir(rootPath))).ServeHTTP(resp, req)
 }
 
 //
@@ -103,7 +101,7 @@ func UI(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 		rootPath = "./"
 	}
 	compressMiddleware := middleware.Compress(5)
-	static = compressMiddleware(http.FileServer(http.Dir(rootPath)).ServeHTTP(resp, req))
+	compressMiddleware(http.FileServer(http.Dir(rootPath))).ServeHTTP(resp, req)
 }
 
 var client = &http.Client{}
