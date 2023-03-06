@@ -10,6 +10,8 @@ import PagesResources from "./Pages/Resources";
 import PagesContainers from "./Pages/Containers/Containers";
 import PagesLogs from "./Pages/Logs";
 import PagesUpdate from "./Pages/Update";
+import PagesSsh from "./Pages/Ssh";
+import PagesExport from "./Pages/Export";
 
 import "../style/app.scss";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -17,7 +19,7 @@ import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 import Notifications from "./Notifications";
 import { NetworkContext } from "./network-context";
-import PagesSsh from "./Pages/Ssh";
+
 
 export interface AppCompState {
   devices: API.Devices | null,
@@ -105,6 +107,7 @@ class AppComp extends React.Component<AppCompProps, AppCompState> {
               <Route path="logs" element={<PagesLogs />} />
               <Route path="update" element={<PagesUpdate />} />
               <Route path="ssh" element={<PagesSsh />} />
+              <Route path="export" element={<PagesExport />} />
               {/* <Route path="/test" element={<PagesTest />} /> */}
 
               {/* <Route component={Notfound} />   */}

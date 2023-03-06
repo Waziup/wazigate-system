@@ -70,6 +70,9 @@ class MenuBar extends React.Component<MenuProps, MenuState> {
               <NavDropdown.Item href="#/logs">
                 <MDBIcon icon="file-alt" /> Logs
               </NavDropdown.Item>
+              <NavDropdown.Item href="#/export">
+                <MDBIcon icon="move_group" /> Export gateways data
+              </NavDropdown.Item>
               {/* <NavDropdown.Divider />
               <NavDropdown.Item href="#update">
                 <MDBIcon icon="sync" /> Update
