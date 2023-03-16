@@ -159,5 +159,3 @@ func delHopHeaders(header http.Header) {
 		header.Del(h)
 	}
 }
-
-//
