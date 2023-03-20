@@ -33,6 +33,11 @@ class PageExport extends React.Component<{},State> {
     return `${date.getFullYear()}-${padZero(date.getMonth()+1)}-${padZero(date.getDate())}T${padZero(date.getHours())}:${padZero(date.getMinutes())}`
   }
   
+  convTimeWithSec = (date: Date) => {
+    //console.log("convTime_Date: " + date)
+    return `${date.getFullYear()}-${padZero(date.getMonth()+1)}-${padZero(date.getDate())}T${padZero(date.getHours())}:${padZero(date.getMinutes())}:${padZero(date.getSeconds())}`
+  }
+
   render() {
       return (
           <>
