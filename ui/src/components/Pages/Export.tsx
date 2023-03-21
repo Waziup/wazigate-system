@@ -111,7 +111,7 @@ class PageExport extends React.Component<{},State> {
                           })
                         }}>
                   </input>
-                  <MDBBtn disabled={false} href={"../../../exportbins?from="+this.convTimeWithSec(this.state.fromTime)+"-0000"+"&to="+this.convTimeWithSec(this.state.toTime)+"-0000"+"&duration="+this.state.duration.toString()+"m"}>
+                  <MDBBtn disabled={false} href={"../../../exportbins?from="+this.state.fromTime.toISOString()+"&to="+this.state.toTime.toISOString()+"&duration="+this.state.duration.toString()+"m"}>
                         <MDBIcon
                           icon="account_tree"
                           className="ml-2"
