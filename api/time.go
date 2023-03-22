@@ -133,6 +133,15 @@ func setSystemTimezone(newTimezone string) error {
 
 	cmd := "sudo timedatectl set-timezone \"" + newTimezone + "\""
 	_, err := execOnHost(cmd)
+	if err != nil {
+		return err
+	}
+	location, err := time.LoadLocation(newTimezone)
+	if err != nil {
+		log.Printf("[ERR  ] Error could not set timezone in golang: %s", err)
+	} else {
+		time.Local = location
+	}
 
 	return err
 }
