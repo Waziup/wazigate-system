@@ -113,7 +113,7 @@ class PageExport extends React.Component<{},State> {
                           })
                         }}>
                   </input>
-                  <MDBCardText>Omit diviating values (20%) inbetween bins : </MDBCardText>
+                  <MDBCardText>Omit deviating values (20%) in between bins : </MDBCardText>
                   <input type="checkbox" id="clear" name="clear"
                     onChange={(ev) => {
                       this.setState({
@@ -121,6 +121,8 @@ class PageExport extends React.Component<{},State> {
                       })
                     }}>
                   </input>
+                  <label htmlFor="clear">exclude deviating values inside bins</label>
+                  <br/>
                   <MDBBtn disabled={false} href={"../../../exportbins?from="+this.state.fromTime.toISOString()+"&to="+this.state.toTime.toISOString()+"&duration="+this.state.duration.toString()+"m"+"&check="+this.state.checkBins}>
                         <MDBIcon
                           icon="account_tree"

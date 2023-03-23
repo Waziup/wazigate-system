@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os/exec"
 	"strings"
 	"time"
 
@@ -131,16 +132,25 @@ func SetTimeZone(resp http.ResponseWriter, req *http.Request, params routing.Par
 
 func setSystemTimezone(newTimezone string) error {
 
+	// set in host
 	cmd := "sudo timedatectl set-timezone \"" + newTimezone + "\""
 	_, err := execOnHost(cmd)
 	if err != nil {
 		return err
 	}
+
+	// set in go
 	location, err := time.LoadLocation(newTimezone)
 	if err != nil {
 		log.Printf("[ERR  ] Error could not set timezone in golang: %s", err)
 	} else {
 		time.Local = location
+	}
+
+	// make api call to edge to update time @runtime
+	err = exec.Command("curl", "-X", "POST", "-d", newTimezone, "http://wazigate-edge/sys/timezone").Run()
+	if err != nil {
+		return err
 	}
 
 	return err
