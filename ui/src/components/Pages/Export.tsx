@@ -13,6 +13,7 @@ export interface State {
   fromTime: Date;
   toTime: Date;
   duration: number;
+  checkBins: boolean;
 }
 
 class PageExport extends React.Component<{},State> {
@@ -26,6 +27,7 @@ class PageExport extends React.Component<{},State> {
       fromTime: fromTime,
       toTime: new Date(),
       duration: 10,
+      checkBins: false,
     }
   }
   convTime = (date: Date) => {
@@ -111,7 +113,15 @@ class PageExport extends React.Component<{},State> {
                           })
                         }}>
                   </input>
-                  <MDBBtn disabled={false} href={"../../../exportbins?from="+this.state.fromTime.toISOString()+"&to="+this.state.toTime.toISOString()+"&duration="+this.state.duration.toString()+"m"}>
+                  <MDBCardText>Omit diviating values (20%) inbetween bins : </MDBCardText>
+                  <input type="checkbox" id="clear" name="clear"
+                    onChange={(ev) => {
+                      this.setState({
+                        checkBins: ev.currentTarget.checked
+                      })
+                    }}>
+                  </input>
+                  <MDBBtn disabled={false} href={"../../../exportbins?from="+this.state.fromTime.toISOString()+"&to="+this.state.toTime.toISOString()+"&duration="+this.state.duration.toString()+"m"+"&check="+this.state.checkBins}>
                         <MDBIcon
                           icon="account_tree"
                           className="ml-2"
