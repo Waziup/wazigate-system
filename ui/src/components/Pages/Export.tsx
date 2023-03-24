@@ -107,7 +107,7 @@ class PageExport extends React.Component<{},State> {
                       }}>
                       </input>
                   <br/>
-                  <MDBCardText>Bin Size in minutes: </MDBCardText>
+                  <MDBCardText>Bin Size in seconds: </MDBCardText>
                   <input type="number" id="bins-time" name="bins-time" value={this.state.duration}
                     onChange={(ev) => {
                           this.setState({
@@ -126,7 +126,7 @@ class PageExport extends React.Component<{},State> {
                   </input>
                   <label htmlFor="clear"> exclude deviating values inside bins</label>
                   <br/>
-                  <MDBBtn disabled={false} href={"../../../exportbins?from="+this.state.fromTime.toISOString()+"&to="+this.state.toTime.toISOString()+"&duration="+this.state.duration.toString()+"m"+"&check="+this.state.checkBins}>
+                  <MDBBtn disabled={false} href={"../../../exportbins?from="+this.state.fromTime.toISOString()+"&to="+this.state.toTime.toISOString()+"&duration="+this.state.duration.toString()+"s"+"&check="+this.state.checkBins}>
                         <MDBIcon
                           icon="account_tree"
                           className="ml-2"
