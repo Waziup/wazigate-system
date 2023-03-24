@@ -95,6 +95,7 @@ class PageExport extends React.Component<{},State> {
                         })
                       }}>
                       </input>
+                  <br/>
                   <MDBCardText>To: </MDBCardText>
                   <input type="datetime-local" id="to-time"
                       name="to-time" defaultValue={this.convTime(this.state.toTime)}
@@ -105,6 +106,7 @@ class PageExport extends React.Component<{},State> {
                         })
                       }}>
                       </input>
+                  <br/>
                   <MDBCardText>Bin Size in minutes: </MDBCardText>
                   <input type="number" id="bins-time" name="bins-time" value={this.state.duration}
                     onChange={(ev) => {
@@ -113,6 +115,7 @@ class PageExport extends React.Component<{},State> {
                           })
                         }}>
                   </input>
+                  <br/>
                   <MDBCardText>Omit deviating values (20%) in between bins : </MDBCardText>
                   <input type="checkbox" id="clear" name="clear"
                     onChange={(ev) => {
@@ -121,7 +124,7 @@ class PageExport extends React.Component<{},State> {
                       })
                     }}>
                   </input>
-                  <label htmlFor="clear">exclude deviating values inside bins</label>
+                  <label htmlFor="clear"> exclude deviating values inside bins</label>
                   <br/>
                   <MDBBtn disabled={false} href={"../../../exportbins?from="+this.state.fromTime.toISOString()+"&to="+this.state.toTime.toISOString()+"&duration="+this.state.duration.toString()+"m"+"&check="+this.state.checkBins}>
                         <MDBIcon
