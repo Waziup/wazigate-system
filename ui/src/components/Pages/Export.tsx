@@ -26,7 +26,7 @@ class PageExport extends React.Component<{},State> {
     this.state= {
       fromTime: fromTime,
       toTime: new Date(),
-      duration: 10,
+      duration: 600,
       checkBins: false,
     }
   }
