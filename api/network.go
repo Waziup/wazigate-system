@@ -473,12 +473,12 @@ func CloudAccessible(withLogs bool) bool {
 	client := http.Client{
 		Timeout: 5 * time.Second,
 	}
-	resp, err := client.Get("http://waziup.io/")
+	resp, err := client.Get("http://www.waziup.io/")
 	if err != nil {
 		return false
 	}
 	resp.Body.Close()
-	return resp.StatusCode == http.StatusOK
+	return true
 }
 
 //

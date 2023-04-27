@@ -272,7 +272,9 @@ func Monitor(ctx context.Context, c chan<- interface{}) (err error) {
 					if err != nil {
 						return err
 					}
-				}
+				} //else if newState == gonetworkmanager.NmDeviceStateActivated {
+
+				// }
 				c <- ev
 			}
 		case <-ctx.Done():
