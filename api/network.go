@@ -471,9 +471,9 @@ func SetNetAP(resp http.ResponseWriter, req *http.Request, params routing.Params
 // Checks if Waziup cloud is accessible
 func CloudAccessible(withLogs bool) bool {
 	client := http.Client{
-		Timeout: 5 * time.Second,
+		Timeout: 10 * time.Second,
 	}
-	resp, err := client.Get("http://www.waziup.io/")
+	resp, err := client.Get("http://www.waziup.io/generate_204")
 	if err != nil {
 		return false
 	}

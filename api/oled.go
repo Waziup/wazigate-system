@@ -222,7 +222,7 @@ func RunOLEDManager() error {
 			//
 
 			oledShow(OledMsg, false)
-			time.Sleep(1 * time.Second)
+			time.Sleep(1 * time.Minute)
 
 			GWStatusCheck++
 			if GWStatusCheck > 7 {
