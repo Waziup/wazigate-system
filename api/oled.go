@@ -65,13 +65,13 @@ func oledHalt() {
 		log.Printf("[ERR  ] OLED halt: No OLED Found!")
 		return
 	}
-	oledShow("\n\n   Screen OFF", false)
-	time.Sleep(1 * time.Second)
-	oledHalted = true
-	err := oledDev.Halt()
-	if err != nil {
-		log.Printf("[ERR  ] OLED halt: %s ", err.Error())
-	}
+	// oledShow("\n\n   Screen OFF", false)
+	// time.Sleep(1 * time.Second)
+	// oledHalted = true
+	// err := oledDev.Halt()
+	// if err != nil {
+	// 	log.Printf("[ERR  ] OLED halt: %s ", err.Error())
+	// }
 }
 
 //
@@ -99,34 +99,34 @@ func oledShow(msg string, withLogs bool) {
 		log.Printf("[OLED  ] \"%s\"", msg)
 	}
 
-	// Draw on it.
-	img := image1bit.NewVerticalLSB(oledDev.Bounds())
-	// Note: this code is commented out so periph does not depend on:
+	// // Draw on it.
+	// img := image1bit.NewVerticalLSB(oledDev.Bounds())
+	// // Note: this code is commented out so periph does not depend on:
 
-	f := basicfont.Face7x13
-	drawer := font.Drawer{
-		Dst:  img,
-		Src:  &image.Uniform{image1bit.On},
-		Face: f,
-		// Dot:  fixed.P(0, img.Bounds().Dy()-1-f.Descent),
-		Dot: fixed.P(0, f.Height-f.Descent),
-	}
+	// f := basicfont.Face7x13
+	// drawer := font.Drawer{
+	// 	Dst:  img,
+	// 	Src:  &image.Uniform{image1bit.On},
+	// 	Face: f,
+	// 	// Dot:  fixed.P(0, img.Bounds().Dy()-1-f.Descent),
+	// 	Dot: fixed.P(0, f.Height-f.Descent),
+	// }
 
-	lines := strings.Split(msg, "\n")
-	for i, line := range lines {
-		line = strings.TrimRight(string(line), " \n\t\r")
+	// lines := strings.Split(msg, "\n")
+	// for i, line := range lines {
+	// 	line = strings.TrimRight(string(line), " \n\t\r")
 
-		drawer.Dot = fixed.P(0, (i+1)*f.Height-f.Descent)
-		drawer.DrawString(line)
-	}
+	// 	drawer.Dot = fixed.P(0, (i+1)*f.Height-f.Descent)
+	// 	drawer.DrawString(line)
+	// }
 
-	if err := oledDev.Draw(oledDev.Bounds(), img, image.Point{}); err != nil {
-		log.Printf("[ERR  ] OLED [ %s ] command. \n\tError: [ %s ]", msg, err.Error())
+	// if err := oledDev.Draw(oledDev.Bounds(), img, image.Point{}); err != nil {
+	// 	log.Printf("[ERR  ] OLED [ %s ] command. \n\tError: [ %s ]", msg, err.Error())
 
-		//Wait for a while and try again after failure
-		time.Sleep(2 * time.Second)
-		oledInit()
-	}
+	// 	//Wait for a while and try again after failure
+	// 	time.Sleep(2 * time.Second)
+	// 	oledInit()
+	// }
 
 }
 
@@ -145,100 +145,100 @@ func RunOLEDManager() error {
 		return nil
 	}
 
-	go func() {
+	// go func() {
 
-		OledBuffer = ""     // Clear the buffer
-		autoClearTimer := 0 // Automatically clear a message if it is not removed after let's say 13 seconds
+	// 	OledBuffer = ""     // Clear the buffer
+	// 	autoClearTimer := 0 // Automatically clear a message if it is not removed after let's say 13 seconds
 
-		allBootedOK := false
-		GWStatusCheck := 0 // Check the containers status in every let's say 7 seconds.
+	// 	allBootedOK := false
+	// 	GWStatusCheck := 0 // Check the containers status in every let's say 7 seconds.
 
-		heartbeat := false // Just a toggle varianle to show heartbeat on the screen
+	// 	heartbeat := false // Just a toggle varianle to show heartbeat on the screen
 
-		oledHaltCounter := 0
+	// 	oledHaltCounter := 0
 
-		for {
+	// 	for {
 
-			//
+	// 		//
 
-			if autoClearTimer > 12 {
-				OledBuffer = ""
-				oledShow("", false)
-			}
+	// 		if autoClearTimer > 12 {
+	// 			OledBuffer = ""
+	// 			oledShow("", false)
+	// 		}
 
-			if len(OledBuffer) > 0 {
-				oledShow(OledBuffer, true)
-				autoClearTimer++
-				time.Sleep(1 * time.Second)
-				continue
-			}
-			autoClearTimer = 0
+	// 		if len(OledBuffer) > 0 {
+	// 			oledShow(OledBuffer, true)
+	// 			autoClearTimer++
+	// 			time.Sleep(1 * time.Second)
+	// 			continue
+	// 		}
+	// 		autoClearTimer = 0
 
-			if oledHalted {
-				time.Sleep(1 * time.Second)
-				continue
-			}
+	// 		if oledHalted {
+	// 			time.Sleep(1 * time.Second)
+	// 			continue
+	// 		}
 
-			if oledHaltCounter > Config.OLEDHaltTimeout {
-				oledHalt()
-				oledHaltCounter = 0
-				continue
-			}
+	// 		if oledHaltCounter > Config.OLEDHaltTimeout {
+	// 			oledHalt()
+	// 			oledHaltCounter = 0
+	// 			continue
+	// 		}
 
-			oledHaltCounter++
+	// 		oledHaltCounter++
 
-			//
+	// 		//
 
-			heartTxt := "  "
-			heartbeat = !heartbeat
-			if heartbeat {
-				heartTxt = "* "
-			}
+	// 		heartTxt := "  "
+	// 		heartbeat = !heartbeat
+	// 		if heartbeat {
+	// 			heartTxt = "* "
+	// 		}
 
-			netTxt := "[ Internet NO ]"
-			if CloudAccessible(false /*Without Logs*/) {
-				netTxt = "[ Internet OK ]"
-			}
+	// 		netTxt := "[ Internet NO ]"
+	// 		if CloudAccessible(false /*Without Logs*/) {
+	// 			netTxt = "[ Internet OK ]"
+	// 		}
 
-			OledMsg := heartTxt + netTxt
+	// 		OledMsg := heartTxt + netTxt
 
-			//
+	// 		//
 
-			// eip, wip, aip, ssid := GetAllIPs()
+	// 		// eip, wip, aip, ssid := GetAllIPs()
 
-			// if len(eip) > 0 {
-			// 	// msg.append( "Ethernet: "+ eip);
-			// 	OledMsg += "\nEth: " + eip
-			// }
+	// 		// if len(eip) > 0 {
+	// 		// 	// msg.append( "Ethernet: "+ eip);
+	// 		// 	OledMsg += "\nEth: " + eip
+	// 		// }
 
-			// if len(wip) > 0 {
-			// 	OledMsg += "\n\nWiFi: (" + ssid + ")\n " + wip
-			// }
+	// 		// if len(wip) > 0 {
+	// 		// 	OledMsg += "\n\nWiFi: (" + ssid + ")\n " + wip
+	// 		// }
 
-			// if len(aip) > 0 {
-			// 	OledMsg += "\n\nAP: (" + ssid + ")\n " + aip
-			// }
+	// 		// if len(aip) > 0 {
+	// 		// 	OledMsg += "\n\nAP: (" + ssid + ")\n " + aip
+	// 		// }
 
-			//
+	// 		//
 
-			oledShow(OledMsg, false)
-			time.Sleep(1 * time.Minute)
+	// 		oledShow(OledMsg, false)
+	// 		time.Sleep(1 * time.Minute)
 
-			GWStatusCheck++
-			if GWStatusCheck > 7 {
-				GWStatusCheck = 0
-				allBootedOK, _ = GetGWBootstatus(false)
-			}
+	// 		GWStatusCheck++
+	// 		if GWStatusCheck > 7 {
+	// 			GWStatusCheck = 0
+	// 			allBootedOK, _ = GetGWBootstatus(false)
+	// 		}
 
-			if !allBootedOK {
-				allBootedOK, OledMsg = GetGWBootstatus(false)
-				oledShow(OledMsg, false)
-				time.Sleep(1 * time.Second)
-			}
+	// 		if !allBootedOK {
+	// 			allBootedOK, OledMsg = GetGWBootstatus(false)
+	// 			oledShow(OledMsg, false)
+	// 			time.Sleep(1 * time.Second)
+	// 		}
 
-		} // End of `for`
+	// 	} // End of `for`
 
-	}()
+	// }()
 
 	log.Printf("[     ] OLED manager initialized.")
 	return nil
