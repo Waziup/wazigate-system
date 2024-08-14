@@ -8,7 +8,7 @@ package main
 import (
 	"log"
 	"os"
-	// "path/filepath"
+	"path/filepath"
 
 	_ "embed"
 
@@ -35,7 +35,7 @@ func main() {
 }
 
 var setup = []func() error{
-	// movePackageJSON,
+	movePackageJSON,
 	nm.Connect,
 	api.Init,
 	api.RunLEDManager,
@@ -49,29 +49,29 @@ var setup = []func() error{
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// //go:embed package.json
-// var packageJSON []byte
+//go:embed package.json
+var packageJSON []byte
 
-// const defaultWaziappFolder = "/var/lib/waziapp"
+const defaultWaziappFolder = "/var/lib/waziapp"
 
-// var waziappFolder = getWaziappFolder()
+var waziappFolder = getWaziappFolder()
 
-// func getWaziappFolder() string {
-// 	waziappFolder := os.Getenv("WAZIAPP_FOLDER")
-// 	if waziappFolder != "" {
-// 		return waziappFolder
-// 	}
-// 	return defaultWaziappFolder
-// }
+func getWaziappFolder() string {
+	waziappFolder := os.Getenv("WAZIAPP_FOLDER")
+	if waziappFolder != "" {
+		return waziappFolder
+	}
+	return defaultWaziappFolder
+}
 
-// var packageJSONFile = filepath.Join(waziappFolder, "package.json")
+var packageJSONFile = filepath.Join(waziappFolder, "package.json")
 
-// func movePackageJSON() error {
-// 	if err := os.WriteFile(packageJSONFile, packageJSON, 0777); err != nil {
-// 		log.Println("Make sure to run this container with the mapped volume '/var/lib/waziapp'.")
-// 		log.Println("See the Waziapp documentation for more details on running Waziapps.")
-// 		return err
-// 	}
-// 	api.PackageJSON = packageJSON
-// 	return nil
-// }
+func movePackageJSON() error {
+	if err := os.WriteFile(packageJSONFile, packageJSON, 0777); err != nil {
+		log.Println("Make sure to run this container with the mapped volume '/var/lib/waziapp'.")
+		log.Println("See the Waziapp documentation for more details on running Waziapps.")
+		return err
+	}
+	api.PackageJSON = packageJSON
+	return nil
+}
