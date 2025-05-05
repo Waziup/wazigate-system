@@ -94,12 +94,30 @@ func Hotspot(ssid string, psk string) (err error) {
 		return errNoHotspot
 	}
 	if ssid != "" {
+		if len(psk) < 8 {
+			return fmt.Errorf("psk must be at least 8 characters")
+		}
+		if len(psk) > 63 {
+			return fmt.Errorf("psk must be at most 63 characters")
+		}
+		if len(ssid) > 32 {
+			return fmt.Errorf("ssid must be at most 32 characters")
+		}
 		err = ap.Update(gonetworkmanager.ConnectionSettings{
+			"connection": map[string]interface{}{
+				"id":             accessPointId,
+				"interface-name": "wlan0",
+				"type":           "802-11-wireless",
+			},
 			"802-11-wireless": map[string]interface{}{
 				"ssid": []byte(ssid),
 			},
 			"802-11-wireless-security": map[string]interface{}{
-				"psk": psk,
+				"psk":      psk,
+				"key-mgmt": "wpa-psk",
+				"pairwise": []string{"ccmp"},
+				"group":    []string{"ccmp"},
+				"proto":    []string{"wpa"},
 			},
 		})
 		if err != nil {

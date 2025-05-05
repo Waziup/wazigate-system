@@ -41,7 +41,7 @@ func loadConfigs() Configuration {
 	filename := GetRootPath() + "/conf.json"
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
-		log.Printf("[ERR  ] %s", err.Error())
+		log.Printf("[WARN ] %s", err.Error())
 		return Configuration{
 			false,
 			62.1,   // in CC
