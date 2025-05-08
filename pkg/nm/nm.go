@@ -103,6 +103,9 @@ func Hotspot(ssid string, psk string) (err error) {
 		if len(ssid) > 32 {
 			return fmt.Errorf("ssid must be at most 32 characters")
 		}
+
+		// cmd := exec.Command("nmcli", "dev", "wifi", "hotspot", "ifname", "wlan0", "ssid", ssid, "password", psk, "con-name", accessPointId)
+		// err := cmd.Run()
 		err = ap.Update(gonetworkmanager.ConnectionSettings{
 			"connection": map[string]interface{}{
 				"id":             accessPointId,
@@ -111,13 +114,20 @@ func Hotspot(ssid string, psk string) (err error) {
 			},
 			"802-11-wireless": map[string]interface{}{
 				"ssid": []byte(ssid),
+				"mode": "ap",
 			},
 			"802-11-wireless-security": map[string]interface{}{
 				"psk":      psk,
 				"key-mgmt": "wpa-psk",
 				"pairwise": []string{"ccmp"},
 				"group":    []string{"ccmp"},
-				"proto":    []string{"wpa"},
+				"proto":    []string{"rsn"},
+			},
+			"ipv4": map[string]interface{}{
+				"method": "shared",
+			},
+			"ipv6": map[string]interface{}{
+				"method": "ignore",
 			},
 		})
 		if err != nil {
