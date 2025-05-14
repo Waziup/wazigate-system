@@ -21,7 +21,7 @@ func setupRouter() *routing.Router {
 	router.GET("/", HomeLink)
 	router.GET("/package.json", packageJSON)
 
-	router.GET("/ui/*file_path", UI)
+	// router.GET("/ui/*file_path", UI)
 	router.GET("/ssh/*file_path", SSH)
 	router.POST("/ssh/*file_path", SSH)
 	router.OPTIONS("/ssh/*file_path", SSH)
