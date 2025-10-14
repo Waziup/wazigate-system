@@ -1,14 +1,14 @@
-FROM waziup/node-sass:14 AS ui
+# FROM waziup/node-sass:14 AS ui
 
-ARG MODE=prod
+# ARG MODE=prod
 
-WORKDIR /app/
+# WORKDIR /app/
 
-COPY ui/package.json /app/
-RUN npm i
+# COPY ui/package.json /app/
+# RUN npm i
 
-COPY ui/. /app
-RUN npm run build --env $MODE
+# COPY ui/. /app
+# RUN npm run build --env $MODE
 
 ################################################################################
 
@@ -37,11 +37,11 @@ RUN apk add --no-cache iw gawk ca-certificates tzdata curl
 
 WORKDIR /app/
 
-COPY --from=ui /app/node_modules/react/umd ui/node_modules/react/umd
-COPY --from=ui /app/node_modules/react-dom/umd ui/node_modules/react-dom/umd
-COPY --from=ui /app/index.html /app/dev.html /app/favicon.ico ui/
-COPY --from=ui /app/dist ui/dist
-COPY --from=ui /app/icons ui/icons
+# COPY --from=ui /app/node_modules/react/umd ui/node_modules/react/umd
+# COPY --from=ui /app/node_modules/react-dom/umd ui/node_modules/react-dom/umd
+# COPY --from=ui /app/index.html /app/dev.html /app/favicon.ico ui/
+# COPY --from=ui /app/dist ui/dist
+# COPY --from=ui /app/icons ui/icons
 
 COPY docs /app/docs
 

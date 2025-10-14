@@ -94,15 +94,15 @@ func APIDocs(resp http.ResponseWriter, req *http.Request, params routing.Params)
 //
 
 // UI implements HTTP /ui
-func UI(resp http.ResponseWriter, req *http.Request, params routing.Params) {
+// func UI(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
-	rootPath := os.Getenv("EXEC_PATH")
-	if rootPath == "" {
-		rootPath = "./"
-	}
-	compressMiddleware := middleware.Compress(5)
-	compressMiddleware(http.FileServer(http.Dir(rootPath))).ServeHTTP(resp, req)
-}
+// 	rootPath := os.Getenv("EXEC_PATH")
+// 	if rootPath == "" {
+// 		rootPath = "./"
+// 	}
+// 	compressMiddleware := middleware.Compress(5)
+// 	compressMiddleware(http.FileServer(http.Dir(rootPath))).ServeHTTP(resp, req)
+// }
 
 var client = &http.Client{}
 

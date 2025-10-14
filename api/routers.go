@@ -21,7 +21,7 @@ func setupRouter() *routing.Router {
 	router.GET("/", HomeLink)
 	router.GET("/package.json", packageJSON)
 
-	router.GET("/ui/*file_path", UI)
+	// router.GET("/ui/*file_path", UI)
 	router.GET("/ssh/*file_path", SSH)
 	router.POST("/ssh/*file_path", SSH)
 	router.OPTIONS("/ssh/*file_path", SSH)
@@ -68,6 +68,9 @@ func setupRouter() *routing.Router {
 	// router.GET("/net/wifi/ap", GetNetAP)
 	router.POST("/net/wifi/ap", SetNetAP)
 	router.PUT("/net/wifi/ap", SetNetAP)
+
+	router.GET("/vpn", GetVPNStatus)
+	router.POST("/vpn", PostVPN)
 
 	router.POST("/net/wifi/mode/ap", SetNetAPMode)
 	router.PUT("/net/wifi/mode/ap", SetNetAPMode)
