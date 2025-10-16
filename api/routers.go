@@ -69,8 +69,8 @@ func setupRouter() *routing.Router {
 	router.POST("/net/wifi/ap", SetNetAP)
 	router.PUT("/net/wifi/ap", SetNetAP)
 
-	router.GET("/vpn", GetVPNStatus)
-	router.POST("/vpn", PostVPN)
+	router.GET("/net/vpn", GetVPNStatus)
+	router.POST("/net/vpn", PostVPN)
 
 	router.POST("/net/wifi/mode/ap", SetNetAPMode)
 	router.PUT("/net/wifi/mode/ap", SetNetAPMode)
