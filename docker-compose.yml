@@ -13,6 +13,9 @@ services:
       - /sys/class/gpio:/sys/class/gpio
       - /dev/mem:/dev/mem
       - ./:/go/src/github.com/Waziup/wazigate-system
+      - /etc/NetworkManager:/etc/NetworkManager
+      - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
+      - /sys/class/net:/sys/class/net:ro
     privileged: true
     network_mode: host
     environment:

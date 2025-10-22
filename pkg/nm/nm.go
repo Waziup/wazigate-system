@@ -5,7 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"log"
+	"net/http"
+	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/Wifx/gonetworkmanager"
@@ -449,4 +453,224 @@ func Devices() (map[string]json.RawMessage, error) {
 		"wlan0": wlan0,
 		"eth0":  eth0,
 	}, nil
+}
+//===========================VPN functions=======================
+func CheckVPNStatus()(bool, gonetworkmanager.NmVpnConnectionState,string , error){
+	nm, err := gonetworkmanager.NewNetworkManager()
+	if err!=nil {
+		return false, 0, "", fmt.Errorf("failed connecting to Network manager: %v", err)
+	}
+
+	gatewayID, err := getGatewayID()
+	if err != nil {
+		return false,0,"",fmt.Errorf("failed to get gateway ID: %v", err)
+	}
+	connected, activeConn, err := isVPNConnected(nm,gatewayID)
+	if err != nil || !connected {
+		return false,0,"", err
+	}
+
+	vpnConn, err := gonetworkmanager.NewVpnConnection(activeConn.GetPath())
+	if( err != nil || vpnConn ==nil) {
+		return true, 0, "", fmt.Errorf("failed to create VPN connection object")
+	}
+
+	state, err := vpnConn.GetPropertyVpnState()
+
+	if state == gonetworkmanager.NmVpnConnectionActivated {
+		log.Println("VPN is fully connected!")
+	}
+	if err != nil {
+		return true, 0, "", fmt.Errorf("failed to get VPN state: %v", err)
+	}
+
+	banner, err := vpnConn.GetPropertyBanner()
+	if err != nil {
+		banner = ""
+	}
+
+	return true, state, banner, nil
+}
+func EnableDisableVPN(enable bool) (error) {
+	nm, err :=gonetworkmanager.NewNetworkManager()
+	if err != nil {
+		return fmt.Errorf("failed to connect to NetworkManager: %v", err)
+	}
+	version, err := nm.GetPropertyVersion()
+	if err != nil {
+		return err
+	}
+	log.Println("[     ] Network Manager Version:", version)
+	gatewayID, err := getGatewayID()
+
+	if err != nil {
+		return fmt.Errorf("failed to get gateway ID: %v", err)
+	}
+	connected, activeConn, err := isVPNConnected(nm,gatewayID)
+	if err != nil || !connected {
+		return fmt.Errorf("error checking VPN status: %v", err)
+	}
+
+	if !enable {
+		if !connected {
+			log.Println("VPN is not connected")
+			return nil
+		}
+		return disconnectVPN(nm, activeConn)
+	}
+	if connected {
+		log.Println(" VPN is already active")
+		return nil
+	}
+	conn, exists,err := vpnProfileExists(gatewayID)
+	if err != nil {
+		return fmt.Errorf("error getting active VPN: %v", err)
+	}
+	if !exists {
+		configFile := gatewayID +".ovpn"
+		if err :=downloadVPNConfig(gatewayID, configFile); err !=nil {
+			return err
+		}
+		conn, err = importVPN(configFile)
+		if err !=nil {
+			return err
+		}
+	}
+	return connectVPN(nm, conn)
+}
+
+func connectVPN(nm gonetworkmanager.NetworkManager, conn gonetworkmanager.Connection) error {
+	log.Println("Connecting to VPN...")
+	activeConn, err := nm.ActivateConnection(conn, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to connect: %v", err)
+	}
+
+	vpnConn,err := gonetworkmanager.NewVpnConnection(activeConn.GetPath())
+	if err != nil {
+		state, err := vpnConn.GetPropertyVpnState()
+		if err == nil {
+			log.Printf("VPN State: %v", state)
+		}
+	}
+
+	log.Println("VPN connected successfully!")
+	return nil
+}
+
+func importVPN(configFile string) (gonetworkmanager.Connection, error) {
+	log.Println("Importing VPN profile...")
+	
+	cmd := exec.Command("nmcli", "connection", "import", "type", "openvpn", "file", configFile)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return nil, fmt.Errorf("failed to import VPN: %v - %s", err, output)
+	}
+	log.Println("VPN profile imported")
+
+	connID := strings.TrimSuffix(configFile, ".ovpn")
+	conn, exists, err := vpnProfileExists(connID)
+	if err != nil || !exists {
+		return nil, fmt.Errorf("failed to find imported connection: %v", err)
+	}
+
+	return conn, nil
+}
+
+func downloadVPNConfig(gatewayID, outputFile string) error {
+	url := fmt.Sprintf("http://3.71.4.83:5000/gateways/%s/vpn", gatewayID)
+	
+	resp, err := http.Get(url)
+	if err != nil {
+		return fmt.Errorf("failed to fetch config: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("server returned status: %d", resp.StatusCode)
+	}
+
+	out, err := os.Create(outputFile)
+	if err != nil {
+		return fmt.Errorf("failed to create file: %v", err)
+	}
+	defer out.Close()
+
+	if _, err = io.Copy(out, resp.Body); err != nil {
+		return fmt.Errorf("failed to save file: %v", err)
+	}
+
+	log.Printf("Downloaded config: %s", outputFile)
+	return nil
+}
+
+func vpnProfileExists(gatewayID string) (gonetworkmanager.Connection, bool, error) {
+	settings, err := gonetworkmanager.NewSettings()
+	if err !=nil{
+		return nil,false,fmt.Errorf("failed to get settings: %v",err)
+	}
+	connections,err :=settings.ListConnections()
+	if err !=nil {
+		return nil, false, fmt.Errorf("failed to list connections: %v",err)
+	}
+	for _, connection := range connections {
+		connSettings,err :=connection.GetSettings()
+		if err !=nil {
+			continue
+		}
+		if connSettings["connection"]["id"]==gatewayID {
+			return connection, true,nil
+		}
+	}
+	return nil, false, nil
+}
+
+func disconnectVPN(nm gonetworkmanager.NetworkManager, activeConn gonetworkmanager.ActiveConnection) error {
+	log.Println(" Disconnecting VPN...")
+
+	err := nm.DeactivateConnection(activeConn)
+	if err !=nil {
+		return fmt.Errorf("failed to disconnected %v",err)
+	}
+	log.Println("VPN disconnected successfully")
+	return nil
+}
+func getGatewayID() (string, error) {
+	resp, err := http.Get("http://localhost/device/id")
+	if err != nil {
+		return "", fmt.Errorf("request failed: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("status: %s", resp.Status)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("read error: %v", err)
+	}
+
+	return "wazigate-" + string(body), nil
+	
+}
+func isVPNConnected(nm gonetworkmanager.NetworkManager, gatewayId string) (bool, gonetworkmanager.ActiveConnection, error){
+	activeConnections, err :=nm.GetPropertyActiveConnections()
+	if err !=nil {
+		return false, nil, fmt.Errorf("failed to get active connections %v",err)
+	}
+	for _, ac :=range activeConnections {
+		isVPN, err :=ac.GetPropertyVPN()
+		if err !=nil || isVPN {
+			continue
+		}
+		id, err :=ac.GetPropertyID()
+		if err !=nil{
+			continue
+		}
+		if id== gatewayId {
+			return true,ac,nil
+		}
+	}
+	return false, nil, nil
 }
