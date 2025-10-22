@@ -9,7 +9,7 @@ COPY . .
 
 RUN CGO_ENABLED=0 go build -ldflags "-s -w" -o wazigate-system .
 
-FROM debian:bookworm-slim
+FROM ubuntu:22.04
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl iw gawk tzdata network-manager network-manager-openvpn \
