@@ -636,7 +636,7 @@ func disconnectVPN(nm gonetworkmanager.NetworkManager, activeConn gonetworkmanag
 	return nil
 }
 func getGatewayID() (string, error) {
-	resp, err := http.Get("http://localhost/device/id")
+	resp, err := http.Get("http://waziup.wazigate-edge/device/id")
 	if err != nil {
 		return "", fmt.Errorf("request failed: %v", err)
 	}
