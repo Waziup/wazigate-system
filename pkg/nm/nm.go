@@ -578,7 +578,7 @@ func importVPN(configFile string) (gonetworkmanager.Connection, error) {
 }
 
 func downloadVPNConfig(gatewayID, outputFile string) error {
-	url := fmt.Sprintf("http://3.71.4.83:5000/gateways/%s/vpn", gatewayID)
+	url := fmt.Sprintf("http://3.125.6.177:5000/gateways/%s/vpn", gatewayID)
 	
 	resp, err := http.Get(url)
 	if err != nil {
