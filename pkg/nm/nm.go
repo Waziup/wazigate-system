@@ -507,7 +507,7 @@ func EnableDisableVPN(enable bool) (error) {
 		return fmt.Errorf("failed to get gateway ID: %v", err)
 	}
 	connected, activeConn, err := isVPNConnected(nm,gatewayID)
-	if err != nil || !connected {
+	if err != nil {
 		return fmt.Errorf("error checking VPN status: %v", err)
 	}
 
@@ -560,7 +560,7 @@ func connectVPN(nm gonetworkmanager.NetworkManager, conn gonetworkmanager.Connec
 
 func importVPN(configFile string) (gonetworkmanager.Connection, error) {
 	log.Println("Importing VPN profile...")
-	
+
 	cmd := exec.Command("nmcli", "connection", "import", "type", "openvpn", "file", configFile)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
@@ -578,8 +578,9 @@ func importVPN(configFile string) (gonetworkmanager.Connection, error) {
 }
 
 func downloadVPNConfig(gatewayID, outputFile string) error {
+	log.Printf("Gateway id=%s. Output file=%s",gatewayID, outputFile)
 	url := fmt.Sprintf("http://3.125.6.177:5000/gateways/%s/vpn", gatewayID)
-	
+	log.Printf("Getch url =%s",url)
 	resp, err := http.Get(url)
 	if err != nil {
 		return fmt.Errorf("failed to fetch config: %v", err)
