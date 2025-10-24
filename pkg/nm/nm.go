@@ -662,11 +662,17 @@ func isVPNConnected(nm gonetworkmanager.NetworkManager, gatewayId string) (bool,
 		return false, nil, fmt.Errorf("failed to get active connections %v",err)
 	}
 	for _, ac :=range activeConnections {
+		if connectionProp, err :=ac.GetPropertyUUID();err !=nil{
+			log.Printf("error getting connection uuid %v",err)
+		}else{
+			log.Printf("connection uuid is %v",connectionProp)
+		}
 		isVPN, err :=ac.GetPropertyVPN()
-		if err !=nil || isVPN {
+		if err !=nil || !isVPN {
 			continue
 		}
 		id, err :=ac.GetPropertyID()
+		log.Printf("connection id %s",id)
 		if err !=nil{
 			continue
 		}
