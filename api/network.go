@@ -194,11 +194,6 @@ func SetNetAP(resp http.ResponseWriter, req *http.Request, params routing.Params
 	}
 }
 
-type VPNStatus struct {
-	Connected bool   `json:"connected"`
-	Name      string `json:"name,omitempty"`
-}
-
 
 
 type VPNRequest struct {
@@ -206,7 +201,7 @@ type VPNRequest struct {
 }
 
 type VPNResponse struct {
-	Success bool   `json:"success"`
+	Connected bool   `json:"connected"`
 	Message string `json:"message"`
 	Error   string `json:"error,omitempty"`
 }
@@ -266,7 +261,7 @@ func Monitor(messages chan interface{}) {
 	}
 }
 //========================================VPN FUNCTIONS=============================
-// GetVPNStatus implements GET /vpn
+// GetVPNStatus implements GET /net/vpn
 func GetVPNStatus(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 	connected, state, banner, err := nm.CheckVPNStatus()
 	if err !=nil {
@@ -284,11 +279,11 @@ func GetVPNStatus(resp http.ResponseWriter, req *http.Request, params routing.Pa
 	}
 
 	resultResponse(resp,http.StatusOK, VPNResponse{
-		Success: connected,
+		Connected: connected,
 		Message: connectedMessage+". VPN banner: "+banner,
 	})
 }
-// PostVPN implements POST /vpn
+// PostVPN implements POST /net/vpn
 func PostVPN(resp http.ResponseWriter, req *http.Request,  params routing.Params){
 	var reqBody VPNRequest
 	decoder :=json.NewDecoder(req.Body)
@@ -306,7 +301,10 @@ func PostVPN(resp http.ResponseWriter, req *http.Request,  params routing.Params
 	if reqBody.Enabled {
 		action = "enabled"
 	}
-	resultResponse(resp,http.StatusOK,"VPN "+action +" successfully.")
+	resultResponse(resp,http.StatusOK,VPNResponse{
+		Connected: reqBody.Enabled,
+		Message: "VPN "+action +" successfully.",
+	})
 }
 func resultResponse(w http.ResponseWriter, code int, payload interface{}){
 	data, err := json.Marshal(payload)
@@ -325,6 +323,6 @@ func errorResponse(resp http.ResponseWriter, code int, msg  string)  {
 	}
 	resultResponse(resp, code, VPNResponse{
 		Error: msg,
-		Success: false,
+		Connected: false,
 	})
 }
