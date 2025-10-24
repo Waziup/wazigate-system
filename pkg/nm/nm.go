@@ -651,9 +651,10 @@ func getGatewayID() (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("read error: %v", err)
 	}
+	cleanId := strings.ReplaceAll(string(body),`"`,"")
+	log.Printf("Gateway id is %s.",cleanId)
+	return "wazigate-" + cleanId, nil
 
-	return "wazigate-" + string(body), nil
-	
 }
 func isVPNConnected(nm gonetworkmanager.NetworkManager, gatewayId string) (bool, gonetworkmanager.ActiveConnection, error){
 	activeConnections, err :=nm.GetPropertyActiveConnections()
