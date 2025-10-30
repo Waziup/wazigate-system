@@ -651,7 +651,7 @@ func getGatewayID() (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("read error: %v", err)
 	}
-	cleanId := strings.ReplaceAll(string(body),`"`,"")
+	cleanId := strings.ToLower(strings.ReplaceAll(string(body),`"`,""))
 	log.Printf("Gateway id is %s.",cleanId)
 	return "wazigate-" + cleanId, nil
 
