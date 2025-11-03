@@ -1,6 +1,7 @@
 package nm
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -561,12 +562,14 @@ func connectVPN(nm gonetworkmanager.NetworkManager, conn gonetworkmanager.Connec
 func importVPN(configFile string) (gonetworkmanager.Connection, error) {
 	log.Println("Importing VPN profile...")
 
+	var buf bytes.Buffer
 	cmd := exec.Command("nmcli", "connection", "import", "type", "openvpn", "file", configFile)
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return nil, fmt.Errorf("failed to import VPN: %v - %s", err, output)
+	cmd.Stdout = io.MultiWriter(os.Stdout, &buf)
+	cmd.Stderr = io.MultiWriter(os.Stderr, &buf)
+	if err := cmd.Run(); err !=nil {
+		return nil, fmt.Errorf("import VPN error: %v - %s", err, buf.String())
 	}
-	log.Println("VPN profile imported")
+	log.Printf("VPN profile imported. Output: %s",strings.TrimSpace(buf.String()))
 
 	connID := strings.TrimSuffix(configFile, ".ovpn")
 	conn, exists, err := vpnProfileExists(connID)
