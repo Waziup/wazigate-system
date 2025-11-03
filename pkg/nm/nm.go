@@ -588,7 +588,7 @@ func downloadVPNConfig(gatewayID, outputFile string) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("server returned status: %d", resp.StatusCode)
+		return fmt.Errorf("error getting VPN config file status %s. code: %d",resp.Status, resp.StatusCode, )
 	}
 
 	out, err := os.Create(outputFile)
