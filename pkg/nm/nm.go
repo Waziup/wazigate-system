@@ -549,11 +549,13 @@ func connectVPN(nm gonetworkmanager.NetworkManager, conn gonetworkmanager.Connec
 
 	vpnConn,err := gonetworkmanager.NewVpnConnection(activeConn.GetPath())
 	if err != nil {
-		state, err := vpnConn.GetPropertyVpnState()
-		if err == nil {
-			log.Printf("VPN State: %v", state)
-		}
+		return fmt.Errorf("error on new vpn %v", err)
 	}
+	state, err := vpnConn.GetPropertyVpnState()
+	if err == nil {
+		return fmt.Errorf("error getting VPN state %v", err)
+	}
+	log.Printf("VPN State: %v", state)
 
 	log.Println("VPN connected successfully!")
 	return nil
@@ -665,11 +667,6 @@ func isVPNConnected(nm gonetworkmanager.NetworkManager, gatewayId string) (bool,
 		return false, nil, fmt.Errorf("failed to get active connections %v",err)
 	}
 	for _, ac :=range activeConnections {
-		if connectionProp, err :=ac.GetPropertyUUID();err !=nil{
-			log.Printf("error getting connection uuid %v",err)
-		}else{
-			log.Printf("connection uuid is %v",connectionProp)
-		}
 		isVPN, err :=ac.GetPropertyVPN()
 		if err !=nil || !isVPN {
 			continue
@@ -677,6 +674,7 @@ func isVPNConnected(nm gonetworkmanager.NetworkManager, gatewayId string) (bool,
 		id, err :=ac.GetPropertyID()
 		log.Printf("connection id %s",id)
 		if err !=nil{
+			log.Printf("error on getting ID: %v",err)
 			continue
 		}
 		if id== gatewayId {
