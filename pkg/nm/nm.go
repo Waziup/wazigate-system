@@ -552,7 +552,7 @@ func connectVPN(nm gonetworkmanager.NetworkManager, conn gonetworkmanager.Connec
 		return fmt.Errorf("error on new vpn %v", err)
 	}
 	state, err := vpnConn.GetPropertyVpnState()
-	if err == nil {
+	if err != nil {
 		return fmt.Errorf("error getting VPN state %v", err)
 	}
 	log.Printf("VPN State: %v", state)
@@ -568,10 +568,11 @@ func importVPN(configFile string) (gonetworkmanager.Connection, error) {
 	cmd := exec.Command("nmcli", "connection", "import", "type", "openvpn", "file", configFile)
 	cmd.Stdout = io.MultiWriter(os.Stdout, &buf)
 	cmd.Stderr = io.MultiWriter(os.Stderr, &buf)
+	log.Printf("importing openvpn file %s", configFile)
 	if err := cmd.Run(); err !=nil {
 		return nil, fmt.Errorf("import VPN error: %v - %s", err, buf.String())
 	}
-	log.Printf("VPN profile imported. Output: %s",strings.TrimSpace(buf.String()))
+	log.Printf("VPN profile imported.\n %s",strings.TrimSpace(buf.String()))
 
 	connID := strings.TrimSuffix(configFile, ".ovpn")
 	conn, exists, err := vpnProfileExists(connID)
@@ -672,12 +673,12 @@ func isVPNConnected(nm gonetworkmanager.NetworkManager, gatewayId string) (bool,
 			continue
 		}
 		id, err :=ac.GetPropertyID()
-		log.Printf("connection id %s",id)
 		if err !=nil{
 			log.Printf("error on getting ID: %v",err)
 			continue
 		}
-		if id== gatewayId {
+		log.Printf("vpn connection id %s",id)
+		if id == gatewayId {
 			return true,ac,nil
 		}
 	}
