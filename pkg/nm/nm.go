@@ -694,3 +694,23 @@ func isVPNConnected(nm gonetworkmanager.NetworkManager, gatewayId string) (bool,
 	}
 	return false, nil, nil
 }
+
+func runCmd(message string, args ...string) error {
+    var outBuf, errBuf bytes.Buffer
+
+    cmd := exec.Command("nmcli", args...)
+    cmd.Stdout = io.MultiWriter(os.Stdout, &outBuf)
+    cmd.Stderr = io.MultiWriter(os.Stderr, &errBuf)
+    err := cmd.Run()
+    stdout := strings.TrimSpace(outBuf.String())
+    stderr := strings.TrimSpace(errBuf.String())
+    if err != nil {
+        return fmt.Errorf( "nmcli command failed (%v)\nstdout: %s\nstderr: %s",err, stdout, stderr,)
+    }
+    if stdout != "" {
+        log.Printf("%s: %s\n", message, stdout)
+    } else {
+        log.Printf("%s: OK\n", message)
+    }
+    return nil
+}
