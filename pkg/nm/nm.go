@@ -1,6 +1,7 @@
 package nm
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -548,11 +549,13 @@ func connectVPN(nm gonetworkmanager.NetworkManager, conn gonetworkmanager.Connec
 
 	vpnConn,err := gonetworkmanager.NewVpnConnection(activeConn.GetPath())
 	if err != nil {
-		state, err := vpnConn.GetPropertyVpnState()
-		if err == nil {
-			log.Printf("VPN State: %v", state)
-		}
+		return fmt.Errorf("error on new vpn %v", err)
 	}
+	state, err := vpnConn.GetPropertyVpnState()
+	if err != nil {
+		return fmt.Errorf("error getting VPN state %v", err)
+	}
+	log.Printf("VPN State: %v", state)
 
 	log.Println("VPN connected successfully!")
 	return nil
@@ -561,12 +564,15 @@ func connectVPN(nm gonetworkmanager.NetworkManager, conn gonetworkmanager.Connec
 func importVPN(configFile string) (gonetworkmanager.Connection, error) {
 	log.Println("Importing VPN profile...")
 
+	var buf bytes.Buffer
 	cmd := exec.Command("nmcli", "connection", "import", "type", "openvpn", "file", configFile)
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return nil, fmt.Errorf("failed to import VPN: %v - %s", err, output)
+	cmd.Stdout = io.MultiWriter(os.Stdout, &buf)
+	cmd.Stderr = io.MultiWriter(os.Stderr, &buf)
+	log.Printf("importing openvpn file %s", configFile)
+	if err := cmd.Run(); err !=nil {
+		return nil, fmt.Errorf("import VPN error: %v - %s", err, buf.String())
 	}
-	log.Println("VPN profile imported")
+	log.Printf("VPN profile imported.\n %s",strings.TrimSpace(buf.String()))
 
 	connID := strings.TrimSuffix(configFile, ".ovpn")
 	conn, exists, err := vpnProfileExists(connID)
@@ -588,7 +594,7 @@ func downloadVPNConfig(gatewayID, outputFile string) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("server returned status: %d", resp.StatusCode)
+		return fmt.Errorf("error getting VPN config file status %s. code: %d",resp.Status, resp.StatusCode, )
 	}
 
 	out, err := os.Create(outputFile)
@@ -662,21 +668,17 @@ func isVPNConnected(nm gonetworkmanager.NetworkManager, gatewayId string) (bool,
 		return false, nil, fmt.Errorf("failed to get active connections %v",err)
 	}
 	for _, ac :=range activeConnections {
-		if connectionProp, err :=ac.GetPropertyUUID();err !=nil{
-			log.Printf("error getting connection uuid %v",err)
-		}else{
-			log.Printf("connection uuid is %v",connectionProp)
-		}
 		isVPN, err :=ac.GetPropertyVPN()
 		if err !=nil || !isVPN {
 			continue
 		}
 		id, err :=ac.GetPropertyID()
-		log.Printf("connection id %s",id)
 		if err !=nil{
+			log.Printf("error on getting ID: %v",err)
 			continue
 		}
-		if id== gatewayId {
+		log.Printf("vpn connection id %s",id)
+		if id == gatewayId {
 			return true,ac,nil
 		}
 	}
