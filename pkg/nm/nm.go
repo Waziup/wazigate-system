@@ -564,22 +564,32 @@ func connectVPN(nm gonetworkmanager.NetworkManager, conn gonetworkmanager.Connec
 func importVPN(configFile string) (gonetworkmanager.Connection, error) {
 	log.Println("Importing VPN profile...")
 
-	var buf bytes.Buffer
-	cmd := exec.Command("nmcli", "connection", "import", "type", "openvpn", "file", configFile)
-	cmd.Stdout = io.MultiWriter(os.Stdout, &buf)
-	cmd.Stderr = io.MultiWriter(os.Stderr, &buf)
-	log.Printf("importing openvpn file %s", configFile)
-	if err := cmd.Run(); err !=nil {
-		return nil, fmt.Errorf("import VPN error: %v - %s", err, buf.String())
+	err := runCmd("VPN profile imported","connection", "import", "type", "openvpn", "file", configFile)
+	if err !=nil {
+		return nil, err
 	}
-	log.Printf("VPN profile imported.\n %s",strings.TrimSpace(buf.String()))
 
 	connID := strings.TrimSuffix(configFile, ".ovpn")
 	conn, exists, err := vpnProfileExists(connID)
-	if err != nil || !exists {
-		return nil, fmt.Errorf("failed to find imported connection: %v", err)
+	if err != nil {
+		return nil, fmt.Errorf("failed checking VPN profile: %v", err)
 	}
-
+	if !exists {
+		return nil, fmt.Errorf("VPN profile %s not found after import",connID)
+	}
+	modifySteps := []struct{
+		msg string
+		args []string
+	}{
+		{"VPN autoconnect enabled",[]string{"connection", "modify", connID, "connection.autoconnect", "yes"}},
+		{"VPN autoconnect reachable enabled",[]string{"connection", "modify", connID, "vpn.gateway-reachable", "yes"}},
+		{"VPN autoconnect retries set",[]string{"connection", "modify", connID, "connection.autoconnect-retries", "0"}},
+	}
+	for _,step := range modifySteps{
+		if err := runCmd(step.msg, step.args...); err != nil {
+            return nil, err
+        }
+	}
 	return conn, nil
 }
 
