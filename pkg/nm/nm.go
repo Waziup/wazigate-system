@@ -9,6 +9,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"os/exec"
 	"strings"
@@ -564,28 +565,71 @@ func connectVPN(nm gonetworkmanager.NetworkManager, conn gonetworkmanager.Connec
 func importVPN(configFile string) (gonetworkmanager.Connection, error) {
 	log.Println("Importing VPN profile...")
 
-	var buf bytes.Buffer
-	cmd := exec.Command("nmcli", "connection", "import", "type", "openvpn", "file", configFile)
-	cmd.Stdout = io.MultiWriter(os.Stdout, &buf)
-	cmd.Stderr = io.MultiWriter(os.Stderr, &buf)
-	log.Printf("importing openvpn file %s", configFile)
-	if err := cmd.Run(); err !=nil {
-		return nil, fmt.Errorf("import VPN error: %v - %s", err, buf.String())
+	err := runCmd("VPN profile imported","connection", "import", "type", "openvpn", "file", configFile)
+	if err !=nil {
+		return nil, err
 	}
-	log.Printf("VPN profile imported.\n %s",strings.TrimSpace(buf.String()))
 
 	connID := strings.TrimSuffix(configFile, ".ovpn")
 	conn, exists, err := vpnProfileExists(connID)
-	if err != nil || !exists {
-		return nil, fmt.Errorf("failed to find imported connection: %v", err)
+	if err != nil {
+		return nil, fmt.Errorf("failed checking VPN profile: %v", err)
 	}
-
+	if !exists {
+		return nil, fmt.Errorf("VPN profile %s not found after import",connID)
+	}
+	modifySteps := []struct{
+		msg string
+		args []string
+	}{
+		{"VPN autoconnect enabled",[]string{"connection", "modify", connID, "connection.autoconnect", "yes"}},
+		{"VPN autoconnect reachable enabled",[]string{"connection", "modify", connID, "vpn.gateway-reachable", "yes"}},
+		{"VPN autoconnect retries set",[]string{"connection", "modify", connID, "connection.autoconnect-retries", "0"}},
+	}
+	for _,step := range modifySteps{
+		if err := runCmd(step.msg, step.args...); err != nil {
+            return nil, err
+        }
+	}
 	return conn, nil
 }
-
+type Cloud struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Paused      bool   `json:"paused"`
+	Pausing     bool   `json:"pausing"`
+	PausingMQTT bool   `json:"pausing_mqtt"`
+	REST        string `json:"rest"`
+	MQTT        string `json:"mqtt"`
+	Registered  string `json:"registered"`
+}
 func downloadVPNConfig(gatewayID, outputFile string) error {
+	cloudReq,err := http.Get("http://waziup.wazigate-edge/clouds/waziup")
+	if err != nil {
+		return fmt.Errorf("failed to get waziup cloud: %v", err)
+	}
 	log.Printf("Gateway id=%s. Output file=%s",gatewayID, outputFile)
-	url := fmt.Sprintf("http://3.125.6.177:5000/gateways/%s/vpn", gatewayID)
+	defer cloudReq.Body.Close()
+	
+	if cloudReq.StatusCode != http.StatusOK{
+		return fmt.Errorf("failed to fetch cloud config: status %s", cloudReq.Status)
+	}
+	var cloud Cloud
+	
+	if err := json.NewDecoder(cloudReq.Body).Decode(&cloud); err != nil {
+		return fmt.Errorf("failed to decode cloud response: %w", err)
+	}
+	fmt.Printf("Cloud request is %+v\n",cloud)
+	cloudUrl := cloud.REST
+	u, err := url.Parse(cloudUrl)
+	if err!=nil{
+		return fmt.Errorf("failed to parse wazicloud url: %v", err)
+	}
+	if u.Scheme=="" {
+		cloudUrl = "https:"+cloudUrl
+	}
+
+	url := fmt.Sprintf("%s/gateways/%s/vpn",cloudUrl, gatewayID)
 	log.Printf("Getch url =%s",url)
 	resp, err := http.Get(url)
 	if err != nil {
@@ -683,4 +727,24 @@ func isVPNConnected(nm gonetworkmanager.NetworkManager, gatewayId string) (bool,
 		}
 	}
 	return false, nil, nil
+}
+
+func runCmd(message string, args ...string) error {
+    var outBuf, errBuf bytes.Buffer
+
+    cmd := exec.Command("nmcli", args...)
+    cmd.Stdout = io.MultiWriter(os.Stdout, &outBuf)
+    cmd.Stderr = io.MultiWriter(os.Stderr, &errBuf)
+    err := cmd.Run()
+    stdout := strings.TrimSpace(outBuf.String())
+    stderr := strings.TrimSpace(errBuf.String())
+    if err != nil {
+        return fmt.Errorf( "nmcli command failed (%v)\nstdout: %s\nstderr: %s",err, stdout, stderr,)
+    }
+    if stdout != "" {
+        log.Printf("%s: %s\n", message, stdout)
+    } else {
+        log.Printf("%s: OK\n", message)
+    }
+    return nil
 }
