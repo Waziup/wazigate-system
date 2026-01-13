@@ -4,11 +4,15 @@ import (
 	// "fmt"
 	"context"
 	"encoding/json"
-	
+	"fmt"
+	"io"
+	"os"
+	"strings"
+
 	"io/ioutil"
 	"log"
 	"net/http"
-	
+
 	"sync"
 	"time"
 
@@ -20,6 +24,7 @@ import (
 )
 
 var wifiOperation = &sync.Mutex{}
+const WAZIUP_CLOUD_URL string = "https://api.waziup.io/api/v2"
 
 //
 
@@ -263,7 +268,13 @@ func Monitor(messages chan interface{}) {
 //========================================VPN FUNCTIONS=============================
 // GetVPNStatus implements GET /net/vpn
 func GetVPNStatus(resp http.ResponseWriter, req *http.Request, params routing.Params) {
-	connected, state, banner, err := nm.CheckVPNStatus()
+	gatewayID, err := getGatewayID()
+
+	if err != nil {
+		errorResponse(resp,http.StatusInternalServerError,err.Error())
+		return
+	}
+	connected, state, banner, err := nm.CheckVPNStatus(gatewayID)
 	if err !=nil {
 		errorResponse(resp,http.StatusBadRequest,"Invalid request body: " + err.Error())
 		return 
@@ -292,11 +303,62 @@ func PostVPN(resp http.ResponseWriter, req *http.Request,  params routing.Params
 		errorResponse(resp,http.StatusBadRequest,"could not decode ")
 		return 
 	}
-	err = nm.EnableDisableVPN(reqBody.Enabled)
-	if err !=nil {
+	gatewayID, err := getGatewayID()
+
+	if err != nil {
+		log.Printf("error encountered %v",err)
 		errorResponse(resp,http.StatusInternalServerError,err.Error())
 		return
 	}
+	
+	connected, activeConn, err := nm.IsVPNConnected(gatewayID)
+	if err != nil {
+		errorResponse(resp,http.StatusInternalServerError,fmt.Sprintf("error checking VPN status: %v", err.Error()))
+		return
+	}
+
+	if !reqBody.Enabled {
+		if !connected {
+			log.Println("VPN is not connected")
+			errorResponse(resp,http.StatusBadRequest,"VPN is not connected")
+			return 
+		}
+		if err := nm.DisconnectVPN(activeConn);err !=nil{
+			log.Printf("error encountered %v",err)
+			errorResponse(resp,http.StatusInternalServerError,fmt.Sprintf("failed to disconnect VPN %s",err.Error()))
+			return 
+		}
+	}
+	if connected {
+		log.Println(" VPN is already active")
+		errorResponse(resp,http.StatusBadRequest,"VPN is already active",)
+		return
+	}
+	conn, exists,err := nm.VpnProfileExists(gatewayID)
+	if err != nil {
+		errorResponse(resp,http.StatusInternalServerError,fmt.Sprintf("error getting active vpn %s",err.Error()))
+		return
+	}
+	if !exists {
+		configFile := gatewayID +".ovpn"
+		if err := downloadVPNConfig(gatewayID, configFile); err !=nil {
+			log.Printf("could not download vpn file %s",err.Error())
+			errorResponse(resp,http.StatusInternalServerError,"could not download vpn file")
+			return 
+		}
+		conn, err = nm.ImportVPN(configFile)
+		if err !=nil {
+			errorResponse(resp,http.StatusInternalServerError,fmt.Sprintf("could not import vpn profile %s",err.Error()))
+			return
+		}
+	}
+	err = nm.ConnectVPN(conn)
+	if err != nil {
+		errorResponse(resp,http.StatusInternalServerError,fmt.Sprintf("could not connect to vpn network %s",err.Error()))
+		return
+	}
+
+	
 	action := "disabled"
 	if reqBody.Enabled {
 		action = "enabled"
@@ -305,6 +367,53 @@ func PostVPN(resp http.ResponseWriter, req *http.Request,  params routing.Params
 		Connected: reqBody.Enabled,
 		Message: "VPN "+action +" successfully.",
 	})
+}
+func getGatewayID() (string, error) {
+	resp, err := http.Get("http://waziup.wazigate-edge/device/id")
+	if err != nil {
+		return "", fmt.Errorf("request failed: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("status: %s", resp.Status)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("read error: %v", err)
+	}
+	cleanId := strings.ToLower(strings.ReplaceAll(string(body),`"`,""))
+	log.Printf("Gateway id is %s.",cleanId)
+	return "wazigate-" + cleanId, nil
+
+}
+
+func downloadVPNConfig(gatewayID, outputFile string) error {
+	url := fmt.Sprintf("%s/gateways/%s/vpn",WAZIUP_CLOUD_URL, gatewayID)
+	log.Printf("Getch url =%s",url)
+	resp, err := http.Get(url)
+	if err != nil {
+		return fmt.Errorf("failed to fetch config: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("error getting VPN config file status %s. code: %d",resp.Status, resp.StatusCode, )
+	}
+
+	out, err := os.Create(outputFile)
+	if err != nil {
+		return fmt.Errorf("failed to create file: %v", err)
+	}
+	defer out.Close()
+
+	if _, err = io.Copy(out, resp.Body); err != nil {
+		return fmt.Errorf("failed to save file: %v", err)
+	}
+
+	log.Printf("Downloaded config: %s", outputFile)
+	return nil
 }
 func resultResponse(w http.ResponseWriter, code int, payload interface{}){
 	data, err := json.Marshal(payload)
@@ -318,9 +427,6 @@ func resultResponse(w http.ResponseWriter, code int, payload interface{}){
 	w.Write(data)
 }
 func errorResponse(resp http.ResponseWriter, code int, msg  string)  {
-	if code > 499 {
-		log.Printf("%d error: %s",code, msg)
-	}
 	resultResponse(resp, code, VPNResponse{
 		Error: msg,
 		Connected: false,
