@@ -12,6 +12,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 
 	"sync"
 	"time"
@@ -24,7 +25,6 @@ import (
 )
 
 var wifiOperation = &sync.Mutex{}
-const WAZIUP_CLOUD_URL string = "https://api.waziup.io/api/v2"
 
 //
 
@@ -389,8 +389,49 @@ func getGatewayID() (string, error) {
 
 }
 
+func getVPNConfigURL() (string,error) {
+	type Cloud struct {
+		ID          string `json:"id"`
+		Name        string `json:"name"`
+		Paused      bool   `json:"paused"`
+		Pausing     bool   `json:"pausing"`
+		PausingMQTT bool   `json:"pausing_mqtt"`
+		REST        string `json:"rest"`
+		MQTT        string `json:"mqtt"`
+		Registered  string `json:"registered"`
+	}
+	cloudReq,err := http.Get("http://waziup.wazigate-edge/clouds/waziup")
+	if err != nil {
+		return "", fmt.Errorf("failed to get waziup cloud: %v", err)
+	}
+	defer cloudReq.Body.Close()
+	
+	if cloudReq.StatusCode != http.StatusOK{
+		return "", fmt.Errorf("failed to fetch cloud config: status %s", cloudReq.Status)
+	}
+	var cloud Cloud
+	
+	if err := json.NewDecoder(cloudReq.Body).Decode(&cloud); err != nil {
+		return "", fmt.Errorf("failed to decode cloud response: %w", err)
+	}
+	fmt.Printf("Cloud request is %+v\n",cloud)
+	cloudUrl := cloud.REST
+	u, err := url.Parse(cloudUrl)
+	if err!=nil{
+		return "", fmt.Errorf("failed to parse wazicloud url: %v", err)
+	}
+	if u.Scheme=="" {
+		cloudUrl = "https:"+cloudUrl
+	}
+	
+	return cloudUrl, nil
+}
 func downloadVPNConfig(gatewayID, outputFile string) error {
-	url := fmt.Sprintf("%s/gateways/%s/vpn",WAZIUP_CLOUD_URL, gatewayID)
+	cloudUrl, err := getVPNConfigURL()
+	if err !=nil {
+		return fmt.Errorf("could not get cloud url: %v", err.Error())
+	}
+	url := fmt.Sprintf("%s/gateways/%s/vpn",cloudUrl, gatewayID)
 	log.Printf("Getch url =%s",url)
 	resp, err := http.Get(url)
 	if err != nil {
