@@ -455,10 +455,10 @@ func Devices() (map[string]json.RawMessage, error) {
 	}, nil
 }
 //===========================VPN functions=======================
-func CheckVPNStatus(gatewayID string)(bool, gonetworkmanager.NmVpnConnectionState,string , error){
+func CheckVPNStatus(clientID string)(bool, gonetworkmanager.NmVpnConnectionState,string , error){
 
 	
-	connected, activeConn, err := IsVPNConnected(gatewayID)
+	connected, activeConn, err := IsVPNConnected(clientID)
 	if err != nil || !connected {
 		return false,0,"", err
 	}
@@ -537,7 +537,7 @@ func ImportVPN(configFile string) (gonetworkmanager.Connection, error) {
 	}
 	return conn, nil
 }
-func VpnProfileExists(gatewayID string) (gonetworkmanager.Connection, bool, error) {
+func VpnProfileExists(clientID string) (gonetworkmanager.Connection, bool, error) {
 	connections,err :=settings.ListConnections()
 	if err !=nil {
 		return nil, false, fmt.Errorf("failed to list connections: %v",err)
@@ -547,7 +547,7 @@ func VpnProfileExists(gatewayID string) (gonetworkmanager.Connection, bool, erro
 		if err !=nil {
 			continue
 		}
-		if connSettings["connection"]["id"]==gatewayID {
+		if connSettings["connection"]["id"]==clientID {
 			return connection, true,nil
 		}
 	}
@@ -564,7 +564,7 @@ func DisconnectVPN( activeConn gonetworkmanager.ActiveConnection) error {
 	log.Println("VPN disconnected successfully")
 	return nil
 }
-func IsVPNConnected( gatewayId string) (bool, gonetworkmanager.ActiveConnection, error){
+func IsVPNConnected( clientID string) (bool, gonetworkmanager.ActiveConnection, error){
 	activeConnections, err :=nm.GetPropertyActiveConnections()
 	if err !=nil {
 		return false, nil, fmt.Errorf("failed to get active connections %v",err)
@@ -580,7 +580,7 @@ func IsVPNConnected( gatewayId string) (bool, gonetworkmanager.ActiveConnection,
 			continue
 		}
 		log.Printf("vpn connection id %s",id)
-		if id == gatewayId {
+		if id == clientID {
 			return true,ac,nil
 		}
 	}
