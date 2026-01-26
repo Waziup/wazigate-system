@@ -528,6 +528,58 @@
             }
          }
       },
+      "/apps/waziup.wazigate-system/net/vpn": {
+         "get": {
+            "tags": [
+               "Network"
+            ],
+            "summary": "Gets VPN connection status",
+            "description":"Checks if gateways is connected to the VPN network.",
+            "produces": [
+               "application/json"
+            ],
+            "responses": {
+               "200": {
+                  "connected": false,
+                  "message": "VPN not connected"
+               }
+            }
+         },
+         "post": {
+            "tags": [
+               "Network"
+            ],
+            "summary": "Enable or Disable VPN connection",
+            "description":"Allows connecting or disconnecting to the VPN network.",
+            "consumes": [
+               "application/json"
+            ],
+            "produces": [
+               "application/json"
+            ],
+            "parameters":[
+               {
+                  "in":"body",
+                  "name":"enable",
+                  "required":true
+               }
+            ],
+            "responses": {
+               "200": {
+                  "connected": true,
+                  "message": "VPN connected successfully"
+               },
+               "400":{
+                  "error":"request error",
+                  "connected":false
+               },
+               "500":{
+                  "error":"server error",
+                  "connected":false
+               }
+            }
+         }
+      },
       "/apps/waziup.wazigate-system/reboot": {
          "put": {
             "tags": [

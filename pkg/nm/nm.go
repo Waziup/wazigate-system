@@ -1,11 +1,15 @@
 package nm
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"log"
+	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/Wifx/gonetworkmanager"
@@ -103,6 +107,9 @@ func Hotspot(ssid string, psk string) (err error) {
 		if len(ssid) > 32 {
 			return fmt.Errorf("ssid must be at most 32 characters")
 		}
+
+		// cmd := exec.Command("nmcli", "dev", "wifi", "hotspot", "ifname", "wlan0", "ssid", ssid, "password", psk, "con-name", accessPointId)
+		// err := cmd.Run()
 		err = ap.Update(gonetworkmanager.ConnectionSettings{
 			"connection": map[string]interface{}{
 				"id":             accessPointId,
@@ -111,13 +118,20 @@ func Hotspot(ssid string, psk string) (err error) {
 			},
 			"802-11-wireless": map[string]interface{}{
 				"ssid": []byte(ssid),
+				"mode": "ap",
 			},
 			"802-11-wireless-security": map[string]interface{}{
 				"psk":      psk,
 				"key-mgmt": "wpa-psk",
 				"pairwise": []string{"ccmp"},
 				"group":    []string{"ccmp"},
-				"proto":    []string{"wpa"},
+				"proto":    []string{"rsn"},
+			},
+			"ipv4": map[string]interface{}{
+				"method": "shared",
+			},
+			"ipv6": map[string]interface{}{
+				"method": "ignore",
 			},
 		})
 		if err != nil {
@@ -439,4 +453,156 @@ func Devices() (map[string]json.RawMessage, error) {
 		"wlan0": wlan0,
 		"eth0":  eth0,
 	}, nil
+}
+//===========================VPN functions=======================
+func CheckVPNStatus(clientID string)(bool, gonetworkmanager.NmVpnConnectionState,string , error){
+
+	
+	connected, activeConn, err := IsVPNConnected(clientID)
+	if err != nil || !connected {
+		return false,0,"", err
+	}
+
+	vpnConn, err := gonetworkmanager.NewVpnConnection(activeConn.GetPath())
+	if( err != nil || vpnConn ==nil) {
+		return true, 0, "", fmt.Errorf("failed to create VPN connection object")
+	}
+
+	state, err := vpnConn.GetPropertyVpnState()
+
+	if state == gonetworkmanager.NmVpnConnectionActivated {
+		log.Println("VPN is fully connected!")
+	}
+	if err != nil {
+		return true, 0, "", fmt.Errorf("failed to get VPN state: %v", err)
+	}
+
+	banner, err := vpnConn.GetPropertyBanner()
+	if err != nil {
+		banner = ""
+	}
+
+	return true, state, banner, nil
+}
+
+func ConnectVPN( conn gonetworkmanager.Connection) error {
+	log.Println("Connecting to VPN...")
+	activeConn, err := nm.ActivateConnection(conn, nil, nil)
+	if err != nil {
+		return fmt.Errorf("failed to connect: %v", err)
+	}
+
+	vpnConn,err := gonetworkmanager.NewVpnConnection(activeConn.GetPath())
+	if err != nil {
+		return fmt.Errorf("error on new vpn %v", err)
+	}
+	state, err := vpnConn.GetPropertyVpnState()
+	if err != nil {
+		return fmt.Errorf("error getting VPN state %v", err)
+	}
+	log.Printf("VPN State: %v", state)
+
+	log.Println("VPN connected successfully!")
+	return nil
+}
+
+func ImportVPN(configFile string) (gonetworkmanager.Connection, error) {
+	log.Println("Importing VPN profile...")
+
+	err := runCmd("VPN profile imported","connection", "import", "type", "openvpn", "file", configFile)
+	if err !=nil {
+		return nil, err
+	}
+
+	connID := strings.TrimSuffix(configFile, ".ovpn")
+	conn, exists, err := VpnProfileExists(connID)
+	if err != nil {
+		return nil, fmt.Errorf("failed checking VPN profile: %v", err)
+	}
+	if !exists {
+		return nil, fmt.Errorf("VPN profile %s not found after import",connID)
+	}
+	modifySteps := []struct{
+		msg string
+		args []string
+	}{
+		{"VPN autoconnect enabled",[]string{"connection", "modify", connID, "connection.autoconnect", "yes"}},
+		{"VPN autoconnect reachable enabled",[]string{"connection", "modify", connID, "vpn.gateway-reachable", "yes"}},
+		{"VPN autoconnect retries set",[]string{"connection", "modify", connID, "connection.autoconnect-retries", "0"}},
+	}
+	for _,step := range modifySteps{
+		if err := runCmd(step.msg, step.args...); err != nil {
+            return nil, err
+        }
+	}
+	return conn, nil
+}
+func VpnProfileExists(clientID string) (gonetworkmanager.Connection, bool, error) {
+	connections,err :=settings.ListConnections()
+	if err !=nil {
+		return nil, false, fmt.Errorf("failed to list connections: %v",err)
+	}
+	for _, connection := range connections {
+		connSettings,err :=connection.GetSettings()
+		if err !=nil {
+			continue
+		}
+		if connSettings["connection"]["id"]==clientID {
+			return connection, true,nil
+		}
+	}
+	return nil, false, nil
+}
+
+func DisconnectVPN( activeConn gonetworkmanager.ActiveConnection) error {
+	log.Println(" Disconnecting VPN...")
+
+	err := nm.DeactivateConnection(activeConn)
+	if err !=nil {
+		return fmt.Errorf("failed to disconnected %v",err)
+	}
+	log.Println("VPN disconnected successfully")
+	return nil
+}
+func IsVPNConnected( clientID string) (bool, gonetworkmanager.ActiveConnection, error){
+	activeConnections, err :=nm.GetPropertyActiveConnections()
+	if err !=nil {
+		return false, nil, fmt.Errorf("failed to get active connections %v",err)
+	}
+	for _, ac :=range activeConnections {
+		isVPN, err :=ac.GetPropertyVPN()
+		if err !=nil || !isVPN {
+			continue
+		}
+		id, err :=ac.GetPropertyID()
+		if err !=nil{
+			log.Printf("error on getting ID: %v",err)
+			continue
+		}
+		log.Printf("vpn connection id %s",id)
+		if id == clientID {
+			return true,ac,nil
+		}
+	}
+	return false, nil, nil
+}
+
+func runCmd(message string, args ...string) error {
+    var outBuf, errBuf bytes.Buffer
+
+    cmd := exec.Command("nmcli", args...)
+    cmd.Stdout = io.MultiWriter(os.Stdout, &outBuf)
+    cmd.Stderr = io.MultiWriter(os.Stderr, &errBuf)
+    err := cmd.Run()
+    stdout := strings.TrimSpace(outBuf.String())
+    stderr := strings.TrimSpace(errBuf.String())
+    if err != nil {
+        return fmt.Errorf( "nmcli command failed (%v)\nstdout: %s\nstderr: %s",err, stdout, stderr,)
+    }
+    if stdout != "" {
+        log.Printf("%s: %s\n", message, stdout)
+    } else {
+        log.Printf("%s: OK\n", message)
+    }
+    return nil
 }
