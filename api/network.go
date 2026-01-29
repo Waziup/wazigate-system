@@ -274,7 +274,7 @@ func GetVPNStatus(resp http.ResponseWriter, req *http.Request, params routing.Pa
 		errorResponse(resp,http.StatusInternalServerError,err.Error())
 		return
 	}
-	connected, state, banner, err := nm.CheckVPNStatus(gatewayID)
+	connected, state, banner, err := nm.CheckVPNStatus(fmt.Sprintf("gateway-%s", gatewayID))
 	if err !=nil {
 		errorResponse(resp,http.StatusBadRequest,"Invalid request body: " + err.Error())
 		return 
@@ -311,7 +311,7 @@ func PostVPN(resp http.ResponseWriter, req *http.Request,  params routing.Params
 		return
 	}
 	
-	connected, activeConn, err := nm.IsVPNConnected(gatewayID)
+	connected, activeConn, err := nm.IsVPNConnected(fmt.Sprintf("gateway-%s", gatewayID))
 	if err != nil {
 		errorResponse(resp,http.StatusInternalServerError,fmt.Sprintf("error checking VPN status: %v", err.Error()))
 		return
@@ -334,13 +334,13 @@ func PostVPN(resp http.ResponseWriter, req *http.Request,  params routing.Params
 		errorResponse(resp,http.StatusBadRequest,"VPN is already active",)
 		return
 	}
-	conn, exists,err := nm.VpnProfileExists(gatewayID)
+	conn, exists,err := nm.VpnProfileExists(fmt.Sprintf("gateway-%s", gatewayID))
 	if err != nil {
 		errorResponse(resp,http.StatusInternalServerError,fmt.Sprintf("error getting active vpn %s",err.Error()))
 		return
 	}
 	if !exists {
-		configFile := gatewayID +".ovpn"
+		configFile := fmt.Sprintf("gateway-%s.ovpn",gatewayID)
 		if err := downloadVPNConfig(gatewayID, configFile); err !=nil {
 			log.Printf("could not download vpn file %s",err.Error())
 			errorResponse(resp,http.StatusInternalServerError,"could not download vpn file")
@@ -384,7 +384,7 @@ func getGatewayID() (string, error) {
 		return "", fmt.Errorf("read error: %v", err)
 	}
 	cleanId := strings.ToLower(strings.ReplaceAll(string(body),`"`,""))
-	return "gateway-" + cleanId, nil
+	return cleanId, nil
 
 }
 
@@ -431,7 +431,6 @@ func downloadVPNConfig(gatewayID, outputFile string) error {
 		return fmt.Errorf("could not get cloud url: %v", err.Error())
 	}
 	url := fmt.Sprintf("%s/gateways/%s/vpn",cloudUrl, gatewayID)
-	log.Printf("Getch url =%s",url)
 	resp, err := http.Get(url)
 	if err != nil {
 		return fmt.Errorf("failed to fetch config: %v", err)
