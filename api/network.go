@@ -384,8 +384,7 @@ func getGatewayID() (string, error) {
 		return "", fmt.Errorf("read error: %v", err)
 	}
 	cleanId := strings.ToLower(strings.ReplaceAll(string(body),`"`,""))
-	log.Printf("Gateway id is %s.",cleanId)
-	return "wazigate-" + cleanId, nil
+	return "gateway-" + cleanId, nil
 
 }
 
@@ -398,7 +397,7 @@ func getVPNConfigURL() (string,error) {
 		PausingMQTT bool   `json:"pausing_mqtt"`
 		REST        string `json:"rest"`
 		MQTT        string `json:"mqtt"`
-		Registered  bool `json:"registered"`
+		Registered  bool   `json:"registered"`
 	}
 	cloudReq,err := http.Get("http://waziup.wazigate-edge/clouds/waziup")
 	if err != nil {
@@ -415,10 +414,9 @@ func getVPNConfigURL() (string,error) {
 		fmt.Printf("Failed to decode cloud response body: %s\n", err.Error())
 		return "", fmt.Errorf("failed to get waziup cloud.")
 	}
-	fmt.Printf("Cloud request is %+v\n",cloud)
 	cloudUrl := cloud.REST
 	u, err := url.Parse(cloudUrl)
-	if err!=nil{
+	if err != nil{
 		return "", fmt.Errorf("failed to parse wazicloud url: %v", err)
 	}
 	if u.Scheme=="" {
