@@ -398,7 +398,7 @@ func getVPNConfigURL() (string,error) {
 		PausingMQTT bool   `json:"pausing_mqtt"`
 		REST        string `json:"rest"`
 		MQTT        string `json:"mqtt"`
-		Registered  string `json:"registered"`
+		Registered  bool `json:"registered"`
 	}
 	cloudReq,err := http.Get("http://waziup.wazigate-edge/clouds/waziup")
 	if err != nil {
@@ -412,7 +412,8 @@ func getVPNConfigURL() (string,error) {
 	var cloud Cloud
 	
 	if err := json.NewDecoder(cloudReq.Body).Decode(&cloud); err != nil {
-		return "", fmt.Errorf("failed to decode cloud response: %w", err)
+		fmt.Printf("Failed to decode cloud response body: %s\n", err.Error())
+		return "", fmt.Errorf("failed to get waziup cloud.")
 	}
 	fmt.Printf("Cloud request is %+v\n",cloud)
 	cloudUrl := cloud.REST
