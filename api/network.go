@@ -323,15 +323,20 @@ func PostVPN(resp http.ResponseWriter, req *http.Request,  params routing.Params
 			errorResponse(resp,http.StatusBadRequest,"VPN is not connected")
 			return 
 		}
-		if err := nm.DisconnectVPN(activeConn);err !=nil{
-			log.Printf("error encountered %v",err)
-			errorResponse(resp,http.StatusInternalServerError,fmt.Sprintf("failed to disconnect VPN %s",err.Error()))
-			return 
+		if err := nm.DisconnectVPN(activeConn); err != nil {
+			log.Printf("error encountered %v", err)
+			errorResponse(resp, http.StatusInternalServerError,fmt.Sprintf("failed to disconnect VPN %s", err.Error()))
+			return
 		}
+		resultResponse(resp, http.StatusOK, VPNResponse{
+			Connected: false,
+			Message: "VPN disabled successfully.",
+		})
+		return
 	}
 	if connected {
-		log.Println(" VPN is already active")
-		errorResponse(resp,http.StatusBadRequest,"VPN is already active",)
+		log.Println("VPN is already active")
+		errorResponse(resp,http.StatusBadRequest,"VPN is already active")
 		return
 	}
 	conn, exists,err := nm.VpnProfileExists(fmt.Sprintf("gateway-%s", gatewayID))
