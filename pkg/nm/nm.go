@@ -527,7 +527,6 @@ func ImportVPN(configFile string) (gonetworkmanager.Connection, error) {
 		args []string
 	}{
 		{"VPN autoconnect enabled",[]string{"connection", "modify", connID, "connection.autoconnect", "yes"}},
-		{"VPN autoconnect reachable enabled",[]string{"connection", "modify", connID, "vpn.gateway-reachable", "yes"}},
 		{"VPN autoconnect retries set",[]string{"connection", "modify", connID, "connection.autoconnect-retries", "0"}},
 	}
 	for _,step := range modifySteps{
