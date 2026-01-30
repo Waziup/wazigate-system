@@ -388,7 +388,7 @@ func getGatewayID() (string, error) {
 
 }
 
-func getVPNConfigURL() (string,error) {
+func getVPNConfigURL() (string,string,error) {
 	type Cloud struct {
 		ID          string `json:"id"`
 		Name        string `json:"name"`
@@ -397,43 +397,70 @@ func getVPNConfigURL() (string,error) {
 		PausingMQTT bool   `json:"pausing_mqtt"`
 		REST        string `json:"rest"`
 		MQTT        string `json:"mqtt"`
+		Username    string `json:"username"`
+		Token        string `json:"token"`
 		Registered  bool   `json:"registered"`
 	}
 	cloudReq,err := http.Get("http://waziup.wazigate-edge/clouds/waziup")
 	if err != nil {
-		return "", fmt.Errorf("failed to get waziup cloud: %v", err)
+		return "", "", fmt.Errorf("failed to get waziup cloud: %v", err)
 	}
 	defer cloudReq.Body.Close()
 	
 	if cloudReq.StatusCode != http.StatusOK{
-		return "", fmt.Errorf("failed to fetch cloud config: status %s", cloudReq.Status)
+		return "", "", fmt.Errorf("failed to fetch cloud config: status %s", cloudReq.Status)
 	}
 	var cloud Cloud
 	
 	if err := json.NewDecoder(cloudReq.Body).Decode(&cloud); err != nil {
 		fmt.Printf("Failed to decode cloud response body: %s\n", err.Error())
-		return "", fmt.Errorf("failed to get waziup cloud.")
+		return "", "", fmt.Errorf("failed to get waziup cloud.")
 	}
 	cloudUrl := cloud.REST
 	u, err := url.Parse(cloudUrl)
 	if err != nil{
-		return "", fmt.Errorf("failed to parse wazicloud url: %v", err)
+		return "", "", fmt.Errorf("failed to parse wazicloud url: %v", err)
 	}
 	if u.Scheme=="" {
 		cloudUrl = "https:"+cloudUrl
 	}
+	tokenReq, err := http.Post(fmt.Sprintf("%s/auth/token",cloudUrl), "application/json", strings.NewReader(`{"username":"`+cloud.Username+`","password":"`+cloud.Token+`"}`))
+	if err != nil {
+		return "", "", fmt.Errorf("failed to get waziup cloud token: %v", err)
+	}
+	defer tokenReq.Body.Close()
+	if tokenReq.StatusCode != http.StatusOK{
+		return "", "", fmt.Errorf("failed to fetch cloud token: status %s", tokenReq.Status)
+	}
+	tokenBody, err := io.ReadAll(tokenReq.Body)
+	if err != nil {
+		return "", "", fmt.Errorf("failed to read wazicloud token body: %v", err)
+	}
+	jwtToken := strings.TrimSpace(string(tokenBody))
+
 	
-	return cloudUrl, nil
+	return cloudUrl, jwtToken, nil
 }
+
 func downloadVPNConfig(gatewayID, outputFile string) error {
-	cloudUrl, err := getVPNConfigURL()
+	cloudUrl, jwtToken, err := getVPNConfigURL()
 	if err !=nil {
-		return fmt.Errorf("could not get cloud url: %v", err.Error())
+		log.Panicf("could not get cloud url: %v", err.Error())
+		return fmt.Errorf(err.Error())
 	}
 	url := fmt.Sprintf("%s/gateways/%s/vpn",cloudUrl, gatewayID)
-	resp, err := http.Get(url)
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return fmt.Errorf("failed to fetch config: %v", err)
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+jwtToken)
+
+	client := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
 	}
 	defer resp.Body.Close()
 
