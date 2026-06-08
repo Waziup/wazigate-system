@@ -528,13 +528,37 @@ func ImportVPN(configFile string) (gonetworkmanager.Connection, error) {
 	}{
 		{"VPN autoconnect enabled",[]string{"connection", "modify", connID, "connection.autoconnect", "yes"}},
 		{"VPN autoconnect retries set",[]string{"connection", "modify", connID, "connection.autoconnect-retries", "0"}},
+		{"VPN attach secondary",[]string{"connection", "modify", "WAZIGATE-AP", "connection.secondaries", connID}},
 	}
 	for _,step := range modifySteps{
 		if err := runCmd(step.msg, step.args...); err != nil {
             return nil, err
         }
 	}
+	err = installExecutable(
+		"./vpn-helper",
+		"/etc/NetworkManager/dispatcher.d/vpn-helper",
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("VPN helper installed successfully")
 	return conn, nil
+}
+func installExecutable(src, dst string) error {
+	data, err := os.ReadFile(src)
+	if err != nil {
+		return err
+	}
+
+	if err := os.WriteFile(dst, data, 0755); err != nil {
+		return err
+	}
+	if err := os.Chown(dst, 0, 0); err != nil {
+		return err
+	}
+
+	return nil
 }
 func VpnProfileExists(clientID string) (gonetworkmanager.Connection, bool, error) {
 	connections,err :=settings.ListConnections()
