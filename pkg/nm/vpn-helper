@@ -5,6 +5,8 @@ STATUS="$2"
 LOG_FILE="/tmp/openvpn-dispatcher.log"
 VPN_PREFIX="gateway-"
 
+touch "$LOG_FILE"
+
 log() {
     echo "$(date '+%F %T') $1" >> "$LOG_FILE"
 }
