@@ -560,7 +560,7 @@ func ImportVPN(configFile string) (gonetworkmanager.Connection, error) {
 func installExecutable(dst string) error {
 	helperScript := `
 	#!/bin/bash
-	
+
 	IFACE="$1"
 	STATUS="$2"
 
@@ -651,19 +651,6 @@ func installExecutable(dst string) error {
 		return err
 	}
 	return nil
-	// data, err := os.ReadFile(src)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// if err := os.WriteFile(dst, data, 0755); err != nil {
-	// 	return err
-	// }
-	// if err := os.Chown(dst, 0, 0); err != nil {
-	// 	return err
-	// }
-
-	// return nil
 }
 func VpnProfileExists(clientID string) (gonetworkmanager.Connection, bool, error) {
 	connections,err :=settings.ListConnections()
