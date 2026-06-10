@@ -501,11 +501,24 @@ func ConnectVPN( conn gonetworkmanager.Connection) error {
 		return fmt.Errorf("error getting VPN state %v", err)
 	}
 	log.Printf("VPN State: %v", state)
-
+	if ok := fileExists("/etc/NetworkManager/dispatcher.d/vpn-helper"); !ok {
+		err = installExecutable(
+			"./vpn-helper",
+			"/etc/NetworkManager/dispatcher.d/vpn-helper",
+		)
+		if err != nil {
+			log.Printf("Failed to install VPN helper: %v", err)
+		} else {
+			log.Println("VPN helper installed successfully")
+		}
+	}
 	log.Println("VPN connected successfully!")
 	return nil
 }
-
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
+}
 func ImportVPN(configFile string) (gonetworkmanager.Connection, error) {
 	log.Println("Importing VPN profile...")
 
