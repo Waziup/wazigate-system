@@ -11,6 +11,7 @@ services:
       # - /var/run/dbus:/var/run/dbus
       - /sys/class/gpio:/sys/class/gpio
       - /dev/mem:/dev/mem
+      - /usr/bin:/usr/bin
       - ./:/go/src/github.com/Waziup/wazigate-system
       - /etc/NetworkManager:/etc/NetworkManager
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
