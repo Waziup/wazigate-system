@@ -538,8 +538,13 @@ func ImportVPN(configFile string) (gonetworkmanager.Connection, error) {
 		msg string
 		args []string
 	}{
-		{"VPN autoconnect enabled",[]string{"connection", "modify", connID, "connection.autoconnect", "yes"}},
-		{"VPN autoconnect retries set",[]string{"connection", "modify", connID, "connection.autoconnect-retries", "0"}},
+		{"VPN autoconnect enabled", []string{"connection", "modify", connID, "connection.autoconnect", "yes"}},
+		{"VPN autoconnect retries set to infinite", []string{"connection", "modify", connID, "connection.autoconnect-retries", "0"}},
+		{"VPN infinite authentication retries", []string{"connection", "modify", connID, "connection.auth-retries", "0"}},
+		{"VPN keepalive intervals injected", []string{"connection", "modify", connID, "vpn.data", "ping=10, ping-restart=60"}},
+		{"VPN not default gateway for all internet traffic", []string{"connection", "modify", connID, "ipv4.never-default", "yes"}},
+		{"VPN disable unnecessary IPv6 loops", []string{"connection", "modify", connID, "ipv6.method", "disabled"}},
+		{"VPN gateway timeout optimized", []string{"connection", "modify", connID, "ipv4.connectivity-timeout", "10"}},
 	}
 	for _,step := range modifySteps{
 		if err := runCmd(step.msg, step.args...); err != nil {
