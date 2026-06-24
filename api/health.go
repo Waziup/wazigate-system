@@ -67,14 +67,25 @@ func ResourceUsage(resp http.ResponseWriter, req *http.Request, params routing.P
 	//
 
 	outc, _ := exeCmd("df -B 1 /")
-	dres := strings.Fields(string(strings.Split(outc, "\n")[1]))
 	disk := map[string]string{
-		"device":     dres[0],
-		"size":       dres[1],
-		"used":       dres[2],
-		"available":  dres[3],
-		"percent":    dres[4],
-		"mountpoint": dres[5],
+		"device":     "",
+		"size":       "",
+		"used":       "",
+		"available":  "",
+		"percent":    "",
+		"mountpoint": "",
+	}
+
+	lines := strings.Split(strings.TrimSpace(outc), "\n")
+	if len(lines) > 1 {
+		if dres := strings.Fields(lines[1]); len(dres) >= 6 {
+			disk["device"] = dres[0]
+			disk["size"] = dres[1]
+			disk["used"] = dres[2]
+			disk["available"] = dres[3]
+			disk["percent"] = dres[4]
+			disk["mountpoint"] = dres[5]
+		}
 	}
 
 	//
