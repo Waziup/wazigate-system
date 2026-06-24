@@ -98,11 +98,18 @@ func ResourceUsage(resp http.ResponseWriter, req *http.Request, params routing.P
 
 	//
 
-	outc, _ = exeCmd("free | grep Mem")
-	mres := strings.Fields(outc)
 	mem_usage := map[string]string{
-		"total": mres[1],
-		"used":  mres[2],
+		"total": "",
+		"used":  "",
+	}
+
+	outc, err := exeCmd("free | grep Mem")
+	if err == nil {
+		mres := strings.Fields(outc)
+		if len(mres) >= 3 {
+			mem_usage["total"] = mres[1]
+			mem_usage["used"] = mres[2]
+		}
 	}
 
 	//
