@@ -562,41 +562,90 @@ func ImportVPN(configFile string) (gonetworkmanager.Connection, error) {
 func installExecutable(dst string) error {
 	helperScript := `
 	#!/bin/bash
-
 	IFACE="$1"
 	STATUS="$2"
 
 	LOG_FILE="/tmp/openvpn-dispatcher.log"
+	VPN_PREFIX="gateway-"
+
 	touch "$LOG_FILE"
 
 	log() {
 		echo "$(date '+%F %T') $1" >> "$LOG_FILE"
 	}
 
-	if [ "$STATUS" != "up" ] || [ "$IFACE" = "lo" ] || [[ "$IFACE" == tun* ]]; then
+	if [ "$STATUS" != "up" ] || [ "$IFACE" = "lo" ]; then
 		exit 0
 	fi
 
-	log "Uplink interface $IFACE is up. Verifying core system state..."
+	log "Interface $IFACE is up, waiting for NetworkManager..."
 
-	# 1. Loop to ensure NetworkManager is stable
-	for i in {1..15}; do
+
+	for i in {1..30}; do
 		NM_STATE=$(nmcli general status | awk 'NR==2 {print $1}')
-		
+
 		if [ "$NM_STATE" = "connected" ]; then
-			log "NetworkManager is connected."
+			log "NetworkManager is connected"
 			break
 		fi
+
 		sleep 1
 	done
 
 	if [ "$NM_STATE" != "connected" ]; then
-		log "NetworkManager not ready, exiting. Native autoconnect will wait."
+		log "NetworkManager not ready, exiting"
 		exit 0
 	fi
 
-	# 2. Reactive Logging/Application Steps go here
-	log "System is online. Native NetworkManager properties (autoconnect) are handling the VPN stack."
+	log "Fetching VPN name from API..."
+
+	while true; do
+		VPN_RAW=$(curl -s --max-time 5 http://localhost/device/id | xargs)
+
+		if [ -n "$VPN_RAW" ]; then
+			log "Received VPN name: $VPN_RAW"
+			break
+		fi
+
+		log "API unavailable or returned empty response, retrying in 1 second..."
+		sleep 1
+	done
+	log "Found gateway id $VPN_RAW"
+
+	VPN_NAME="${VPN_PREFIX}${VPN_RAW}"
+
+	log "Resolved VPN name: $VPN_NAME"
+
+
+	if ! nmcli connection show | awk '{print $1}' | grep -qx "$VPN_NAME"; then
+		log "VPN connection '$VPN_NAME' does not exist"
+		exit 0
+	fi
+
+
+	if nmcli connection show --active | awk '{print $1}' | grep -qx "$VPN_NAME"; then
+		log "VPN already active, skipping"
+		exit 0
+	fi
+
+
+	log "Bringing up VPN: $VPN_NAME"
+
+	success=0
+
+	for i in {1..5}; do
+		if nmcli connection up "$VPN_NAME" >> "$LOG_FILE" 2>&1; then
+			log "VPN connection succeeded on attempt $i"
+			success=1
+			break
+		fi
+		sleep 3
+	done
+
+	if [ "$success" -ne 1 ]; then
+		log "VPN connection failed after 5 attempts"
+	fi
+	log "VPN start command executed"
 	`
 	if err := os.WriteFile(dst, []byte(helperScript), 0755); err != nil {
 		return err
