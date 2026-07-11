@@ -541,7 +541,6 @@ func ImportVPN(configFile string) (gonetworkmanager.Connection, error) {
 		{"VPN autoconnect enabled", []string{"connection", "modify", connID, "connection.autoconnect", "yes"}},
 		{"VPN autoconnect retries set to infinite", []string{"connection", "modify", connID, "connection.autoconnect-retries", "0"}},
 		{"VPN keepalive ping intervals", []string{"connection", "modify", connID, "+vpn.data", "ping=10, ping-restart=60"}},
-		{"VPN explicit exit notify", []string{"connection", "modify", connID, "+vpn.data", "explicit-exit-notify=2"}},
 		{"VPN not default gateway for all internet traffic", []string{"connection", "modify", connID, "ipv4.never-default", "yes"}},
 		{"VPN disable IPv6 loops", []string{"connection", "modify", connID, "ipv6.method", "disabled"}},
 	}
