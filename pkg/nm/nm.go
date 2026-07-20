@@ -575,8 +575,19 @@ func installExecutable(dst string) error {
 	}
 
 	if [ "$STATUS" != "up" ] || [ "$IFACE" = "lo" ]; then
+		log "Connection is not up or Interface $IFACE is loopback, exiting."
 		exit 0
 	fi
+	
+	case "$IFACE" in
+		docker*|br-*|tun*|veth*|vbox*)
+			log "Interface $IFACE is a virtual interface, skipping VPN connection."
+			exit 0
+			;;
+		*)
+			log "Interface $IFACE is up. Procceding with vpn connection..."
+			;;
+	esac
 
 	log "Interface $IFACE is up, waiting for NetworkManager..."
 
@@ -594,6 +605,23 @@ func installExecutable(dst string) error {
 
 	if [ "$NM_STATE" != "connected" ]; then
 		log "NetworkManager not ready, exiting"
+		exit 0
+	fi
+
+	log "Verifying internet connectivity..."
+	INTERNET_READY=0
+	for i in {1..35}; do
+		if ping -c 1 -W 1 8.8.8.8 >/dev/null 2>&1; then
+			log "Connected to internet with interface $IFACE."
+			INTERNET_READY=1
+			break
+		fi
+		log "Not connected yet, waiting... (Attempt $i/35)"
+		sleep 1
+	done
+
+	if [ "$INTERNET_READY" -ne 1 ]; then
+		log "ERROR: NetworkManager is up but public internet is unreachable. Exiting."
 		exit 0
 	fi
 
