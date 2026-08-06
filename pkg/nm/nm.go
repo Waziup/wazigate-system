@@ -555,19 +555,6 @@ func ImportVPN(configFile string) (gonetworkmanager.Connection, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	targetScript := "/etc/NetworkManager/dispatcher.d/vpn-helper"
-
-	log.Println("Deploying automated boot fallback systemd layout...")
-	if err := generateVPNFallbackService(targetScript); err != nil {
-		log.Printf("Deployment failed: %v\n", err)
-		log.Fatalf("Deployment failed: %v", err)
-	}
-	if err := enableVPNFallbackService(); err != nil {
-		log.Printf("Systemd registration failed: %v\n", err)
-		log.Fatalf("Systemd registration failed: %v", err)
-	}
-	
-	fmt.Println("Successfully registered and enabled the boot fallback tunnel tracker!")
 	log.Println("VPN helper installed successfully")
 	return conn, nil
 }
@@ -693,67 +680,6 @@ log "VPN start command executed"
 	if err := os.Chown(dst, 0, 0); err != nil {
 		return err
 	}
-	return nil
-}
-func generateVPNFallbackService(scriptPath string) error {
-	const servicePath = "/etc/systemd/system/openvpn-boot-fallback.service"
-
-	serviceContent := fmt.Sprintf(`[Unit]
-Description=OpenVPN Automated Cold Boot Multi-Interface Fallback
-After=network.target NetworkManager.service
-Wants=network-online.target
-
-[Service]
-Type=oneshot
-ExecStartPre=/bin/sleep 10
-ExecStart=/bin/bash -c '%s eth0 up & /bin/sleep 5; %s wlan0 up & wait'
-RemainAfterExit=yes
-
-[Install]
-WantedBy=multi-user.target
-`, scriptPath, scriptPath)
-
-	// Open the file with write-only, create, and truncate permissions (0644 standard for systemd)
-	file, err := os.OpenFile(servicePath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
-		return fmt.Errorf("failed to open/create systemd service file: %w", err)
-	}
-	defer file.Close()
-
-	// Write the service contents to the disk buffer
-	_, err = file.WriteString(serviceContent)
-	if err != nil {
-		return fmt.Errorf("failed writing contents to systemd service file: %w", err)
-	}
-
-	// Flush the storage cache out to the host disk layout securely
-	if err := file.Sync(); err != nil {
-		return fmt.Errorf("failed syncing service file to storage medium: %w", err)
-	}
-
-	return nil
-}
-func enableVPNFallbackService() error {
-	fmt.Println("Reloading host systemd manager configuration...")
-	
-	daemonReloadCmd := exec.Command("systemctl", "daemon-reload")
-	var errBuf bytes.Buffer
-	daemonReloadCmd.Stderr = &errBuf
-	
-	if err := daemonReloadCmd.Run(); err != nil {
-		return fmt.Errorf("systemctl daemon-reload failed: %w (stderr: %s)", err, errBuf.String())
-	}
-
-	fmt.Println("Enabling openvpn-boot-fallback service for every boot...")
-
-	enableCmd := exec.Command("systemctl", "enable", "openvpn-boot-fallback.service")
-	errBuf.Reset()
-	enableCmd.Stderr = &errBuf
-
-	if err := enableCmd.Run(); err != nil {
-		return fmt.Errorf("failed to enable systemd service: %w (stderr: %s)", err, errBuf.String())
-	}
-
 	return nil
 }
 func VpnProfileExists(clientID string) (gonetworkmanager.Connection, bool, error) {
