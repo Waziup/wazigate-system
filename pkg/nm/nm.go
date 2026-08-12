@@ -528,17 +528,17 @@ func ImportVPN(configFile string) (gonetworkmanager.Connection, error) {
 	return conn, nil
 }
 
-// Every keepalive ping leaves the gateway over wlan0 or the GSM modem. At the
-// 10 seconds that were configured here before, the modem never got a chance to
-// go idle and the pings alone added up to tens of megabytes a month. A minute
-// is still far below any NAT or carrier timeout.
-const vpnPingInterval = 60 // Seconds between keepalive pings on an idle tunnel
+// Do not raise this to save traffic without testing it on a real gateway: an
+// idle tunnel gets closed underneath us, so the ping is what keeps the
+// connection open, not just a health check. It has to stay below whatever
+// closes the idle connection, which on a mobile link is usually the carrier
+// NAT timeout and can be as low as 30 seconds.
+const vpnPingInterval = 10 // Seconds between keepalive pings on an idle tunnel
 
-// How long the tunnel may stay quiet before it is restarted. This has to be a
-// multiple of vpnPingInterval, otherwise a single lost ping tears the tunnel
-// down and a flaky link turns into a reconnect loop, each reconnect costing a
-// full TLS handshake.
-const vpnPingRestart = 5 * vpnPingInterval
+// How long the tunnel may stay quiet before it is torn down and rebuilt. Every
+// restart costs a full TLS handshake, so raising this makes a flaky link
+// cheaper, at the price of noticing a dead tunnel later.
+const vpnPingRestart = 6 * vpnPingInterval
 
 // ConfigureVPN applies the connection settings that we want on every VPN
 // profile, whether it was just imported or already existed. The steps are

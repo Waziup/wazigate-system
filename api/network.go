@@ -344,13 +344,6 @@ func PostVPN(resp http.ResponseWriter, req *http.Request,  params routing.Params
 			errorResponse(resp,http.StatusInternalServerError,fmt.Sprintf("could not import vpn profile %s",err.Error()))
 			return
 		}
-	} else {
-		// Profiles that were imported by an older version still carry the
-		// 10 second keepalive, which is a lot of traffic on a metered uplink.
-		// Re-applying is best effort, an outdated profile still connects.
-		if err := nm.ConfigureVPN(fmt.Sprintf("gateway-%s", gatewayID)); err != nil {
-			log.Printf("[WARN ] Could not update VPN profile settings: %v", err)
-		}
 	}
 	err = nm.ConnectVPN(conn)
 	if err != nil {
