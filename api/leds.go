@@ -14,6 +14,9 @@ import (
 const LED1_PIN = "GPIO27" // PIN #13
 const LED2_PIN = "GPIO22" // PIN #15
 
+// The cloud reachability probe causes network traffic, so it is throttled.
+const cloudCheckInterval = 5 * time.Minute
+
 //
 
 // This function controlls the LED indicators
@@ -33,6 +36,9 @@ func RunLEDManager() error {
 		}
 
 		//
+
+		var lastCloudCheck time.Time // Zero value forces a check on the first iteration
+		var cloudAccessible, ledSet bool
 
 		for {
 
@@ -63,10 +69,23 @@ func RunLEDManager() error {
 
 			//
 
-			if CloudAccessible(false /*Without Logs*/) {
-				turnOnLED(LED1_PIN)
-			} else {
-				blinkStart(LED1_PIN, 100, 100)
+			// The LED keeps its state (blinking runs in its own goroutine) between
+			// the cloud checks, so it only has to be updated on a state change.
+			if time.Since(lastCloudCheck) >= cloudCheckInterval {
+
+				accessible := CloudAccessible(false /*Without Logs*/)
+				lastCloudCheck = time.Now()
+
+				if !ledSet || accessible != cloudAccessible {
+
+					if accessible {
+						turnOnLED(LED1_PIN)
+					} else {
+						blinkStart(LED1_PIN, 100, 100)
+					}
+
+					cloudAccessible, ledSet = accessible, true
+				}
 			}
 
 			//
