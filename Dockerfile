@@ -1,47 +1,23 @@
-# FROM waziup/node-sass:14 AS ui
+FROM golang:1.25-bookworm AS bin
 
-# ARG MODE=prod
-
-# WORKDIR /app/
-
-# COPY ui/package.json /app/
-# RUN npm i
-
-# COPY ui/. /app
-# RUN npm run build --env $MODE
-
-################################################################################
-
-
-FROM golang:1.16-alpine AS bin
-
-ENV CGO_ENABLED=0
 ENV GO111MODULE=on
 
-RUN apk add --no-cache ca-certificates tzdata git
-
-WORKDIR /app/
-
-COPY go.mod go.sum /app/
+WORKDIR /app
+COPY go.mod ./
 RUN go mod download
+COPY . .
 
-COPY . /app
-RUN go build -ldflags "-s -w" -o wazigate-system .
+RUN CGO_ENABLED=0 go build -ldflags "-s -w" -o wazigate-system .
 
-################################################################################
+FROM ubuntu:22.04
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl iw gawk tzdata network-manager network-manager-openvpn \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc /usr/share/man
 
-FROM alpine:latest AS app
-
-RUN apk add --no-cache iw gawk ca-certificates tzdata curl
 
 WORKDIR /app/
-
-# COPY --from=ui /app/node_modules/react/umd ui/node_modules/react/umd
-# COPY --from=ui /app/node_modules/react-dom/umd ui/node_modules/react-dom/umd
-# COPY --from=ui /app/index.html /app/dev.html /app/favicon.ico ui/
-# COPY --from=ui /app/dist ui/dist
-# COPY --from=ui /app/icons ui/icons
 
 COPY docs /app/docs
 

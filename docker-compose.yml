@@ -1,4 +1,3 @@
-version: "3.4"
 services:
   wazigate-system:
     image: waziup/wazigate-system:latest
@@ -13,6 +12,12 @@ services:
       - /sys/class/gpio:/sys/class/gpio
       - /dev/mem:/dev/mem
       - ./:/go/src/github.com/Waziup/wazigate-system
+      - /etc/NetworkManager:/etc/NetworkManager
+      - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
+      - /sys/class/net:/sys/class/net:ro
+      - /etc/openvpn:/etc/openvpn
+      - /root/.cert/nm-openvpn:/root/.cert/nm-openvpn
+      - /run/NetworkManager:/run/NetworkManager
     privileged: true
     network_mode: host
     environment:

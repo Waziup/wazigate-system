@@ -14,6 +14,10 @@ import (
 const LED1_PIN = "GPIO27" // PIN #13
 const LED2_PIN = "GPIO22" // PIN #15
 
+// How often the LED is aligned with the cloud state. Reading that state does
+// not cause any network traffic, the probing itself happens in cloud.go.
+const ledRefreshInterval = 10 * time.Second
+
 //
 
 // This function controlls the LED indicators
@@ -33,6 +37,8 @@ func RunLEDManager() error {
 		}
 
 		//
+
+		var cloudAccessible, ledSet bool
 
 		for {
 
@@ -63,15 +69,28 @@ func RunLEDManager() error {
 
 			//
 
-			if CloudAccessible(false /*Without Logs*/) {
-				turnOnLED(LED1_PIN)
-			} else {
-				blinkStart(LED1_PIN, 100, 100)
+			// The cloud state comes from the cloud monitor, reading it does not
+			// send anything over wlan0 or the modem. As long as it has not been
+			// probed once, the startup blinking is kept, so that a gateway that
+			// is still coming up is not reported as "no cloud".
+			accessible, known := cloudStatus()
+
+			// The LED keeps its state (blinking runs in its own goroutine)
+			// between the checks, so it only has to be updated on a change.
+			if known && (!ledSet || accessible != cloudAccessible) {
+
+				if accessible {
+					turnOnLED(LED1_PIN)
+				} else {
+					blinkStart(LED1_PIN, 100, 100)
+				}
+
+				cloudAccessible, ledSet = accessible, true
 			}
 
 			//
 
-			time.Sleep(3 * time.Second)
+			time.Sleep(ledRefreshInterval)
 		}
 
 	}()

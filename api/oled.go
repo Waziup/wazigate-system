@@ -27,6 +27,20 @@ import (
 var OledBuffer string     // A Shared buffer for showing message on the OLED
 var OledCurrentMsg string // The message which is showing on the OLED at the moment
 
+// How often the screen is redrawn. The heartbeat indicator and the timeouts
+// below are expressed as durations, so they stay correct if this is changed.
+const oledRefreshInterval = 1 * time.Second
+
+// For how long a message written through POST /oled stays on the screen if
+// nobody clears it.
+const oledMessageTimeout = 13 * time.Second
+
+// The container states are read from the docker socket on the host, which costs
+// a process spawn there, so they are not fetched on every redraw.
+const bootStatusInterval = 10 * time.Second
+
+//
+
 var oledDev *ssd1306.Dev
 var oledDoesNotExist bool // We check if the OLED does not exist, we just ignore it.
 
@@ -147,45 +161,62 @@ func RunOLEDManager() error {
 
 	go func() {
 
-		OledBuffer = ""     // Clear the buffer
-		autoClearTimer := 0 // Automatically clear a message if it is not removed after let's say 13 seconds
+		OledBuffer = "" // Clear the buffer
+
+		var msgShownFor time.Duration // For how long the current message is on the screen
+		var screenOnFor time.Duration // For how long the screen has been on
 
 		allBootedOK := false
-		GWStatusCheck := 0 // Check the containers status in every let's say 7 seconds.
+		bootStatusMsg := ""
+		var lastBootCheck time.Time // Zero value forces a check on the first iteration
 
 		heartbeat := false // Just a toggle varianle to show heartbeat on the screen
-
-		oledHaltCounter := 0
 
 		for {
 
 			//
 
-			if autoClearTimer > 12 {
+			// Automatically clear a message if it is not removed in time
+			if msgShownFor > oledMessageTimeout {
 				OledBuffer = ""
 				oledShow("", false)
 			}
 
 			if len(OledBuffer) > 0 {
 				oledShow(OledBuffer, true)
-				autoClearTimer++
-				time.Sleep(1 * time.Second)
+				msgShownFor += oledRefreshInterval
+				time.Sleep(oledRefreshInterval)
 				continue
 			}
-			autoClearTimer = 0
+			msgShownFor = 0
 
 			if oledHalted {
-				time.Sleep(1 * time.Second)
+				time.Sleep(oledRefreshInterval)
 				continue
 			}
 
-			if oledHaltCounter > Config.OLEDHaltTimeout {
+			if screenOnFor > time.Duration(Config.OLEDHaltTimeout)*time.Second {
 				oledHalt()
-				oledHaltCounter = 0
+				screenOnFor = 0
 				continue
 			}
 
-			oledHaltCounter++
+			screenOnFor += oledRefreshInterval
+
+			//
+
+			if time.Since(lastBootCheck) >= bootStatusInterval {
+				allBootedOK, bootStatusMsg = GetGWBootstatus(false)
+				lastBootCheck = time.Now()
+			}
+
+			// While the gateway is still coming up, the container states are
+			// more useful on the screen than the network status.
+			if !allBootedOK {
+				oledShow(bootStatusMsg, false)
+				time.Sleep(oledRefreshInterval)
+				continue
+			}
 
 			//
 
@@ -195,6 +226,8 @@ func RunOLEDManager() error {
 				heartTxt = "* "
 			}
 
+			// The cloud state comes from the cloud monitor, reading it does not
+			// send anything over wlan0 or the modem.
 			netTxt := "[ Internet NO ]"
 			if CloudAccessible(false /*Without Logs*/) {
 				netTxt = "[ Internet OK ]"
@@ -222,19 +255,7 @@ func RunOLEDManager() error {
 			//
 
 			oledShow(OledMsg, false)
-			time.Sleep(1 * time.Minute)
-
-			GWStatusCheck++
-			if GWStatusCheck > 7 {
-				GWStatusCheck = 0
-				allBootedOK, _ = GetGWBootstatus(false)
-			}
-
-			if !allBootedOK {
-				allBootedOK, OledMsg = GetGWBootstatus(false)
-				oledShow(OledMsg, false)
-				time.Sleep(1 * time.Second)
-			}
+			time.Sleep(oledRefreshInterval)
 
 		} // End of `for`
 
