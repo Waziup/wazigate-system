@@ -520,24 +520,47 @@ func ImportVPN(configFile string) (gonetworkmanager.Connection, error) {
 	if !exists {
 		return nil, fmt.Errorf("VPN profile %s not found after import",connID)
 	}
+	if err := ConfigureVPN(connID); err != nil {
+		return nil, err
+	}
+
+	log.Println("VPN setup successfully")
+	return conn, nil
+}
+
+// Every keepalive ping leaves the gateway over wlan0 or the GSM modem. At the
+// 10 seconds that were configured here before, the modem never got a chance to
+// go idle and the pings alone added up to tens of megabytes a month. A minute
+// is still far below any NAT or carrier timeout.
+const vpnPingInterval = 60 // Seconds between keepalive pings on an idle tunnel
+
+// How long the tunnel may stay quiet before it is restarted. This has to be a
+// multiple of vpnPingInterval, otherwise a single lost ping tears the tunnel
+// down and a flaky link turns into a reconnect loop, each reconnect costing a
+// full TLS handshake.
+const vpnPingRestart = 5 * vpnPingInterval
+
+// ConfigureVPN applies the connection settings that we want on every VPN
+// profile, whether it was just imported or already existed. The steps are
+// idempotent, so it is safe to call on an existing connection.
+func ConfigureVPN(connID string) error {
+
 	modifySteps := []struct{
 		msg string
 		args []string
 	}{
 		{"VPN autoconnect enabled", []string{"connection", "modify", connID, "connection.autoconnect", "yes"}},
 		{"VPN autoconnect retries set to infinite", []string{"connection", "modify", connID, "connection.autoconnect-retries", "0"}},
-		{"VPN keepalive ping intervals", []string{"connection", "modify", connID, "+vpn.data", "ping=10, ping-restart=60"}},
+		{"VPN keepalive ping intervals", []string{"connection", "modify", connID, "+vpn.data", fmt.Sprintf("ping=%d, ping-restart=%d", vpnPingInterval, vpnPingRestart)}},
 		{"VPN not default gateway for all internet traffic", []string{"connection", "modify", connID, "ipv4.never-default", "yes"}},
 		{"VPN disable IPv6 loops", []string{"connection", "modify", connID, "ipv6.method", "disabled"}},
 	}
 	for _,step := range modifySteps{
 		if err := runCmd(step.msg, step.args...); err != nil {
-            return nil, err
+            return err
         }
 	}
-	
-	log.Println("VPN setup successfully")
-	return conn, nil
+	return nil
 }
 func VpnProfileExists(clientID string) (gonetworkmanager.Connection, bool, error) {
 	connections,err :=settings.ListConnections()

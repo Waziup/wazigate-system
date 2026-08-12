@@ -214,25 +214,13 @@ type VPNResponse struct {
 
 //
 
-// Checks if Waziup cloud is accessible
-func CloudAccessible(withLogs bool) bool {
-	client := http.Client{
-		Timeout: 10 * time.Second,
-	}
-	resp, err := client.Get("http://www.waziup.io/generate_204")
-	if err != nil {
-		return false
-	}
-	resp.Body.Close()
-	return true
-}
-
-//
-
 // InternetAccessible implements GET /internet
 func InternetAccessible(resp http.ResponseWriter, req *http.Request, params routing.Params) {
 
-	if CloudAccessible(true) {
+	// This endpoint is called on demand, so it may send a probe of its own to
+	// stay accurate. `cloudRefresh` caps how often that actually happens, see
+	// cloud.go.
+	if cloudRefresh(cloudProbeMinInterval, true) {
 
 		resp.Write([]byte("1"))
 
@@ -355,6 +343,13 @@ func PostVPN(resp http.ResponseWriter, req *http.Request,  params routing.Params
 		if err !=nil {
 			errorResponse(resp,http.StatusInternalServerError,fmt.Sprintf("could not import vpn profile %s",err.Error()))
 			return
+		}
+	} else {
+		// Profiles that were imported by an older version still carry the
+		// 10 second keepalive, which is a lot of traffic on a metered uplink.
+		// Re-applying is best effort, an outdated profile still connects.
+		if err := nm.ConfigureVPN(fmt.Sprintf("gateway-%s", gatewayID)); err != nil {
+			log.Printf("[WARN ] Could not update VPN profile settings: %v", err)
 		}
 	}
 	err = nm.ConnectVPN(conn)

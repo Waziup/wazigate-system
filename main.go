@@ -38,6 +38,7 @@ var setup = []func() error{
 	movePackageJSON,
 	nm.Connect,
 	api.Init,
+	api.RunCloudMonitor,
 	api.RunLEDManager,
 	api.RunTimezoneManager,
 	api.RunBlackoutManager,
