@@ -10,7 +10,7 @@ echo "[1 / 7] Test ping ..."
 ping -c 1 $WAZIGATE_ADDR
 
 echo "[2 / 7] Building image ..."
-docker buildx build --platform=linux/arm/v7 --tag waziup/wazigate-system:$WAZIGATE_TAG --build-arg MODE=dev --load .
+docker buildx build --platform=linux/arm64 --tag waziup/wazigate-system:$WAZIGATE_TAG --build-arg MODE=dev --load .
 
 docker image save waziup/wazigate-system:$WAZIGATE_TAG -o wazigate-system.tar
 
