@@ -35,9 +35,14 @@ func RunBlackoutManager() error {
 		return fmt.Errorf("failed to find power_in_pin %v", POWER_IN_PIN)
 	}
 
-	// Set it as input, with a pull down (defaults to Low when unconnected) and
-	// enable rising edge triggering.
-	if err := inPin.In(gpio.PullDown, gpio.FallingEdge); err != nil {
+	// Set it as input with a pull down (it defaults to Low when unconnected).
+	//
+	// NoEdge rather than FallingEdge: periph.io implements edge detection via
+	// the kernel's legacy sysfs GPIO interface, which the trixie kernel no
+	// longer numbers the way v3.6.7 expects, so asking for an edge here fails
+	// outright. watchEdge polls the memory-mapped registers instead; see
+	// gpiopoll.go for the full story.
+	if err := inPin.In(gpio.PullDown, gpio.NoEdge); err != nil {
 		return fmt.Errorf("failed to access power_in_pin %v", err.Error())
 	}
 
@@ -55,20 +60,20 @@ func RunBlackoutManager() error {
 
 	//
 
-	go func() {
+	// The circuit pulls the pin low when mains power is cut, so what used to be
+	// FallingEdge is a transition to Low.
+	go watchEdge(inPin, gpio.Low, func() bool {
 
-		for inPin.WaitForEdge(-1) {
-
-			if DEBUG_MODE {
-				log.Printf("[     ] %s Blackout signal received", inPin)
-			}
-
-			oledWrite("\n\n    BLACKOUT!")
-
-			systemQuickShutdown()
-			// time.Sleep( 1 * time.Second)
+		if DEBUG_MODE {
+			log.Printf("[     ] %s Blackout signal received", inPin)
 		}
-	}()
+
+		oledWrite("\n\n    BLACKOUT!")
+
+		systemQuickShutdown()
+		// time.Sleep( 1 * time.Second)
+		return true
+	})
 
 	//
 
